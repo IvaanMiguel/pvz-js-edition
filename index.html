@@ -2,21 +2,67 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        padding: 0;
+        margin: 0;
+
+        height: 100svh;
+        height: 100vh;
+
+        background-color: black;
+      }
+
+      body {
+        display: grid;
+        place-items: center;
+      }
+
+      #canvas {
+        width: 100% !important;
+        max-width: fit-content;
+        height: 100svh !important;
+
+        /* width: 100% !important;
+        height: 100% !important;
+        max-height: fit-content; */
+
+        object-fit: contain;
+
+        image-rendering: crisp-edges;
+        image-rendering: pixelated;
+      }
+
+      #p5_loading {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
+        display: grid;
+        place-items: center;
+
+        color: white;
+      }
+    </style>
     <link
       rel="icon"
       type="image/svg+xml"
       href="/icon.ico"
     />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
     <title>Plants vs. Zombies - JS Edition</title>
   </head>
-  <body>
-    <div id="app">
-      <canvas id="canvas"></canvas>
-    </div>
+  <body id='app'>
+    <canvas id="canvas"></canvas>
+    <div id="p5_loading">Cargando...</div>
     <script
       type="module"
       src="/src/scripts/index.ts"
