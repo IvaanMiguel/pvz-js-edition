@@ -12,7 +12,7 @@ export const PEASHOOTER_HEIGHT = 30
 
 export const FramesIndex = {
   [PeashooterState.IDLE]: [0, 1, 2, 3, 4, 5, 6, 7],
-  [PeashooterState.SHOOTING]: [8, 9, 10, 9, 8]
+  [PeashooterState.SHOOTING]: [1, 2]
 }
 
 export const TransformFrame: TransformFrameType = {
@@ -24,6 +24,11 @@ export const TransformFrame: TransformFrameType = {
   7: { offsetX: -2 }
 }
 
+export const PeaState = {
+  FLYING: 'flying',
+  ON_HIT: 'on-hit'
+}
+
 export const PeaFrame = {
   FLYING: 'flying',
   EXPLODING_1: 'exploding-1',
@@ -31,12 +36,14 @@ export const PeaFrame = {
 }
 
 export const PeaKeyframe = {
-  [PeaFrame.FLYING]: { originX: 80, originY: 32, w: 10, h: 10, timer: 60 },
-  [PeaFrame.EXPLODING_1]: { originX: 91, originY: 32, w: 10, h: 11, timer: 2 },
-  [PeaFrame.EXPLODING_2]: { originX: 101, originY: 32, w: 13, h: 15, timer: 2 }
+  [PeaFrame.FLYING]: { originX: 80, originY: 31, w: 10, h: 10, timer: 60 },
+  [PeaFrame.EXPLODING_1]: { originX: 90, originY: 31, w: 10, h: 11, timer: 5 },
+  [PeaFrame.EXPLODING_2]: { originX: 100, originY: 31, w: 13, h: 15, timer: 5 }
 }
 
 export const PeaAnimation = {
-  Flying: [PeaKeyframe[PeaFrame.FLYING], PeaKeyframe[PeaFrame.FLYING]],
-  OnHit: [PeaKeyframe[PeaFrame.EXPLODING_1], PeaKeyframe[PeaFrame.EXPLODING_2]]
+  OnHit: [PeaKeyframe[PeaFrame.EXPLODING_1], PeaKeyframe[PeaFrame.EXPLODING_2], PeaKeyframe[PeaFrame.EXPLODING_1]]
 }
+
+export const FIRE_RATE = 1500 * SPEED_MULTIPLIER
+export const PEA_SPEED = 100
