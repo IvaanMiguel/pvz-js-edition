@@ -1,6 +1,6 @@
-import { Image, Vector } from 'p5'
+import P5, { Image, Vector } from 'p5'
 
-class Entity {
+abstract class Entity {
   static spritesheet: Image
 
   animationFrame: number = 0
@@ -10,6 +10,10 @@ class Entity {
   constructor(x: number, y: number) {
     this.vector = new Vector(x, y)
   }
+
+  abstract update(p5?: P5): void
+
+  abstract draw(p5?: P5): void
 }
 
 export default Entity

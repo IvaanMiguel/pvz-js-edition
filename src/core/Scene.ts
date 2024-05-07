@@ -2,24 +2,30 @@ import P5, { Image } from 'p5'
 import {
   DEBUG,
   FRAME_RATE_FRECUENCY,
+  LAWN_HEIGHT,
   LAWN_OFFSET_X,
   LAWN_OFFSET_Y,
-  LAWN_HEIGHT,
   LAWN_WIDTH,
+  SHOW_FPS,
   TILE_HEIGHT,
-  TILE_WIDTH,
-  SHOW_FPS
+  TILE_WIDTH
 } from '../constants/game'
 import Peashooter from '../entities/peashooter/Peashooter'
+import Lawn from './Lawn'
+import Player from './Player'
 
 class Scene {
   static bgImage: Image
 
   framesTimer: number = 0
   frameRate: number = 0
-  peashooters: Peashooter[] = []
+  lawn: Lawn
+  player: Player
 
   constructor(p5: P5) {
+    this.lawn = new Lawn(LAWN_OFFSET_X, LAWN_OFFSET_Y, LAWN_WIDTH, LAWN_HEIGHT)
+    this.player = new Player(this.lawn)
+
     if (!DEBUG) return
 
     this.frameRate = this.getFrameRate(p5)
@@ -42,7 +48,8 @@ class Scene {
   }
 
   update(p5: P5) {
-    this.peashooters.forEach(peashooter => peashooter.update(p5))
+    this.lawn.update(p5)
+    this.player.update(p5)
 
     if (SHOW_FPS) this.updateFrameRate(p5)
   }
@@ -51,7 +58,7 @@ class Scene {
     p5.imageMode(p5.CORNER)
     p5.image(Scene.bgImage, 0, 0)
 
-    this.peashooters.forEach(peashooter => peashooter.draw(p5))
+    this.lawn.draw(p5)
 
     if (SHOW_FPS) this.showFps(p5)
 
@@ -73,24 +80,14 @@ class Scene {
     p5.noFill()
     p5.rectMode(p5.CORNER)
 
-    p5.rect(LAWN_OFFSET_X, LAWN_OFFSET_Y, LAWN_WIDTH, LAWN_HEIGHT)
-  
-    for (let i = 0; i < 4; i++) {
-      p5.line(
-        LAWN_OFFSET_X,
-        (TILE_HEIGHT * (i + 1)) + LAWN_OFFSET_Y,
-        LAWN_OFFSET_X + LAWN_WIDTH,
-        (TILE_HEIGHT * (i + 1)) + LAWN_OFFSET_Y
-      )
+    p5.rect(this.lawn.x, this.lawn.y, this.lawn.w, this.lawn.h)
+
+    for (let i = 1; i < 5; i++) {
+      p5.line(this.lawn.x, TILE_HEIGHT * i + this.lawn.y, this.lawn.x + this.lawn.w, TILE_HEIGHT * i + this.lawn.y)
     }
 
-    for (let i = 0; i < 8; i++) {
-      p5.line(
-        LAWN_OFFSET_X + (TILE_WIDTH * (i + 1)),
-        LAWN_OFFSET_Y,
-        LAWN_OFFSET_X + (TILE_WIDTH * (i + 1)),
-        LAWN_OFFSET_Y + LAWN_HEIGHT,
-      )
+    for (let i = 1; i < 9; i++) {
+      p5.line(this.lawn.x + TILE_WIDTH * i, this.lawn.y, this.lawn.x + TILE_WIDTH * i, this.lawn.y + this.lawn.h)
     }
   }
 }

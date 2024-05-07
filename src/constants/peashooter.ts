@@ -16,7 +16,7 @@ export const FramesIndex = {
 }
 
 export const TransformFrame: TransformFrameType = {
-  0: { offsetX: -1},
+  0: { offsetX: -1 },
   2: { offsetX: 2 },
   4: { offsetX: -1 },
   5: { offsetX: -2 },
@@ -37,8 +37,8 @@ export const PeaFrame = {
 
 export const PeaKeyframe = {
   [PeaFrame.FLYING]: { originX: 80, originY: 31, w: 10, h: 10, timer: 60 },
-  [PeaFrame.EXPLODING_1]: { originX: 90, originY: 31, w: 10, h: 11, timer: 5 },
-  [PeaFrame.EXPLODING_2]: { originX: 100, originY: 31, w: 13, h: 15, timer: 5 }
+  [PeaFrame.EXPLODING_1]: { originX: 90, originY: 31, w: 10, h: 11, timer: 5 * SPEED_MULTIPLIER },
+  [PeaFrame.EXPLODING_2]: { originX: 100, originY: 31, w: 13, h: 15, timer: 5 * SPEED_MULTIPLIER }
 }
 
 export const PeaAnimation = {

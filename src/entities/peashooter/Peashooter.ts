@@ -101,7 +101,6 @@ class Peashooter extends Entity {
     this.changeState(p5, PeashooterState.SHOOTING)
 
     this.firingTimer = p5.millis() + FIRE_RATE
-    console.log(this.peas.length)
     this.peas.push(new Pea(this.vector.x + 5, this.vector.y - 8))
   }
 

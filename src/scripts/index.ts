@@ -1,11 +1,9 @@
 import P5 from 'p5'
 import { CANVAS_ELEMENT } from '../constants/game'
-import Player from '../core/Player'
 import Scene from '../core/Scene'
 
 const sketch = (p5: P5): void => {
   let scene: Scene
-  let player: Player
   let canvasHeight: number
 
   p5.preload = () => {
@@ -14,12 +12,11 @@ const sketch = (p5: P5): void => {
 
   p5.setup = () => {
     p5.createCanvas(256, 192, p5.P2D, CANVAS_ELEMENT)
-    
+
     canvasHeight = (CANVAS_ELEMENT.clientWidth / p5.width) * p5.height
     CANVAS_ELEMENT.style.setProperty('height', `${canvasHeight}px`, 'important')
 
     scene = new Scene(p5)
-    player = new Player(scene.peashooters)
   }
 
   p5.draw = () => {
@@ -29,7 +26,6 @@ const sketch = (p5: P5): void => {
     scene.draw(p5)
 
     scene.update(p5)
-    player.update(p5)
   }
 
   p5.windowResized = () => {

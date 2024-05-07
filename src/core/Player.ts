@@ -1,14 +1,15 @@
 import P5 from 'p5'
-import { LAWN_HEIGHT, LAWN_OFFSET_X, LAWN_OFFSET_Y, LAWN_WIDTH, TILE_HEIGHT, TILE_WIDTH } from '../constants/game'
+import { TILE_HEIGHT, TILE_WIDTH } from '../constants/game'
 import Peashooter from '../entities/peashooter/Peashooter'
+import Lawn from './Lawn'
 
 class Player {
   lawnPosition: { x: number; y: number }
-  peashooters: Peashooter[] = []
+  lawn: Lawn
 
-  constructor(peashooters: Peashooter[]) {
+  constructor(lawn: Lawn) {
     this.lawnPosition = { x: -1, y: -1 }
-    this.peashooters = peashooters
+    this.lawn = lawn
   }
 
   update(p5: P5) {
@@ -18,10 +19,10 @@ class Player {
 
   isMouseInsideLawn(p5: P5) {
     return (
-      p5.mouseX >= LAWN_OFFSET_X &&
-      p5.mouseX <= LAWN_OFFSET_X + LAWN_WIDTH &&
-      p5.mouseY >= LAWN_OFFSET_Y &&
-      p5.mouseY <= LAWN_OFFSET_Y + LAWN_HEIGHT
+      p5.mouseX >= this.lawn.x &&
+      p5.mouseX <= this.lawn.x + this.lawn.w &&
+      p5.mouseY >= this.lawn.y &&
+      p5.mouseY <= this.lawn.y + this.lawn.h
     )
   }
 
@@ -32,17 +33,19 @@ class Player {
         return
       }
 
-      this.lawnPosition.x = p5.floor((p5.mouseX - LAWN_OFFSET_X) / TILE_WIDTH) + 1
-      this.lawnPosition.y = p5.floor((p5.mouseY - LAWN_OFFSET_Y) / TILE_HEIGHT) + 1
+      this.lawnPosition.x = p5.floor((p5.mouseX - this.lawn.x) / TILE_WIDTH)
+      this.lawnPosition.y = p5.floor((p5.mouseY - this.lawn.y) / TILE_HEIGHT)
     }
   }
 
   onMouseClicked(p5: P5) {
     p5.mouseClicked = () => {
-      const x = this.lawnPosition.x * TILE_WIDTH + LAWN_OFFSET_X - TILE_WIDTH / 2
-      const y = this.lawnPosition.y * TILE_HEIGHT + LAWN_OFFSET_Y - TILE_HEIGHT / 2
+      if (this.lawn.getLawnTile(this.lawnPosition.x, this.lawnPosition.y)) return
 
-      this.peashooters.push(new Peashooter(p5, x, y))
+      const x = (this.lawnPosition.x + 1) * TILE_WIDTH + this.lawn.x - TILE_WIDTH / 2
+      const y = (this.lawnPosition.y + 1) * TILE_HEIGHT + this.lawn.y - TILE_HEIGHT / 2
+
+      this.lawn.plant(new Peashooter(p5, x, y), this.lawnPosition.x, this.lawnPosition.y)
     }
   }
 }
