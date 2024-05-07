@@ -1,6 +1,6 @@
 import P5 from 'p5'
-import { CANVAS_ELEMENT } from '../constants/game'
-import Scene from '../core/Scene'
+import { CANVAS_ELEMENT } from './constants/game'
+import Scene from './core/Scene'
 
 const sketch = (p5: P5): void => {
   let scene: Scene
