@@ -12,6 +12,7 @@ import {
 } from '../constants/game'
 import Peashooter from '../entities/peashooter/Peashooter'
 import Lawn from './Lawn'
+import PeasSystem from './PeasSystem'
 import Player from './Player'
 
 class Scene {
@@ -21,10 +22,12 @@ class Scene {
   frameRate: number = 0
   lawn: Lawn
   player: Player
+  peasSystem: PeasSystem
 
   constructor(p5: P5) {
     this.lawn = new Lawn(LAWN_OFFSET_X, LAWN_OFFSET_Y, LAWN_WIDTH, LAWN_HEIGHT)
-    this.player = new Player(this.lawn)
+    this.peasSystem = new PeasSystem()
+    this.player = new Player(this.lawn, this.peasSystem)
 
     if (!DEBUG) return
 
@@ -48,8 +51,9 @@ class Scene {
   }
 
   update(p5: P5) {
-    this.lawn.update(p5)
     this.player.update(p5)
+    this.lawn.update(p5)
+    this.peasSystem.update(p5)
 
     if (SHOW_FPS) this.updateFrameRate(p5)
   }
@@ -59,6 +63,7 @@ class Scene {
     p5.image(Scene.bgImage, 0, 0)
 
     this.lawn.draw(p5)
+    this.peasSystem.draw(p5)
 
     if (SHOW_FPS) this.showFps(p5)
 

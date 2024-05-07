@@ -2,18 +2,18 @@ import P5 from 'p5'
 import { TILE_HEIGHT, TILE_WIDTH } from '../constants/game'
 import Peashooter from '../entities/peashooter/Peashooter'
 import Lawn from './Lawn'
+import PeasSystem from './PeasSystem'
 
 class Player {
-  lawnPosition: { x: number; y: number }
   lawn: Lawn
+  peasSystem: PeasSystem
 
-  constructor(lawn: Lawn) {
-    this.lawnPosition = { x: -1, y: -1 }
+  constructor(lawn: Lawn, peasSystem: PeasSystem) {
     this.lawn = lawn
+    this.peasSystem = peasSystem
   }
 
   update(p5: P5) {
-    this.onMouseMoved(p5)
     this.onMouseClicked(p5)
   }
 
@@ -26,26 +26,17 @@ class Player {
     )
   }
 
-  onMouseMoved(p5: P5) {
-    p5.mouseMoved = () => {
-      if (!this.isMouseInsideLawn(p5)) {
-        this.lawnPosition = { x: -1, y: -1 }
-        return
-      }
-
-      this.lawnPosition.x = p5.floor((p5.mouseX - this.lawn.x) / TILE_WIDTH)
-      this.lawnPosition.y = p5.floor((p5.mouseY - this.lawn.y) / TILE_HEIGHT)
-    }
-  }
-
   onMouseClicked(p5: P5) {
     p5.mouseClicked = () => {
-      if (this.lawn.getLawnTile(this.lawnPosition.x, this.lawnPosition.y)) return
+      const lawnTileCol = p5.floor((p5.mouseX - this.lawn.x) / TILE_WIDTH)
+      const lawnTileRow = p5.floor((p5.mouseY - this.lawn.y) / TILE_HEIGHT)
 
-      const x = (this.lawnPosition.x + 1) * TILE_WIDTH + this.lawn.x - TILE_WIDTH / 2
-      const y = (this.lawnPosition.y + 1) * TILE_HEIGHT + this.lawn.y - TILE_HEIGHT / 2
+      if (!this.isMouseInsideLawn(p5) || this.lawn.getLawnTile(lawnTileRow, lawnTileCol)) return
 
-      this.lawn.plant(new Peashooter(p5, x, y), this.lawnPosition.x, this.lawnPosition.y)
+      const x = (lawnTileCol + 1) * TILE_WIDTH + this.lawn.x - TILE_WIDTH / 2
+      const y = (lawnTileRow + 1) * TILE_HEIGHT + this.lawn.y - TILE_HEIGHT / 2
+
+      this.lawn.plant(new Peashooter(p5, x, y, this.peasSystem.addPea), lawnTileRow, lawnTileCol)
     }
   }
 }

@@ -7,12 +7,14 @@ import Peashooter from './Peashooter'
 class Pea extends Entity {
   states: EntityState
   currentState: HandleState
-  onHitEnd: () => void = () => {  }
+  onPeaEnd: (pea: Pea) => void
 
-  constructor(x: number, y: number) {
+  constructor(x: number, y: number, onPeaEnd: (pea: Pea) => void) {
     super(x, y)
 
     Pea.spritesheet = Peashooter.spritesheet
+
+    this.onPeaEnd = onPeaEnd
 
     this.states = {
       [PeaState.FLYING]: {
@@ -54,7 +56,7 @@ class Pea extends Entity {
     this.animationFrame++
     if (this.animationFrame >= PeaAnimation.OnHit.length) {
       this.animationFrame = 0
-      this.onHitEnd()
+      this.onPeaEnd(this)
     }
 
     this.animationTimer = p5.millis() + PeaAnimation.OnHit[this.animationFrame].timer * p5.deltaTime

@@ -6,24 +6,29 @@ import {
   PEASHOOTER_HEIGHT,
   PEASHOOTER_TIMER,
   PEASHOOTER_WIDTH,
-  PeaState,
   PeashooterState,
   TransformFrame
 } from '../../constants/peashooter'
 import { EntityState, HandleState } from '../../types'
 import Entity from '../Entity'
-import Pea from './Pea'
 
 class Peashooter extends Entity {
   firingTimer: number
-  peas: Pea[] = []
   currentState: HandleState
+  changingStateTimer: number
   states: EntityState
+  isZombieAhead: boolean
+  addPea: (x: number, y: number) => void
+  CHANGING_STATE_CONST: number = 500
+
+  // Solo para usarse en el método debug().
   dx: number = 0
 
-  constructor(p5: P5, x: number, y: number) {
+  constructor(p5: P5, x: number, y: number, addPea: (x: number, y: number) => void) {
     super(x, y)
 
+    this.addPea = addPea
+    this.isZombieAhead = Math.floor(Math.random() * 2) === 0
     this.animationTimer = p5.millis() + PEASHOOTER_TIMER * p5.deltaTime
     this.firingTimer = p5.millis() + FIRE_RATE / 4
 
@@ -40,6 +45,7 @@ class Peashooter extends Entity {
       }
     }
 
+    this.changingStateTimer = p5.millis() + this.CHANGING_STATE_CONST
     this.currentState = this.states[PeashooterState.IDLE]
   }
 
@@ -65,7 +71,7 @@ class Peashooter extends Entity {
     )
   }
 
-  handleIdleUpdate() {
+  handleIdleUpdate = () => {
     this.animationFrame = 0
   }
 
@@ -96,12 +102,11 @@ class Peashooter extends Entity {
   }
 
   updateFiringPea(p5: P5) {
-    if (p5.millis() < this.firingTimer) return
+    if (p5.millis() < this.firingTimer || !this.isZombieAhead) return
 
     this.changeState(p5, PeashooterState.SHOOTING)
-
     this.firingTimer = p5.millis() + FIRE_RATE
-    this.peas.push(new Pea(this.vector.x + 5, this.vector.y - 8))
+    this.addPea(this.vector.x + 10, this.vector.y - 8)
   }
 
   updateAnimation(p5: P5) {
@@ -115,26 +120,10 @@ class Peashooter extends Entity {
 
   update(p5: P5) {
     this.updateFiringPea(p5)
-
-    this.peas.forEach((pea) => {
-      const index = this.peas.indexOf(pea)
-
-      if (pea.vector.x > p5.width - 20 && pea.currentState.type !== PeaState.ON_HIT) {
-        pea.onHitEnd = () => this.peas.splice(index, 1)
-        pea.changeState(p5, PeaState.ON_HIT)
-      }
-
-      pea.update(p5)
-
-      // pea.vector.x > p5.width + 10 ? this.peas.splice(index, 1) : pea.update(p5)
-    })
-
     this.updateAnimation(p5)
   }
 
   draw(p5: P5) {
-    this.peas.forEach((pea) => pea.draw(p5))
-
     this.currentState.draw(p5)
 
     if (!DEBUG) return

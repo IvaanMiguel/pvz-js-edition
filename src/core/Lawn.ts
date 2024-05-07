@@ -19,7 +19,7 @@ class Lawn {
   }
 
   getLawnTile(row: number, col: number) {
-    return this.tiles[col][row]
+    return this.tiles[row][col]
   }
 
   digUpLawnTile(row: number, col: number) {
@@ -27,7 +27,7 @@ class Lawn {
   }
 
   plant(plant: Entity, row: number, col: number) {
-    this.tiles[col][row] = plant
+    this.tiles[row][col] = plant
   }
 
   update(p5: P5) {
