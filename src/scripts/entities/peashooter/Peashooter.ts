@@ -9,7 +9,7 @@ import {
   PeashooterState,
   TransformFrame
 } from '../../constants/peashooter'
-import { EntityState, HandleState } from '../../types'
+import { EntityState, HandleState } from '../../../types'
 import Entity from '../Entity'
 
 class Peashooter extends Entity {

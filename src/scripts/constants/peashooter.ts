@@ -1,4 +1,4 @@
-import { TransformFrame as TransformFrameType } from '../types'
+import { TransformFrame as TransformFrameType } from '../../types'
 import { SPEED_MULTIPLIER } from './game'
 
 export const PeashooterState = {

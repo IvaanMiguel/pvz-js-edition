@@ -1,6 +1,6 @@
 import P5 from 'p5'
 import { PEA_SPEED, PeaAnimation, PeaFrame, PeaKeyframe, PeaState } from '../../constants/peashooter'
-import { EntityState, HandleState } from '../../types'
+import { EntityState, HandleState } from '../../../types'
 import Entity from '../Entity'
 import Peashooter from './Peashooter'
 
