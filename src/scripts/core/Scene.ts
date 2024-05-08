@@ -14,6 +14,7 @@ import Peashooter from '../entities/peashooter/Peashooter'
 import Lawn from './Lawn'
 import PeasSystem from './PeasSystem'
 import Player from './Player'
+import Zombie from '../entities/Zombie'
 
 class Scene {
   static bgImage: Image
@@ -23,11 +24,13 @@ class Scene {
   lawn: Lawn
   player: Player
   peasSystem: PeasSystem
+  zombie: Zombie
 
   constructor(p5: P5) {
     this.lawn = new Lawn(LAWN_OFFSET_X, LAWN_OFFSET_Y, LAWN_WIDTH, LAWN_HEIGHT)
     this.peasSystem = new PeasSystem()
     this.player = new Player(this.lawn, this.peasSystem)
+    this.zombie = new Zombie(150, 100, 10)
 
     if (!DEBUG) return
 
@@ -39,6 +42,7 @@ class Scene {
     Scene.bgImage = p5.loadImage('/sprites/bg.png')
 
     Peashooter.preload(p5)
+    Zombie.preload(p5)
   }
 
   getFrameRate = (p5: P5) => p5.round(p5.frameRate())
@@ -53,6 +57,7 @@ class Scene {
   update(p5: P5) {
     this.player.update(p5)
     this.lawn.update(p5)
+    this.zombie.update(p5)
     this.peasSystem.update(p5)
 
     if (SHOW_FPS) this.updateFrameRate(p5)
@@ -63,6 +68,7 @@ class Scene {
     p5.image(Scene.bgImage, 0, 0)
 
     this.lawn.draw(p5)
+    this.zombie.draw(p5)
     this.peasSystem.draw(p5)
 
     if (SHOW_FPS) this.showFps(p5)
