@@ -2,7 +2,7 @@ import P5 from 'p5'
 import { TILE_HEIGHT, TILE_WIDTH } from '../constants/game'
 import Peashooter from '../entities/peashooter/Peashooter'
 import Lawn from './Lawn'
-import PeasSystem from './PeasSystem'
+import PeasSystem from './systems/PeasSystem'
 
 class Player {
   lawn: Lawn
@@ -36,7 +36,7 @@ class Player {
       const x = (lawnTileCol + 1) * TILE_WIDTH + this.lawn.x - TILE_WIDTH / 2
       const y = (lawnTileRow + 1) * TILE_HEIGHT + this.lawn.y - TILE_HEIGHT / 2
 
-      this.lawn.plant(new Peashooter(p5, x, y, this.peasSystem.addPea), lawnTileRow, lawnTileCol)
+      this.lawn.plantTile(new Peashooter(p5, x, y, this.peasSystem.addPea), lawnTileRow, lawnTileCol)
     }
   }
 }

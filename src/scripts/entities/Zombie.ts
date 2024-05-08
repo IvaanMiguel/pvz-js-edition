@@ -1,8 +1,12 @@
-import P5 from 'p5'
+import P5, { Vector } from 'p5'
 import { EntityState, HandleState } from '../../types'
 import { DEBUG } from '../constants/game'
 import {
+  DRAW_HITBOX,
+  DRAW_SPRITE_BORDERS,
   FramesIndex,
+  HITBOX_HEIGHT,
+  HITBOX_WIDTH,
   TransformFrame,
   ZOMBIE_SPEED,
   ZOMBIE_TIMER,
@@ -18,14 +22,23 @@ class Zombie extends Entity {
   remainingHp: number
   action: 'EATING' | 'WALKING'
   hpStatus: 'FULL' | 'DAMAGED'
+  lawnRow: number
+  hitbox: { position: Vector; w: number; h: number }
 
-  constructor(x: number, y: number, hp: number) {
+  constructor(x: number, y: number, hp: number, lawnRow: number) {
     super(x, y)
+
+    this.hitbox = {
+      position: new Vector(this.vector.x - HITBOX_WIDTH / 2, this.vector.y - HITBOX_HEIGHT / 2),
+      w: HITBOX_WIDTH,
+      h: HITBOX_HEIGHT
+    }
 
     this.hp = hp
     this.remainingHp = hp
     this.action = 'WALKING'
     this.hpStatus = 'FULL'
+    this.lawnRow = lawnRow
 
     this.states = {
       [ZombieState.WALKING.FULL]: {
@@ -115,13 +128,21 @@ class Zombie extends Entity {
     )
   }
 
+  updatePosition(p5: P5) {
+    if (this.action === 'WALKING' && this.remainingHp > 0) {
+      const xVelocity = ZOMBIE_SPEED * (p5.deltaTime / 1000)
+
+      this.vector.sub(xVelocity, 0)
+      this.hitbox.position.sub(xVelocity, 0)
+    }
+  }
+
   update(p5: P5) {
-    this.hpStatus = this.remainingHp <= (this.hp / 2) ? 'DAMAGED' : 'FULL'
+    this.hpStatus = this.remainingHp <= this.hp / 2 ? 'DAMAGED' : 'FULL'
 
     if (this.remainingHp <= 0 && this.currentState.type !== ZombieState.LYING_DOWN) this.kill(p5)
 
-    if (this.action === 'WALKING' && this.remainingHp > 0) this.vector.sub(ZOMBIE_SPEED * (p5.deltaTime / 1000), 0)
-
+    this.updatePosition(p5)
     this.currentState.update(p5)
   }
 
@@ -134,16 +155,29 @@ class Zombie extends Entity {
   }
 
   debug(p5: P5) {
-    p5.stroke('red')
-    p5.noFill()
     p5.strokeWeight(1)
-    p5.rectMode(p5.CENTER)
-    p5.rect(
-      this.vector.x + (TransformFrame[this.currentState.type]?.offsetX || 0),
-      this.vector.y + (TransformFrame[this.currentState.type]?.offsetY || 0),
-      ZombieDimensions[this.currentState.type].width - 1,
-      ZombieDimensions[this.currentState.type].height - 1
-    )
+
+    if (DRAW_HITBOX) {
+      p5.stroke('blue')
+      p5.rectMode(p5.CORNER)
+      p5.rect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.w, this.hitbox.h)
+
+      p5.stroke('yellow')
+      p5.point(this.hitbox.position.x, this.hitbox.position.y)
+    }
+
+    if (DRAW_SPRITE_BORDERS) {
+      p5.stroke('red')
+      p5.rectMode(p5.CENTER)
+      p5.point(this.vector.x, this.vector.y)
+      p5.noFill()
+      p5.rect(
+        this.vector.x + (TransformFrame[this.currentState.type]?.offsetX || 0),
+        this.vector.y + (TransformFrame[this.currentState.type]?.offsetY || 0),
+        ZombieDimensions[this.currentState.type].width,
+        ZombieDimensions[this.currentState.type].height
+      )
+    }
   }
 }
 

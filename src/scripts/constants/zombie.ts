@@ -1,10 +1,16 @@
 import { TransformFrame as TransformFrameType } from '../../types'
-import { SPEED_MULTIPLIER } from './game'
+import { SPEED_MULTIPLIER, TILE_HEIGHT } from './game'
+
+export const DRAW_SPRITE_BORDERS = false
+export const DRAW_HITBOX = true
+
+export const HITBOX_WIDTH = 20
+export const HITBOX_HEIGHT = TILE_HEIGHT * 0.9
 
 export const ZombieState = {
   WALKING: {
     FULL: 'walking-full',
-    DAMAGED: 'walking-damaged',
+    DAMAGED: 'walking-damaged'
   },
   EATING: {
     FULL: 'eating-full',
@@ -17,18 +23,19 @@ export const ZOMBIE_TIMER = 8 * SPEED_MULTIPLIER
 export const ZOMBIE_SPEED = 4
 
 export const TransformFrame: TransformFrameType = {
-  [ZombieState.WALKING.FULL]: { offsetY: 0 },
-  [ZombieState.WALKING.DAMAGED]: { offsetX: -2, offsetY: 0 },
-  [ZombieState.EATING.FULL]: { offsetY: 2 },
-  [ZombieState.EATING.DAMAGED]: { offsetX: 0, offsetY: 2 }
+  [ZombieState.WALKING.FULL]: { offsetY: -9 },
+  [ZombieState.WALKING.DAMAGED]: { offsetX: -2, offsetY: -9 },
+  [ZombieState.EATING.FULL]: { offsetY: -7 },
+  [ZombieState.EATING.DAMAGED]: { offsetY: -7 },
+  [ZombieState.LYING_DOWN]: { offsetX: -7, offsetY: -1 }
 }
 
 export const ZombieDimensions = {
-  [ZombieState.WALKING.FULL]: { originY: 0, width: 42, height: 54 },
-  [ZombieState.WALKING.DAMAGED]: { originY: 54, width: 37, height: 54 },
-  [ZombieState.EATING.FULL]: { originY: 175, width: 37, height: 51 },
-  [ZombieState.EATING.DAMAGED]: { originY: 226, width: 37, height: 51 },
-  [ZombieState.LYING_DOWN]: { originY: 141, width: 44, height: 34 }
+  [ZombieState.WALKING.FULL]: { originY: 0, width: 42, height: 47 },
+  [ZombieState.WALKING.DAMAGED]: { originY: 48, width: 37, height: 47 },
+  [ZombieState.EATING.FULL]: { originY: 161, width: 37, height: 44 },
+  [ZombieState.EATING.DAMAGED]: { originY: 206, width: 37, height: 44 },
+  [ZombieState.LYING_DOWN]: { originY: 129, width: 44, height: 31 }
 }
 
 export const FramesIndex = {

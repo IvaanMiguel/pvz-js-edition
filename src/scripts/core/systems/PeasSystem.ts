@@ -1,10 +1,14 @@
 import P5 from 'p5'
 import Pea from '../../entities/peashooter/Pea'
+import Lawn from '../Lawn'
 
 class PeasSystem {
   peas: Pea[] = []
+  lawn: Lawn
 
-  constructor() {}
+  constructor(lawn: Lawn) {
+    this.lawn = lawn
+  }
 
   onPeaEnd = (pea: Pea) => {
     const index = this.peas.indexOf(pea)

@@ -10,11 +10,11 @@ import {
   TILE_HEIGHT,
   TILE_WIDTH
 } from '../constants/game'
+import Zombie from '../entities/Zombie'
 import Peashooter from '../entities/peashooter/Peashooter'
 import Lawn from './Lawn'
-import PeasSystem from './PeasSystem'
 import Player from './Player'
-import Zombie from '../entities/Zombie'
+import PeasSystem from './systems/PeasSystem'
 
 class Scene {
   static bgImage: Image
@@ -24,13 +24,13 @@ class Scene {
   lawn: Lawn
   player: Player
   peasSystem: PeasSystem
-  zombie: Zombie
+  SPAWNING_TIMER_CONST: number = 5000
+  spawningTime: number = 0
 
   constructor(p5: P5) {
     this.lawn = new Lawn(LAWN_OFFSET_X, LAWN_OFFSET_Y, LAWN_WIDTH, LAWN_HEIGHT)
-    this.peasSystem = new PeasSystem()
+    this.peasSystem = new PeasSystem(this.lawn)
     this.player = new Player(this.lawn, this.peasSystem)
-    this.zombie = new Zombie(150, 100, 10)
 
     if (!DEBUG) return
 
@@ -55,9 +55,16 @@ class Scene {
   }
 
   update(p5: P5) {
+    if (p5.millis() >= this.spawningTime) {
+      const lawnRow = Math.floor(Math.random() * 5)
+      const y = (lawnRow + 1) * TILE_HEIGHT + LAWN_OFFSET_Y - TILE_HEIGHT / 2
+
+      this.lawn.addZombieToRow(new Zombie(p5.width + 10, y, 10, lawnRow), lawnRow)
+      this.spawningTime = p5.millis() + this.SPAWNING_TIMER_CONST
+    }
+
     this.player.update(p5)
     this.lawn.update(p5)
-    this.zombie.update(p5)
     this.peasSystem.update(p5)
 
     if (SHOW_FPS) this.updateFrameRate(p5)
@@ -68,7 +75,6 @@ class Scene {
     p5.image(Scene.bgImage, 0, 0)
 
     this.lawn.draw(p5)
-    this.zombie.draw(p5)
     this.peasSystem.draw(p5)
 
     if (SHOW_FPS) this.showFps(p5)
@@ -93,11 +99,11 @@ class Scene {
 
     p5.rect(this.lawn.x, this.lawn.y, this.lawn.w, this.lawn.h)
 
-    for (let i = 1; i < 5; i++) {
+    for (let i = 1; i < this.lawn.h / TILE_HEIGHT; i++) {
       p5.line(this.lawn.x, TILE_HEIGHT * i + this.lawn.y, this.lawn.x + this.lawn.w, TILE_HEIGHT * i + this.lawn.y)
     }
 
-    for (let i = 1; i < 9; i++) {
+    for (let i = 1; i < this.lawn.w / TILE_WIDTH; i++) {
       p5.line(this.lawn.x + TILE_WIDTH * i, this.lawn.y, this.lawn.x + TILE_WIDTH * i, this.lawn.y + this.lawn.h)
     }
   }

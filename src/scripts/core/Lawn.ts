@@ -8,6 +8,7 @@ class Lawn {
   w: number
   h: number
   tiles: (Entity | null)[][]
+  zombies: Entity[][]
 
   constructor(x: number, y: number, w: number, h: number) {
     this.x = x
@@ -16,6 +17,7 @@ class Lawn {
     this.h = h
 
     this.tiles = [...Array(this.h / TILE_HEIGHT)].map(() => Array(this.w / TILE_WIDTH).fill(null)) // ?
+    this.zombies = [...Array(this.h / TILE_HEIGHT)].map(() => [])
   }
 
   getLawnTile(row: number, col: number) {
@@ -26,14 +28,22 @@ class Lawn {
     this.tiles[col][row] = null
   }
 
-  plant(plant: Entity, row: number, col: number) {
+  plantTile(plant: Entity, row: number, col: number) {
     this.tiles[row][col] = plant
+  }
+
+  addZombieToRow(zombie: Entity, lawnRow: number) {
+    this.zombies[lawnRow].push(zombie)
   }
 
   update(p5: P5) {
     for (let i = 0; i < this.tiles.length; i++) {
-      for (let j = 0; j < this.tiles[0].length; j++) {
-        if (this.tiles[i][j]) this.tiles[i][j]?.update(p5)
+      for (let j = 0; j < this.tiles[i].length; j++) {
+        this.tiles[i][j]?.update(p5)
+      }
+
+      for (let j = 0; j < this.zombies[i].length; j++) {
+        this.zombies[i][j].update(p5)
       }
     }
   }
@@ -41,7 +51,11 @@ class Lawn {
   draw(p5: P5) {
     for (let i = 0; i < this.tiles.length; i++) {
       for (let j = 0; j < this.tiles[0].length; j++) {
-        if (this.tiles[i][j]) this.tiles[i][j]?.draw(p5)
+        this.tiles[i][j]?.draw(p5)
+      }
+
+      for (let j = this.zombies[i].length - 1; j >= 0; j--) {
+        this.zombies[i][j].draw(p5)
       }
     }
   }

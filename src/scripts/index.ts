@@ -1,5 +1,5 @@
 import P5 from 'p5'
-import { CANVAS_ELEMENT } from './constants/game'
+import { CANVAS_ELEMENT, PIXEL_DENSITY, SCREEN_HEIGHT, SCREEN_WIDTH } from './constants/game'
 import Scene from './core/Scene'
 
 const sketch = (p5: P5): void => {
@@ -11,7 +11,8 @@ const sketch = (p5: P5): void => {
   }
 
   p5.setup = () => {
-    p5.createCanvas(256, 192, p5.P2D, CANVAS_ELEMENT)
+    p5.pixelDensity(PIXEL_DENSITY)
+    p5.createCanvas(SCREEN_WIDTH, SCREEN_HEIGHT, p5.P2D, CANVAS_ELEMENT)
 
     canvasHeight = (CANVAS_ELEMENT.clientWidth / p5.width) * p5.height
     CANVAS_ELEMENT.style.setProperty('height', `${canvasHeight}px`, 'important')
@@ -20,11 +21,9 @@ const sketch = (p5: P5): void => {
   }
 
   p5.draw = () => {
-    // p5.pixelDensity(2)
     p5.noSmooth()
 
     scene.draw(p5)
-
     scene.update(p5)
   }
 
@@ -33,6 +32,10 @@ const sketch = (p5: P5): void => {
 
     canvasHeight = (CANVAS_ELEMENT.clientWidth / p5.width) * p5.height
     CANVAS_ELEMENT.style.setProperty('height', `${canvasHeight}px`, 'important')
+  }
+
+  p5.mouseMoved = () => {
+    console.log(p5.mouseX, p5.mouseY)
   }
 }
 
