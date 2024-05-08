@@ -1,5 +1,5 @@
 import P5 from 'p5'
-import Pea from '../entities/peashooter/Pea'
+import Pea from '../../entities/peashooter/Pea'
 
 class PeasSystem {
   peas: Pea[] = []
