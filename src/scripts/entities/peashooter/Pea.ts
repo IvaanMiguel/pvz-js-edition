@@ -1,20 +1,30 @@
 import P5 from 'p5'
-import { DRAW_PEA_SPRITE_BORDERS, PEA_SIZE, PEA_SPEED, PeaAnimation, PeaFrame, PeaKeyframe, PeaState } from '../../constants/peashooter'
 import { EntityState, HandleState } from '../../../types'
+import { DEBUG } from '../../constants/game'
+import {
+  DRAW_PEA_SPRITE_BORDERS,
+  PEA_SIZE,
+  PEA_SPEED,
+  PeaAnimation,
+  PeaFrame,
+  PeaKeyframe,
+  PeaState
+} from '../../constants/peashooter'
 import Entity from '../Entity'
 import Peashooter from './Peashooter'
-import { DEBUG } from '../../constants/game'
 
 class Pea extends Entity {
   states: EntityState
   currentState: HandleState
+  lawnRow: number
   onPeaEnd: (pea: Pea) => void
 
-  constructor(x: number, y: number, onPeaEnd: (pea: Pea) => void) {
+  constructor(x: number, y: number, lawnRow: number, onPeaEnd: (pea: Pea) => void) {
     super(x, y)
 
     Pea.spritesheet = Peashooter.spritesheet
 
+    this.lawnRow = lawnRow
     this.onPeaEnd = onPeaEnd
 
     this.states = {

@@ -33,10 +33,6 @@ const sketch = (p5: P5): void => {
     canvasHeight = (CANVAS_ELEMENT.clientWidth / p5.width) * p5.height
     CANVAS_ELEMENT.style.setProperty('height', `${canvasHeight}px`, 'important')
   }
-
-  p5.mouseMoved = () => {
-    console.log(p5.mouseX, p5.mouseY)
-  }
 }
 
 new P5(sketch, document.body)

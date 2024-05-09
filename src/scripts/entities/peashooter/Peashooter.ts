@@ -1,4 +1,5 @@
 import P5 from 'p5'
+import { EntityState, HandleState } from '../../../types'
 import { DEBUG } from '../../constants/game'
 import {
   DRAW_PEASHOOTER_SPRITE_BORDERS,
@@ -10,25 +11,26 @@ import {
   PeashooterState,
   TransformFrame
 } from '../../constants/peashooter'
-import { EntityState, HandleState } from '../../../types'
 import Entity from '../Entity'
 
 class Peashooter extends Entity {
   firingTimer: number
   currentState: HandleState
-  changingStateTimer: number
   states: EntityState
   isZombieAhead: boolean
-  addPea: (x: number, y: number) => void
+  lawnRow: number
+  addPea: (x: number, y: number, lawnRow: number) => void
   CHANGING_STATE_CONST: number = 500
 
   // Solo para usarse en el método debug().
   dx: number = 0
 
-  constructor(p5: P5, x: number, y: number, addPea: (x: number, y: number) => void) {
+  constructor(p5: P5, x: number, y: number, lawnRow: number, addPea: (x: number, y: number, lawnRow: number) => void) {
     super(x, y)
 
+    this.lawnRow = lawnRow
     this.addPea = addPea
+
     this.isZombieAhead = Math.floor(Math.random() * 2) === 0
     this.animationTimer = p5.millis() + PEASHOOTER_TIMER * p5.deltaTime
     this.firingTimer = p5.millis() + FIRE_RATE / 4
@@ -46,7 +48,6 @@ class Peashooter extends Entity {
       }
     }
 
-    this.changingStateTimer = p5.millis() + this.CHANGING_STATE_CONST
     this.currentState = this.states[PeashooterState.IDLE]
   }
 
@@ -107,7 +108,7 @@ class Peashooter extends Entity {
 
     this.changeState(p5, PeashooterState.SHOOTING)
     this.firingTimer = p5.millis() + FIRE_RATE
-    this.addPea(this.vector.x + 10, this.vector.y - 8)
+    this.addPea(this.vector.x + 10, this.vector.y - 8, this.lawnRow)
   }
 
   updateAnimation(p5: P5) {

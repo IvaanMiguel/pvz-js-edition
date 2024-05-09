@@ -36,7 +36,7 @@ class Player {
       const x = (lawnTileCol + 1) * TILE_WIDTH + this.lawn.x - TILE_WIDTH / 2
       const y = (lawnTileRow + 1) * TILE_HEIGHT + this.lawn.y - TILE_HEIGHT / 2
 
-      this.lawn.plantTile(new Peashooter(p5, x, y, this.peasSystem.addPea), lawnTileRow, lawnTileCol)
+      this.lawn.plantTile(new Peashooter(p5, x, y, lawnTileRow, this.peasSystem.addPea), lawnTileRow, lawnTileCol)
     }
   }
 }
