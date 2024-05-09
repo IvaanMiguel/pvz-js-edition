@@ -4,7 +4,7 @@ import { SPEED_MULTIPLIER, TILE_HEIGHT } from './game'
 export const DRAW_SPRITE_BORDERS = false
 export const DRAW_HITBOX = true
 
-export const HITBOX_WIDTH = 20
+export const HITBOX_WIDTH = 15
 export const HITBOX_HEIGHT = TILE_HEIGHT * 0.9
 
 export const ZombieState = {
@@ -19,8 +19,8 @@ export const ZombieState = {
   LYING_DOWN: 'lying-down'
 }
 
-export const ZOMBIE_TIMER = 8 * SPEED_MULTIPLIER
-export const ZOMBIE_SPEED = 4
+export const ZOMBIE_TIMER = 10 * SPEED_MULTIPLIER
+export const ZOMBIE_SPEED = 2 - (2 - 2 / SPEED_MULTIPLIER)
 
 export const TransformFrame: TransformFrameType = {
   [ZombieState.WALKING.FULL]: { offsetY: -9 },

@@ -23,15 +23,16 @@ class Zombie extends Entity {
   action: 'EATING' | 'WALKING'
   hpStatus: 'FULL' | 'DAMAGED'
   lawnRow: number
-  hitbox: { position: Vector; w: number; h: number }
+  hitbox: { position: Vector; w: number; h: number, isActive: boolean }
 
   constructor(x: number, y: number, hp: number, lawnRow: number) {
     super(x, y)
 
     this.hitbox = {
-      position: new Vector(this.vector.x - HITBOX_WIDTH / 2, this.vector.y - HITBOX_HEIGHT / 2),
+      position: new Vector(this.vector.x - HITBOX_WIDTH / 2 + 4, this.vector.y - HITBOX_HEIGHT / 2),
       w: HITBOX_WIDTH,
-      h: HITBOX_HEIGHT
+      h: HITBOX_HEIGHT,
+      isActive: true
     }
 
     this.hp = hp
@@ -139,6 +140,7 @@ class Zombie extends Entity {
 
   update(p5: P5) {
     this.hpStatus = this.remainingHp <= this.hp / 2 ? 'DAMAGED' : 'FULL'
+    this.hitbox.isActive = this.remainingHp > 0
 
     if (this.remainingHp <= 0 && this.currentState.type !== ZombieState.LYING_DOWN) this.kill(p5)
 
@@ -157,7 +159,7 @@ class Zombie extends Entity {
   debug(p5: P5) {
     p5.strokeWeight(1)
 
-    if (DRAW_HITBOX) {
+    if (DRAW_HITBOX && this.hitbox.isActive) {
       p5.stroke('blue')
       p5.rectMode(p5.CORNER)
       p5.rect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.w, this.hitbox.h)

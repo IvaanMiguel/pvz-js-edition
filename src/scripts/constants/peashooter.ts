@@ -1,6 +1,9 @@
 import { TransformFrame as TransformFrameType } from '../../types'
 import { SPEED_MULTIPLIER } from './game'
 
+export const DRAW_PEASHOOTER_SPRITE_BORDERS = true
+export const DRAW_PEA_SPRITE_BORDERS = true
+
 export const PeashooterState = {
   IDLE: 'idle',
   SHOOTING: 'shooting'
@@ -24,6 +27,8 @@ export const TransformFrame: TransformFrameType = {
   7: { offsetX: -2 }
 }
 
+export const PEA_SIZE = 10
+
 export const PeaState = {
   FLYING: 'flying',
   ON_HIT: 'on-hit'
@@ -36,7 +41,7 @@ export const PeaFrame = {
 }
 
 export const PeaKeyframe = {
-  [PeaFrame.FLYING]: { originX: 80, originY: 31, w: 10, h: 10, timer: 60 },
+  [PeaFrame.FLYING]: { originX: 80, originY: 31, w: PEA_SIZE, h: PEA_SIZE, timer: 60 },
   [PeaFrame.EXPLODING_1]: { originX: 90, originY: 31, w: 10, h: 11, timer: 5 * SPEED_MULTIPLIER },
   [PeaFrame.EXPLODING_2]: { originX: 100, originY: 31, w: 13, h: 15, timer: 5 * SPEED_MULTIPLIER }
 }
@@ -46,4 +51,4 @@ export const PeaAnimation = {
 }
 
 export const FIRE_RATE = 1500 * SPEED_MULTIPLIER
-export const PEA_SPEED = 100
+export const PEA_SPEED = 100 - (100 - 100 / SPEED_MULTIPLIER)

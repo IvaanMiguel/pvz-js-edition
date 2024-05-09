@@ -1,8 +1,9 @@
 import P5 from 'p5'
-import { PEA_SPEED, PeaAnimation, PeaFrame, PeaKeyframe, PeaState } from '../../constants/peashooter'
+import { DRAW_PEA_SPRITE_BORDERS, PEA_SIZE, PEA_SPEED, PeaAnimation, PeaFrame, PeaKeyframe, PeaState } from '../../constants/peashooter'
 import { EntityState, HandleState } from '../../../types'
 import Entity from '../Entity'
 import Peashooter from './Peashooter'
+import { DEBUG } from '../../constants/game'
 
 class Pea extends Entity {
   states: EntityState
@@ -74,6 +75,19 @@ class Pea extends Entity {
 
   draw(p5: P5) {
     this.currentState.draw(p5)
+
+    if (!DEBUG) return
+
+    this.debug(p5)
+  }
+
+  debug(p5: P5) {
+    if (DRAW_PEA_SPRITE_BORDERS) {
+      p5.strokeWeight(1)
+      p5.stroke('red')
+      p5.rectMode(p5.CENTER)
+      p5.rect(this.vector.x, this.vector.y, PEA_SIZE)
+    }
   }
 }
 

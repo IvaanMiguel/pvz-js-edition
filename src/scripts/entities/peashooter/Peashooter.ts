@@ -1,6 +1,7 @@
 import P5 from 'p5'
 import { DEBUG } from '../../constants/game'
 import {
+  DRAW_PEASHOOTER_SPRITE_BORDERS,
   FIRE_RATE,
   FramesIndex,
   PEASHOOTER_HEIGHT,
@@ -132,11 +133,13 @@ class Peashooter extends Entity {
   }
 
   debug(p5: P5) {
-    p5.stroke('red')
-    p5.noFill()
-    p5.strokeWeight(1)
-    p5.rectMode(p5.CENTER)
-    p5.rect(this.dx, this.vector.y, PEASHOOTER_WIDTH - 1, PEASHOOTER_HEIGHT - 1)
+    if (DRAW_PEASHOOTER_SPRITE_BORDERS) {
+      p5.stroke('red')
+      p5.noFill()
+      p5.strokeWeight(1)
+      p5.rectMode(p5.CENTER)
+      p5.rect(this.dx, this.vector.y, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT)
+    }
   }
 }
 
