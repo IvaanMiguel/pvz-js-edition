@@ -6,21 +6,22 @@ import {
   FIRE_RATE,
   FramesIndex,
   PEASHOOTER_HEIGHT,
+  PEASHOOTER_HP,
   PEASHOOTER_TIMER,
   PEASHOOTER_WIDTH,
   PeashooterState,
   TransformFrame
 } from '../../constants/peashooter'
-import Entity from '../Entity'
+import Plant from '../Plant'
 
-class Peashooter extends Entity {
+class Peashooter extends Plant {
+  hp: number = PEASHOOTER_HP
+  remainingHp: number = PEASHOOTER_HP
   firingTimer: number
   currentState: HandleState
   states: EntityState
-  isZombieAhead: boolean
   lawnRow: number
   addPea: (x: number, y: number, lawnRow: number) => void
-  CHANGING_STATE_CONST: number = 500
 
   // Solo para usarse en el método debug().
   dx: number = 0
@@ -31,7 +32,7 @@ class Peashooter extends Entity {
     this.lawnRow = lawnRow
     this.addPea = addPea
 
-    this.isZombieAhead = Math.floor(Math.random() * 2) === 0
+    this.isZombieAhead = false
     this.animationTimer = p5.millis() + PEASHOOTER_TIMER * p5.deltaTime
     this.firingTimer = p5.millis() + FIRE_RATE / 4
 
@@ -53,6 +54,10 @@ class Peashooter extends Entity {
 
   static preload(p5: P5) {
     Peashooter.spritesheet = p5.loadImage('/sprites/peashooter.png')
+  }
+
+  setIsZombieAhead(isZombieAhead: boolean) {
+    this.isZombieAhead = isZombieAhead
   }
 
   handleIdleDraw = (p5: P5) => {
@@ -93,18 +98,19 @@ class Peashooter extends Entity {
   }
 
   handleShootingUpdate = (p5: P5) => {
-    this.animationFrame = 0
-    this.changeState(p5, PeashooterState.IDLE)
+    const initialFrame = p5.floor(p5.random(0, FramesIndex[PeashooterState.IDLE].length))
+
+    this.changeState(p5, PeashooterState.IDLE, initialFrame)
   }
 
-  changeState(p5: P5, newState: string) {
+  changeState(p5: P5, newState: string, initialAnimationFrame: number = 0) {
     this.currentState = this.states[newState]
-    this.animationFrame = 0
+    this.animationFrame = initialAnimationFrame
     this.animationTimer = p5.millis() + PEASHOOTER_TIMER * p5.deltaTime
   }
 
   updateFiringPea(p5: P5) {
-    if (p5.millis() < this.firingTimer || !this.isZombieAhead) return
+    if (p5.millis() < this.firingTimer) return
 
     this.changeState(p5, PeashooterState.SHOOTING)
     this.firingTimer = p5.millis() + FIRE_RATE
@@ -121,7 +127,8 @@ class Peashooter extends Entity {
   }
 
   update(p5: P5) {
-    this.updateFiringPea(p5)
+    if (this.isZombieAhead) this.updateFiringPea(p5)
+
     this.updateAnimation(p5)
   }
 

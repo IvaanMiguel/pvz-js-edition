@@ -15,6 +15,7 @@ import Peashooter from '../entities/peashooter/Peashooter'
 import Lawn from './Lawn'
 import Player from './Player'
 import PeasSystem from './systems/PeasSystem'
+import ZombiesSystem from './systems/ZombiesSystem'
 
 class Scene {
   static bgImage: Image
@@ -24,12 +25,14 @@ class Scene {
   lawn: Lawn
   player: Player
   peasSystem: PeasSystem
-  SPAWNING_TIMER_CONST: number = 5000
+  zombiesSystem: ZombiesSystem
+  SPAWNING_TIMER_CONST: number = 2000
   spawningTime: number = 0
 
   constructor(p5: P5) {
-    this.lawn = new Lawn(LAWN_OFFSET_X, LAWN_OFFSET_Y, LAWN_WIDTH, LAWN_HEIGHT)
-    this.peasSystem = new PeasSystem(this.lawn)
+    this.zombiesSystem = new ZombiesSystem()
+    this.lawn = new Lawn(LAWN_OFFSET_X, LAWN_OFFSET_Y, LAWN_WIDTH, LAWN_HEIGHT, this.zombiesSystem)
+    this.peasSystem = new PeasSystem(this.lawn, this.zombiesSystem)
     this.player = new Player(this.lawn, this.peasSystem)
 
     if (!DEBUG) return
@@ -59,12 +62,13 @@ class Scene {
       const lawnRow = Math.floor(Math.random() * 5)
       const y = (lawnRow + 1) * TILE_HEIGHT + LAWN_OFFSET_Y - TILE_HEIGHT / 2
 
-      this.lawn.addZombieToRow(new Zombie(p5.width + 10, y, 10, lawnRow), lawnRow)
+      this.zombiesSystem.addZombieToRow(new Zombie(p5.width + 10, y, 10, lawnRow, this.zombiesSystem.onZombieEnd), lawnRow)
       this.spawningTime = p5.millis() + this.SPAWNING_TIMER_CONST
     }
 
     this.player.update(p5)
     this.lawn.update(p5)
+    this.zombiesSystem.update(p5)
     this.peasSystem.update(p5)
 
     if (SHOW_FPS) this.updateFrameRate(p5)

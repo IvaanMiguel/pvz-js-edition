@@ -1,6 +1,8 @@
 import P5 from 'p5'
 import { TILE_HEIGHT, TILE_WIDTH } from '../constants/game'
 import Entity from '../entities/Entity'
+import Plant from '../entities/Plant'
+import ZombiesSystem from './systems/ZombiesSystem'
 
 class Lawn {
   x: number
@@ -8,16 +10,16 @@ class Lawn {
   w: number
   h: number
   tiles: (Entity | null)[][]
-  zombies: Entity[][]
+  zombiesSystem: ZombiesSystem
 
-  constructor(x: number, y: number, w: number, h: number) {
+  constructor(x: number, y: number, w: number, h: number, zombiesSystem: ZombiesSystem) {
     this.x = x
     this.y = y
     this.w = w
     this.h = h
+    this.zombiesSystem = zombiesSystem
 
     this.tiles = [...Array(this.h / TILE_HEIGHT)].map(() => Array(this.w / TILE_WIDTH).fill(null)) // ?
-    this.zombies = [...Array(this.h / TILE_HEIGHT)].map(() => [])
   }
 
   getLawnTile(row: number, col: number) {
@@ -32,18 +34,22 @@ class Lawn {
     this.tiles[row][col] = plant
   }
 
-  addZombieToRow(zombie: Entity, lawnRow: number) {
-    this.zombies[lawnRow].push(zombie)
+  tauntLawn() {
+    for (let i = 0; i < this.tiles.length; i++) {
+      for (let j = 0; j < this.tiles[0].length; j++) {
+        if (this.tiles[i][j] instanceof Plant) {
+          (this.tiles[i][j] as Plant).setIsZombieAhead(this.zombiesSystem.zombies[i].length > 0)
+        }
+      }
+    }
   }
 
   update(p5: P5) {
+    this.tauntLawn()
+
     for (let i = 0; i < this.tiles.length; i++) {
       for (let j = 0; j < this.tiles[i].length; j++) {
         this.tiles[i][j]?.update(p5)
-      }
-
-      for (let j = 0; j < this.zombies[i].length; j++) {
-        this.zombies[i][j].update(p5)
       }
     }
   }
@@ -54,8 +60,8 @@ class Lawn {
         this.tiles[i][j]?.draw(p5)
       }
 
-      for (let j = this.zombies[i].length - 1; j >= 0; j--) {
-        this.zombies[i][j].draw(p5)
+      for (let j = this.zombiesSystem.zombies[i].length - 1; j >= 0; j--) {
+        this.zombiesSystem.zombies[i][j].draw(p5)
       }
     }
   }

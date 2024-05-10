@@ -20,7 +20,9 @@ export const ZombieState = {
 }
 
 export const ZOMBIE_TIMER = 10 * SPEED_MULTIPLIER
-export const ZOMBIE_SPEED = 2 - (2 - 2 / SPEED_MULTIPLIER)
+
+const ZOMBIE_BASE_SPEED  = 5
+export const ZOMBIE_SPEED = ZOMBIE_BASE_SPEED - (ZOMBIE_BASE_SPEED - ZOMBIE_BASE_SPEED / SPEED_MULTIPLIER)
 
 export const TransformFrame: TransformFrameType = {
   [ZombieState.WALKING.FULL]: { offsetY: -9 },

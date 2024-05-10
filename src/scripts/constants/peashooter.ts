@@ -9,6 +9,7 @@ export const PeashooterState = {
   SHOOTING: 'shooting'
 }
 
+export const PEASHOOTER_HP = 3
 export const PEASHOOTER_TIMER = 8 * SPEED_MULTIPLIER
 export const PEASHOOTER_WIDTH = 26
 export const PEASHOOTER_HEIGHT = 30
@@ -51,4 +52,6 @@ export const PeaAnimation = {
 }
 
 export const FIRE_RATE = 1500 * SPEED_MULTIPLIER
-export const PEA_SPEED = 100 - (100 - 100 / SPEED_MULTIPLIER)
+
+const BASE_PEA_SPEED = 70
+export const PEA_SPEED = BASE_PEA_SPEED - (BASE_PEA_SPEED - BASE_PEA_SPEED / SPEED_MULTIPLIER)

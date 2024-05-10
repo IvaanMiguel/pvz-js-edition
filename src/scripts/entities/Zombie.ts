@@ -23,9 +23,10 @@ class Zombie extends Entity {
   action: 'EATING' | 'WALKING'
   hpStatus: 'FULL' | 'DAMAGED'
   lawnRow: number
-  hitbox: { position: Vector; w: number; h: number, isActive: boolean }
+  hitbox: { position: Vector; w: number; h: number; isActive: boolean }
+  onZombieEnd: (zombie: Entity) => void
 
-  constructor(x: number, y: number, hp: number, lawnRow: number) {
+  constructor(x: number, y: number, hp: number, lawnRow: number, onZombieEnd: (zombie: Entity) => void) {
     super(x, y)
 
     this.hitbox = {
@@ -35,6 +36,7 @@ class Zombie extends Entity {
       isActive: true
     }
 
+    this.onZombieEnd = onZombieEnd
     this.hp = hp
     this.remainingHp = hp
     this.action = 'WALKING'
@@ -65,7 +67,7 @@ class Zombie extends Entity {
       [ZombieState.LYING_DOWN]: {
         type: ZombieState.LYING_DOWN,
         draw: this.handleLyingDownDraw,
-        update: this.handleUpdate
+        update: this.handleLyingDownUpdate
       }
     }
 
@@ -74,6 +76,10 @@ class Zombie extends Entity {
 
   static preload(p5: P5) {
     Zombie.spritesheet = p5.loadImage('/sprites/zombie.png')
+  }
+
+  hit() {
+    this.remainingHp--
   }
 
   kill(p5: P5) {
@@ -87,6 +93,18 @@ class Zombie extends Entity {
 
     this.animationFrame++
     if (this.animationFrame >= FramesIndex[this.currentState.type].length) this.animationFrame = 0
+
+    this.animationTimer = p5.millis() + ZOMBIE_TIMER * p5.deltaTime
+  }
+
+  handleLyingDownUpdate = (p5: P5) => {
+    if (p5.millis() < this.animationTimer) return
+
+    this.animationFrame++
+    if (this.animationFrame >= FramesIndex[this.currentState.type].length) {
+      this.animationFrame = 0
+      this.onZombieEnd(this)
+    }
 
     this.animationTimer = p5.millis() + ZOMBIE_TIMER * p5.deltaTime
   }
