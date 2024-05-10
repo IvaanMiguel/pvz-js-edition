@@ -1,10 +1,10 @@
 import P5 from 'p5'
-import { TILE_HEIGHT, TILE_WIDTH } from '../constants/game'
-import Entity from '../entities/Entity'
-import Plant from '../entities/Plant'
-import ZombiesSystem from './systems/ZombiesSystem'
+import { TILE_HEIGHT, TILE_WIDTH } from '../../constants/game'
+import Entity from '../../entities/Entity'
+import Plant from '../../entities/Plant'
+import ZombiesSystem from './ZombiesSystem'
 
-class Lawn {
+class LawnSystem {
   x: number
   y: number
   w: number
@@ -67,4 +67,4 @@ class Lawn {
   }
 }
 
-export default Lawn
+export default LawnSystem

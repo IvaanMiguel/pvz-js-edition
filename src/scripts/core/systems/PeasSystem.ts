@@ -4,19 +4,19 @@ import { PeaState } from '../../constants/peashooter'
 import Entity from '../../entities/Entity'
 import Zombie from '../../entities/Zombie'
 import Pea from '../../entities/peashooter/Pea'
-import Lawn from '../Lawn'
+import LawnSystem from './LawnSystem'
 import ZombiesSystem from './ZombiesSystem'
 
 class PeasSystem {
   zombiesSystem: ZombiesSystem
   peas: Pea[][]
-  lawn: Lawn
+  lawnSystem: LawnSystem
 
-  constructor(lawn: Lawn, zombiesSystem: ZombiesSystem) {
-    this.lawn = lawn
+  constructor(lawnSystem: LawnSystem, zombiesSystem: ZombiesSystem) {
+    this.lawnSystem = lawnSystem
     this.zombiesSystem = zombiesSystem
 
-    this.peas = [...Array(this.lawn.h / TILE_HEIGHT)].map(() => [])
+    this.peas = [...Array(this.lawnSystem.h / TILE_HEIGHT)].map(() => [])
   }
 
   onPeaEnd = (pea: Pea) => {

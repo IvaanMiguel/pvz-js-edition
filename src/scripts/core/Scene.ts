@@ -12,7 +12,7 @@ import {
 } from '../constants/game'
 import Zombie from '../entities/Zombie'
 import Peashooter from '../entities/peashooter/Peashooter'
-import Lawn from './Lawn'
+import LawnSystem from './systems/LawnSystem'
 import Player from './Player'
 import PeasSystem from './systems/PeasSystem'
 import ZombiesSystem from './systems/ZombiesSystem'
@@ -22,18 +22,18 @@ class Scene {
 
   framesTimer: number = 0
   frameRate: number = 0
-  lawn: Lawn
-  player: Player
+  lawnSystem: LawnSystem
   peasSystem: PeasSystem
   zombiesSystem: ZombiesSystem
+  player: Player
   SPAWNING_TIMER_CONST: number = 2000
   spawningTime: number = 0
 
   constructor(p5: P5) {
     this.zombiesSystem = new ZombiesSystem()
-    this.lawn = new Lawn(LAWN_OFFSET_X, LAWN_OFFSET_Y, LAWN_WIDTH, LAWN_HEIGHT, this.zombiesSystem)
-    this.peasSystem = new PeasSystem(this.lawn, this.zombiesSystem)
-    this.player = new Player(this.lawn, this.peasSystem)
+    this.lawnSystem = new LawnSystem(LAWN_OFFSET_X, LAWN_OFFSET_Y, LAWN_WIDTH, LAWN_HEIGHT, this.zombiesSystem)
+    this.peasSystem = new PeasSystem(this.lawnSystem, this.zombiesSystem)
+    this.player = new Player(this.lawnSystem, this.peasSystem)
 
     if (!DEBUG) return
 
@@ -70,7 +70,7 @@ class Scene {
     }
 
     this.player.update(p5)
-    this.lawn.update(p5)
+    this.lawnSystem.update(p5)
     this.zombiesSystem.update(p5)
     this.peasSystem.update(p5)
 
@@ -81,7 +81,7 @@ class Scene {
     p5.imageMode(p5.CORNER)
     p5.image(Scene.bgImage, 0, 0)
 
-    this.lawn.draw(p5)
+    this.lawnSystem.draw(p5)
     this.peasSystem.draw(p5)
 
     if (SHOW_FPS) this.drawFps(p5)
@@ -105,14 +105,14 @@ class Scene {
     p5.noFill()
     p5.rectMode(p5.CORNER)
 
-    p5.rect(this.lawn.x, this.lawn.y, this.lawn.w, this.lawn.h)
+    p5.rect(this.lawnSystem.x, this.lawnSystem.y, this.lawnSystem.w, this.lawnSystem.h)
 
-    for (let i = 1; i < this.lawn.h / TILE_HEIGHT; i++) {
-      p5.line(this.lawn.x, TILE_HEIGHT * i + this.lawn.y, this.lawn.x + this.lawn.w, TILE_HEIGHT * i + this.lawn.y)
+    for (let i = 1; i < this.lawnSystem.h / TILE_HEIGHT; i++) {
+      p5.line(this.lawnSystem.x, TILE_HEIGHT * i + this.lawnSystem.y, this.lawnSystem.x + this.lawnSystem.w, TILE_HEIGHT * i + this.lawnSystem.y)
     }
 
-    for (let i = 1; i < this.lawn.w / TILE_WIDTH; i++) {
-      p5.line(this.lawn.x + TILE_WIDTH * i, this.lawn.y, this.lawn.x + TILE_WIDTH * i, this.lawn.y + this.lawn.h)
+    for (let i = 1; i < this.lawnSystem.w / TILE_WIDTH; i++) {
+      p5.line(this.lawnSystem.x + TILE_WIDTH * i, this.lawnSystem.y, this.lawnSystem.x + TILE_WIDTH * i, this.lawnSystem.y + this.lawnSystem.h)
     }
   }
 }
