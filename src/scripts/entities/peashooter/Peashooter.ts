@@ -17,6 +17,7 @@ import {
   TransformFrame
 } from '../../constants/peashooter'
 import Plant from '../Plant'
+import peashooterSprites from '/sprites/peashooter.png'
 
 class Peashooter extends Plant {
   hp: number = PEASHOOTER_HP
@@ -63,7 +64,7 @@ class Peashooter extends Plant {
   }
 
   static preload(p5: P5) {
-    Peashooter.spritesheet = p5.loadImage('/sprites/peashooter.png')
+    Peashooter.spritesheet = p5.loadImage(peashooterSprites)
   }
 
   setIsZombieAhead(isZombieAhead: boolean) {

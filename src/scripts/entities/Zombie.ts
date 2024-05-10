@@ -15,6 +15,7 @@ import {
   ZombieState
 } from '../constants/zombie'
 import Entity from './Entity'
+import zombieSprites from '/sprites/zombie.png'
 
 class Zombie extends Entity {
   states: EntityState
@@ -74,7 +75,7 @@ class Zombie extends Entity {
   }
 
   static preload(p5: P5) {
-    Zombie.spritesheet = p5.loadImage('/sprites/zombie.png')
+    Zombie.spritesheet = p5.loadImage(zombieSprites)
   }
 
   hit() {

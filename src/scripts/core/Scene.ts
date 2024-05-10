@@ -12,10 +12,11 @@ import {
 } from '../constants/game'
 import Zombie from '../entities/Zombie'
 import Peashooter from '../entities/peashooter/Peashooter'
-import LawnSystem from './systems/LawnSystem'
 import Player from './Player'
+import LawnSystem from './systems/LawnSystem'
 import PeasSystem from './systems/PeasSystem'
 import ZombiesSystem from './systems/ZombiesSystem'
+import bgImage from '/sprites/bg.png'
 
 class Scene {
   static bgImage: Image
@@ -42,7 +43,7 @@ class Scene {
   }
 
   static preload(p5: P5) {
-    Scene.bgImage = p5.loadImage('/sprites/bg.png')
+    Scene.bgImage = p5.loadImage(bgImage)
 
     Peashooter.preload(p5)
     Zombie.preload(p5)
@@ -108,11 +109,21 @@ class Scene {
     p5.rect(this.lawnSystem.x, this.lawnSystem.y, this.lawnSystem.w, this.lawnSystem.h)
 
     for (let i = 1; i < this.lawnSystem.h / TILE_HEIGHT; i++) {
-      p5.line(this.lawnSystem.x, TILE_HEIGHT * i + this.lawnSystem.y, this.lawnSystem.x + this.lawnSystem.w, TILE_HEIGHT * i + this.lawnSystem.y)
+      p5.line(
+        this.lawnSystem.x,
+        TILE_HEIGHT * i + this.lawnSystem.y,
+        this.lawnSystem.x + this.lawnSystem.w,
+        TILE_HEIGHT * i + this.lawnSystem.y
+      )
     }
 
     for (let i = 1; i < this.lawnSystem.w / TILE_WIDTH; i++) {
-      p5.line(this.lawnSystem.x + TILE_WIDTH * i, this.lawnSystem.y, this.lawnSystem.x + TILE_WIDTH * i, this.lawnSystem.y + this.lawnSystem.h)
+      p5.line(
+        this.lawnSystem.x + TILE_WIDTH * i,
+        this.lawnSystem.y,
+        this.lawnSystem.x + TILE_WIDTH * i,
+        this.lawnSystem.y + this.lawnSystem.h
+      )
     }
   }
 }
