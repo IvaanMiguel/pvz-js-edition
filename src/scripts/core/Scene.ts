@@ -62,7 +62,10 @@ class Scene {
       const lawnRow = Math.floor(Math.random() * 5)
       const y = (lawnRow + 1) * TILE_HEIGHT + LAWN_OFFSET_Y - TILE_HEIGHT / 2
 
-      this.zombiesSystem.addZombieToRow(new Zombie(p5.width + 10, y, 10, lawnRow, this.zombiesSystem.onZombieEnd), lawnRow)
+      this.zombiesSystem.addZombieToRow(
+        new Zombie(p5.width + 10, y, 10, lawnRow, this.zombiesSystem.onZombieEnd),
+        lawnRow
+      )
       this.spawningTime = p5.millis() + this.SPAWNING_TIMER_CONST
     }
 
@@ -81,19 +84,20 @@ class Scene {
     this.lawn.draw(p5)
     this.peasSystem.draw(p5)
 
-    if (SHOW_FPS) this.showFps(p5)
+    if (SHOW_FPS) this.drawFps(p5)
 
     if (!DEBUG) return
 
     this.debug(p5)
   }
 
-  showFps(p5: P5) {
+  drawFps(p5: P5) {
     p5.strokeWeight(1)
     p5.stroke('black')
     p5.fill('black')
-    p5.textAlign(p5.CENTER)
-    p5.text(this.frameRate, 8, 10)
+    p5.textAlign(p5.LEFT)
+    p5.textSize(8)
+    p5.text(`FPS: ${this.frameRate}`, 5, 10)
   }
 
   debug(p5: P5) {

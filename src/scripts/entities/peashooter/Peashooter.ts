@@ -2,10 +2,14 @@ import P5 from 'p5'
 import { EntityState, HandleState } from '../../../types'
 import { DEBUG } from '../../constants/game'
 import {
+  DRAW_PEASHOOTER_COORDS_POINT,
+  DRAW_PEASHOOTER_HITBOX,
   DRAW_PEASHOOTER_SPRITE_BORDERS,
   FIRE_RATE,
   FramesIndex,
   PEASHOOTER_HEIGHT,
+  PEASHOOTER_HITBOX_HEIGHT,
+  PEASHOOTER_HITBOX_WIDTH,
   PEASHOOTER_HP,
   PEASHOOTER_TIMER,
   PEASHOOTER_WIDTH,
@@ -27,7 +31,13 @@ class Peashooter extends Plant {
   dx: number = 0
 
   constructor(p5: P5, x: number, y: number, lawnRow: number, addPea: (x: number, y: number, lawnRow: number) => void) {
-    super(x, y)
+    super(x, y, {
+      x: x - PEASHOOTER_HITBOX_WIDTH / 2,
+      y: y - PEASHOOTER_HITBOX_HEIGHT / 2,
+      w: PEASHOOTER_HITBOX_WIDTH,
+      h: PEASHOOTER_HITBOX_HEIGHT,
+      isActive: true
+    })
 
     this.lawnRow = lawnRow
     this.addPea = addPea
@@ -61,14 +71,14 @@ class Peashooter extends Plant {
   }
 
   handleIdleDraw = (p5: P5) => {
-    this.dx = this.vector.x + (TransformFrame[this.animationFrame]?.offsetX || 0)
+    this.dx = this.position.x + (TransformFrame[this.animationFrame]?.offsetX || 0)
     const sx = 26 * FramesIndex[this.currentState.type][this.animationFrame]
 
     p5.imageMode(p5.CENTER)
     p5.image(
       Peashooter.spritesheet,
       this.dx,
-      this.vector.y,
+      this.position.y,
       PEASHOOTER_WIDTH,
       PEASHOOTER_HEIGHT,
       sx,
@@ -86,8 +96,8 @@ class Peashooter extends Plant {
     p5.imageMode(p5.CENTER)
     p5.image(
       Peashooter.spritesheet,
-      this.vector.x,
-      this.vector.y,
+      this.position.x,
+      this.position.y,
       PEASHOOTER_WIDTH,
       PEASHOOTER_HEIGHT,
       26 * FramesIndex[this.currentState.type][this.animationFrame],
@@ -114,7 +124,7 @@ class Peashooter extends Plant {
 
     this.changeState(p5, PeashooterState.SHOOTING)
     this.firingTimer = p5.millis() + FIRE_RATE
-    this.addPea(this.vector.x + 10, this.vector.y - 8, this.lawnRow)
+    this.addPea(this.position.x + 10, this.position.y - 8, this.lawnRow)
   }
 
   updateAnimation(p5: P5) {
@@ -141,13 +151,13 @@ class Peashooter extends Plant {
   }
 
   debug(p5: P5) {
+    if (DRAW_PEASHOOTER_HITBOX && this.hitbox.isActive) this.drawHitbox(p5)
+
     if (DRAW_PEASHOOTER_SPRITE_BORDERS) {
-      p5.stroke('red')
-      p5.noFill()
-      p5.strokeWeight(1)
-      p5.rectMode(p5.CENTER)
-      p5.rect(this.dx, this.vector.y, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT)
+      this.drawSpriteBorders(p5, this.dx, this.position.y, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT)
     }
+
+    if (DRAW_PEASHOOTER_COORDS_POINT) this.drawCoordsPoint(p5)
   }
 }
 

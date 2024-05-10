@@ -1,7 +1,8 @@
-import P5, { Vector } from 'p5'
+import P5 from 'p5'
 import { EntityState, HandleState } from '../../types'
 import { DEBUG } from '../constants/game'
 import {
+  DRAW_COORDS_POINT,
   DRAW_HITBOX,
   DRAW_SPRITE_BORDERS,
   FramesIndex,
@@ -23,18 +24,16 @@ class Zombie extends Entity {
   action: 'EATING' | 'WALKING'
   hpStatus: 'FULL' | 'DAMAGED'
   lawnRow: number
-  hitbox: { position: Vector; w: number; h: number; isActive: boolean }
   onZombieEnd: (zombie: Entity) => void
 
   constructor(x: number, y: number, hp: number, lawnRow: number, onZombieEnd: (zombie: Entity) => void) {
-    super(x, y)
-
-    this.hitbox = {
-      position: new Vector(this.vector.x - HITBOX_WIDTH / 2 + 4, this.vector.y - HITBOX_HEIGHT / 2),
+    super(x, y, {
+      x: x - HITBOX_WIDTH / 2 + 4,
+      y: y - HITBOX_HEIGHT / 2,
       w: HITBOX_WIDTH,
       h: HITBOX_HEIGHT,
       isActive: true
-    }
+    })
 
     this.onZombieEnd = onZombieEnd
     this.hp = hp
@@ -118,8 +117,8 @@ class Zombie extends Entity {
     p5.imageMode(p5.CENTER)
     p5.image(
       Zombie.spritesheet,
-      this.vector.x + (TransformFrame[currentState]?.offsetX || 0),
-      this.vector.y + (TransformFrame[currentState]?.offsetY || 0),
+      this.position.x + (TransformFrame[currentState]?.offsetX || 0),
+      this.position.y + (TransformFrame[currentState]?.offsetY || 0),
       width,
       height,
       width * FramesIndex[currentState][this.animationFrame],
@@ -136,8 +135,8 @@ class Zombie extends Entity {
     p5.imageMode(p5.CENTER)
     p5.image(
       Zombie.spritesheet,
-      this.vector.x + (TransformFrame[this.currentState.type]?.offsetX || 0),
-      this.vector.y + (TransformFrame[this.currentState.type]?.offsetY || 0),
+      this.position.x + (TransformFrame[this.currentState.type]?.offsetX || 0),
+      this.position.y + (TransformFrame[this.currentState.type]?.offsetY || 0),
       width,
       height,
       width * FramesIndex[this.currentState.type][this.animationFrame],
@@ -151,7 +150,7 @@ class Zombie extends Entity {
     if (this.action === 'WALKING' && this.remainingHp > 0) {
       const xVelocity = ZOMBIE_SPEED * (p5.deltaTime / 1000)
 
-      this.vector.sub(xVelocity, 0)
+      this.position.sub(xVelocity, 0)
       this.hitbox.position.sub(xVelocity, 0)
     }
   }
@@ -177,27 +176,19 @@ class Zombie extends Entity {
   debug(p5: P5) {
     p5.strokeWeight(1)
 
-    if (DRAW_HITBOX && this.hitbox.isActive) {
-      p5.stroke('blue')
-      p5.rectMode(p5.CORNER)
-      p5.rect(this.hitbox.position.x, this.hitbox.position.y, this.hitbox.w, this.hitbox.h)
-
-      p5.stroke('yellow')
-      p5.point(this.hitbox.position.x, this.hitbox.position.y)
-    }
+    if (DRAW_HITBOX && this.hitbox.isActive) this.drawHitbox(p5)
 
     if (DRAW_SPRITE_BORDERS) {
-      p5.stroke('red')
-      p5.rectMode(p5.CENTER)
-      p5.point(this.vector.x, this.vector.y)
-      p5.noFill()
-      p5.rect(
-        this.vector.x + (TransformFrame[this.currentState.type]?.offsetX || 0),
-        this.vector.y + (TransformFrame[this.currentState.type]?.offsetY || 0),
+      this.drawSpriteBorders(
+        p5,
+        this.position.x + (TransformFrame[this.currentState.type]?.offsetX || 0),
+        this.position.y + (TransformFrame[this.currentState.type]?.offsetY || 0),
         ZombieDimensions[this.currentState.type].width,
         ZombieDimensions[this.currentState.type].height
       )
     }
+
+    if (DRAW_COORDS_POINT) this.drawCoordsPoint(p5)
   }
 }
 

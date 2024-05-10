@@ -1,6 +1,7 @@
 import { TransformFrame as TransformFrameType } from '../../types'
 import { SPEED_MULTIPLIER, TILE_HEIGHT } from './game'
 
+export const DRAW_COORDS_POINT = true
 export const DRAW_SPRITE_BORDERS = false
 export const DRAW_HITBOX = true
 
@@ -21,7 +22,7 @@ export const ZombieState = {
 
 export const ZOMBIE_TIMER = 10 * SPEED_MULTIPLIER
 
-const ZOMBIE_BASE_SPEED  = 5
+const ZOMBIE_BASE_SPEED = 5
 export const ZOMBIE_SPEED = ZOMBIE_BASE_SPEED - (ZOMBIE_BASE_SPEED - ZOMBIE_BASE_SPEED / SPEED_MULTIPLIER)
 
 export const TransformFrame: TransformFrameType = {

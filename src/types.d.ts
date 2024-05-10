@@ -1,4 +1,4 @@
-import P5 from 'p5'
+import P5, { Vector } from 'p5'
 
 export interface TransformFrame {
   [x: string]: {
@@ -15,4 +15,11 @@ export interface HandleState {
   type: string
   update: (p5: P5) => void
   draw: (p5: P5) => void
+}
+
+export interface Hitbox {
+  position: Vector
+  w: number
+  h: number
+  isActive: boolean
 }

@@ -2,6 +2,8 @@ import P5 from 'p5'
 import { EntityState, HandleState } from '../../../types'
 import { DEBUG } from '../../constants/game'
 import {
+  DRAW_PEA_COORDS_POINT,
+  DRAW_PEA_HITBOX,
   DRAW_PEA_SPRITE_BORDERS,
   PEA_SIZE,
   PEA_SPEED,
@@ -20,7 +22,7 @@ class Pea extends Entity {
   onPeaEnd: (pea: Pea) => void
 
   constructor(x: number, y: number, lawnRow: number, onPeaEnd: (pea: Pea) => void) {
-    super(x, y)
+    super(x, y, { x, y, w: 1, h: 1, isActive: true })
 
     Pea.spritesheet = Peashooter.spritesheet
 
@@ -47,18 +49,20 @@ class Pea extends Entity {
     const { originX, originY, w, h } = PeaKeyframe[PeaFrame.FLYING]
 
     p5.imageMode(p5.CENTER)
-    p5.image(Peashooter.spritesheet, this.vector.x, this.vector.y, w, h, originX, originY, w, h)
+    p5.image(Peashooter.spritesheet, this.position.x, this.position.y, w, h, originX, originY, w, h)
   }
 
   handleFlyingUpdate = (p5: P5) => {
-    this.vector.add(PEA_SPEED * (p5.deltaTime / 1000), 0)
+    const xVelocity = PEA_SPEED * (p5.deltaTime / 1000)
+    this.position.add(xVelocity, 0)
+    this.hitbox.position.add(xVelocity, 0)
   }
 
   handleOnHitDraw = (p5: P5) => {
     const { originX, originY, w, h } = PeaAnimation.OnHit[this.animationFrame]
 
     p5.imageMode(p5.CENTER)
-    p5.image(Pea.spritesheet, this.vector.x, this.vector.y, w, h, originX, originY, w, h)
+    p5.image(Pea.spritesheet, this.position.x, this.position.y, w, h, originX, originY, w, h)
   }
 
   handleOnHitUpdate = (p5: P5) => {
@@ -92,12 +96,13 @@ class Pea extends Entity {
   }
 
   debug(p5: P5) {
-    if (DRAW_PEA_SPRITE_BORDERS) {
-      p5.strokeWeight(1)
-      p5.stroke('red')
-      p5.rectMode(p5.CENTER)
-      p5.rect(this.vector.x, this.vector.y, PEA_SIZE)
-    }
+    p5.strokeWeight(1)
+
+    if (DRAW_PEA_SPRITE_BORDERS) this.drawSpriteBorders(p5, this.position.x, this.position.y, PEA_SIZE, PEA_SIZE)
+
+    if (DRAW_PEA_HITBOX) this.drawHitbox(p5)
+
+    if (DRAW_PEA_COORDS_POINT) this.drawCoordsPoint(p5)
   }
 }
 

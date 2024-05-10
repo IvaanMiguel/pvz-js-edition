@@ -1,6 +1,7 @@
 import P5 from 'p5'
 import { TILE_HEIGHT } from '../../constants/game'
 import { PeaState } from '../../constants/peashooter'
+import Entity from '../../entities/Entity'
 import Zombie from '../../entities/Zombie'
 import Pea from '../../entities/peashooter/Pea'
 import Lawn from '../Lawn'
@@ -28,12 +29,12 @@ class PeasSystem {
     this.peas[lawnRow].push(new Pea(x, y, lawnRow, this.onPeaEnd))
   }
 
-  isColliding(pea: Pea, zombie: Zombie) {
+  isColliding(pea: Entity, zombie: Entity) {
     return (
-      pea.vector.x >= zombie.hitbox.position.x &&
-      pea.vector.x <= zombie.hitbox.position.x + zombie.hitbox.w &&
-      pea.vector.y >= zombie.hitbox.position.y &&
-      pea.vector.y <= zombie.hitbox.position.y + zombie.hitbox.w
+      pea.hitbox.position.x + pea.hitbox.w >= zombie.hitbox.position.x &&
+      pea.hitbox.position.x <= zombie.hitbox.position.x + zombie.hitbox.w &&
+      pea.hitbox.position.y + pea.hitbox.h >= zombie.hitbox.position.y &&
+      pea.hitbox.position.y <= zombie.hitbox.position.y + zombie.hitbox.w
     )
   }
 
@@ -57,7 +58,7 @@ class PeasSystem {
 
         this.updateOnHittingZombie(p5, pea, this.zombiesSystem.zombies[i] as Zombie[])
 
-        pea.vector.x > p5.width + 10 ? this.onPeaEnd(pea) : pea.update(p5)
+        pea.position.x > p5.width + 10 ? this.onPeaEnd(pea) : pea.update(p5)
       }
     }
   }

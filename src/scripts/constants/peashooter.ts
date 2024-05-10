@@ -1,8 +1,12 @@
 import { TransformFrame as TransformFrameType } from '../../types'
 import { SPEED_MULTIPLIER } from './game'
 
+export const DRAW_PEASHOOTER_COORDS_POINT = true
 export const DRAW_PEASHOOTER_SPRITE_BORDERS = true
+export const DRAW_PEASHOOTER_HITBOX = true
+export const DRAW_PEA_COORDS_POINT = false
 export const DRAW_PEA_SPRITE_BORDERS = true
+export const DRAW_PEA_HITBOX = true
 
 export const PeashooterState = {
   IDLE: 'idle',
@@ -10,9 +14,12 @@ export const PeashooterState = {
 }
 
 export const PEASHOOTER_HP = 3
-export const PEASHOOTER_TIMER = 8 * SPEED_MULTIPLIER
 export const PEASHOOTER_WIDTH = 26
 export const PEASHOOTER_HEIGHT = 30
+export const PEASHOOTER_HITBOX_WIDTH = PEASHOOTER_WIDTH * 0.8
+export const PEASHOOTER_HITBOX_HEIGHT = PEASHOOTER_HEIGHT * 0.9
+
+export const PEASHOOTER_TIMER = 8 * SPEED_MULTIPLIER
 
 export const FramesIndex = {
   [PeashooterState.IDLE]: [0, 1, 2, 3, 4, 5, 6, 7],
