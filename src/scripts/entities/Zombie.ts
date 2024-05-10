@@ -2,11 +2,14 @@ import P5 from 'p5'
 import { EntityState, HandleState } from '../../types'
 import { DEBUG } from '../constants/game'
 import {
+  BASIC_ZOMBIE_DMG,
+  BASIC_ZOMBIE_HP,
   DRAW_COORDS_POINT,
   DRAW_HITBOX,
   DRAW_SPRITE_BORDERS,
   FramesIndex,
   HITBOX_HEIGHT,
+  HITBOX_OFFSET_X,
   HITBOX_WIDTH,
   TransformFrame,
   ZOMBIE_SPEED,
@@ -15,21 +18,23 @@ import {
   ZombieState
 } from '../constants/zombie'
 import Entity from './Entity'
+import Pea from './peashooter/Pea'
 import zombieSprites from '/sprites/zombie.png'
 
 class Zombie extends Entity {
   states: EntityState
   currentState: HandleState
-  hp: number
-  remainingHp: number
+  hp: number = BASIC_ZOMBIE_HP
+  remainingHp: number = BASIC_ZOMBIE_HP
+  dmg: number = BASIC_ZOMBIE_DMG
   action: 'EATING' | 'WALKING'
   hpStatus: 'FULL' | 'DAMAGED'
   lawnRow: number
   onZombieEnd: (zombie: Entity) => void
 
-  constructor(x: number, y: number, hp: number, lawnRow: number, onZombieEnd: (zombie: Entity) => void) {
+  constructor(x: number, y: number, lawnRow: number, onZombieEnd: (zombie: Entity) => void) {
     super(x, y, {
-      x: x - HITBOX_WIDTH / 2 + 4,
+      x: x - HITBOX_WIDTH / 2 + HITBOX_OFFSET_X,
       y: y - HITBOX_HEIGHT / 2,
       w: HITBOX_WIDTH,
       h: HITBOX_HEIGHT,
@@ -37,8 +42,6 @@ class Zombie extends Entity {
     })
 
     this.onZombieEnd = onZombieEnd
-    this.hp = hp
-    this.remainingHp = hp
     this.action = 'WALKING'
     this.hpStatus = 'FULL'
     this.lawnRow = lawnRow
@@ -78,8 +81,8 @@ class Zombie extends Entity {
     Zombie.spritesheet = p5.loadImage(zombieSprites)
   }
 
-  hit() {
-    this.remainingHp--
+  hit(pea: Pea) {
+    this.remainingHp -= pea.dmg
   }
 
   kill(p5: P5) {
@@ -148,12 +151,12 @@ class Zombie extends Entity {
   }
 
   updatePosition(p5: P5) {
-    if (this.action === 'WALKING' && this.remainingHp > 0) {
-      const xVelocity = ZOMBIE_SPEED * (p5.deltaTime / 1000)
+    if (this.action !== 'WALKING' || this.remainingHp <= 0) return
 
-      this.position.sub(xVelocity, 0)
-      this.hitbox.position.sub(xVelocity, 0)
-    }
+    const xVelocity = ZOMBIE_SPEED * (p5.deltaTime / 1000)
+
+    this.position.sub(xVelocity, 0)
+    this.hitbox.position.sub(xVelocity, 0)
   }
 
   update(p5: P5) {

@@ -5,6 +5,7 @@ import {
   DRAW_PEA_COORDS_POINT,
   DRAW_PEA_HITBOX,
   DRAW_PEA_SPRITE_BORDERS,
+  PEA_DMG,
   PEA_SIZE,
   PEA_SPEED,
   PeaAnimation,
@@ -18,6 +19,7 @@ import Peashooter from './Peashooter'
 class Pea extends Entity {
   states: EntityState
   currentState: HandleState
+  dmg: number = PEA_DMG
   lawnRow: number
   onPeaEnd: (pea: Pea) => void
 

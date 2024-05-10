@@ -5,8 +5,13 @@ export const DRAW_COORDS_POINT = true
 export const DRAW_SPRITE_BORDERS = false
 export const DRAW_HITBOX = true
 
+export const HITBOX_OFFSET_X = 4
 export const HITBOX_WIDTH = 15
 export const HITBOX_HEIGHT = TILE_HEIGHT * 0.9
+
+export const BASIC_ZOMBIE_HP = 181
+export const BASIC_ZOMBIE_DMG = 100
+export const ZOMBIE_SPEED = 5 / SPEED_MULTIPLIER
 
 export const ZombieState = {
   WALKING: {
@@ -21,9 +26,6 @@ export const ZombieState = {
 }
 
 export const ZOMBIE_TIMER = 10 * SPEED_MULTIPLIER
-
-const ZOMBIE_BASE_SPEED = 5
-export const ZOMBIE_SPEED = ZOMBIE_BASE_SPEED - (ZOMBIE_BASE_SPEED - ZOMBIE_BASE_SPEED / SPEED_MULTIPLIER)
 
 export const TransformFrame: TransformFrameType = {
   [ZombieState.WALKING.FULL]: { offsetY: -9 },

@@ -17,6 +17,7 @@ import LawnSystem from './systems/LawnSystem'
 import PeasSystem from './systems/PeasSystem'
 import ZombiesSystem from './systems/ZombiesSystem'
 import bgImage from '/sprites/bg.png'
+import VersusSystem from './systems/VersusSystem'
 
 class Scene {
   static bgImage: Image
@@ -26,6 +27,7 @@ class Scene {
   lawnSystem: LawnSystem
   peasSystem: PeasSystem
   zombiesSystem: ZombiesSystem
+  versusSystem: VersusSystem
   player: Player
   SPAWNING_TIMER_CONST: number = 2000
   spawningTime: number = 0
@@ -33,7 +35,9 @@ class Scene {
   constructor(p5: P5) {
     this.zombiesSystem = new ZombiesSystem()
     this.lawnSystem = new LawnSystem(LAWN_OFFSET_X, LAWN_OFFSET_Y, LAWN_WIDTH, LAWN_HEIGHT, this.zombiesSystem)
-    this.peasSystem = new PeasSystem(this.lawnSystem, this.zombiesSystem)
+    this.peasSystem = new PeasSystem(this.zombiesSystem)
+    this.versusSystem = new VersusSystem(this.lawnSystem, this.peasSystem, this.zombiesSystem)
+
     this.player = new Player(this.lawnSystem, this.peasSystem)
 
     if (!DEBUG) return
@@ -64,16 +68,19 @@ class Scene {
       const y = (lawnRow + 1) * TILE_HEIGHT + LAWN_OFFSET_Y - TILE_HEIGHT / 2
 
       this.zombiesSystem.addZombieToRow(
-        new Zombie(p5.width + 10, y, 10, lawnRow, this.zombiesSystem.onZombieEnd),
+        new Zombie(p5.width + 10, y, lawnRow, this.zombiesSystem.onZombieEnd),
         lawnRow
       )
       this.spawningTime = p5.millis() + this.SPAWNING_TIMER_CONST
     }
 
     this.player.update(p5)
+    this.versusSystem.update(p5)
     this.lawnSystem.update(p5)
     this.zombiesSystem.update(p5)
     this.peasSystem.update(p5)
+
+    // console.log((p5.deltaTime / 1000) * 100)
 
     if (SHOW_FPS) this.updateFrameRate(p5)
   }

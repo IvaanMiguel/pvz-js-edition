@@ -10,6 +10,8 @@ class LawnSystem {
   w: number
   h: number
   tiles: (Entity | null)[][]
+
+  // Solo para ser dibujado correctamente respecto a las plantas.
   zombiesSystem: ZombiesSystem
 
   constructor(x: number, y: number, w: number, h: number, zombiesSystem: ZombiesSystem) {
@@ -27,29 +29,21 @@ class LawnSystem {
   }
 
   digUpLawnTile(row: number, col: number) {
-    this.tiles[col][row] = null
+    this.tiles[row][col] = null
   }
 
   plantTile(plant: Entity, row: number, col: number) {
     this.tiles[row][col] = plant
   }
 
-  tauntLawn() {
-    for (let i = 0; i < this.tiles.length; i++) {
-      for (let j = 0; j < this.tiles[0].length; j++) {
-        if (this.tiles[i][j] instanceof Plant) {
-          (this.tiles[i][j] as Plant).setIsZombieAhead(this.zombiesSystem.zombies[i].length > 0)
-        }
-      }
-    }
-  }
-
   update(p5: P5) {
-    this.tauntLawn()
-
     for (let i = 0; i < this.tiles.length; i++) {
       for (let j = 0; j < this.tiles[i].length; j++) {
-        this.tiles[i][j]?.update(p5)
+        const plant = this.tiles[i][j] as Plant | null
+
+        if (!plant) continue
+
+        plant.remainingHp <= 0 ? this.digUpLawnTile(i, j) : plant.update(p5)
       }
     }
   }

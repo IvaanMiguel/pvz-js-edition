@@ -21,6 +21,10 @@ class ZombiesSystem {
     this.zombies[lawnRow].push(zombie)
   }
 
+  getZombie(row: number, index: number) {
+    return this.zombies[row][index]
+  }
+
   update(p5: P5) {
     for (let i = 0; i < this.zombies.length; i++) {
       for (let j = 0; j < this.zombies[i].length; j++) {

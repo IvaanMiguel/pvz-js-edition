@@ -17,3 +17,5 @@ export const LAWN_HEIGHT = TILE_HEIGHT * 5
 
 export const LAWN_OFFSET_X = 8
 export const LAWN_OFFSET_Y = 25
+
+export const PLANT_BASIC_HP = 300

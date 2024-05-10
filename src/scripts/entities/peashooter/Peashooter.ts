@@ -10,7 +10,6 @@ import {
   PEASHOOTER_HEIGHT,
   PEASHOOTER_HITBOX_HEIGHT,
   PEASHOOTER_HITBOX_WIDTH,
-  PEASHOOTER_HP,
   PEASHOOTER_TIMER,
   PEASHOOTER_WIDTH,
   PeashooterState,
@@ -20,8 +19,6 @@ import Plant from '../Plant'
 import peashooterSprites from '/sprites/peashooter.png'
 
 class Peashooter extends Plant {
-  hp: number = PEASHOOTER_HP
-  remainingHp: number = PEASHOOTER_HP
   firingTimer: number
   currentState: HandleState
   states: EntityState
