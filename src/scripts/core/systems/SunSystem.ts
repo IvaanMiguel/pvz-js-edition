@@ -33,7 +33,6 @@ class SunSystem {
 
     this.suns.push(
       new Sun(
-        p5,
         x,
         y,
         {
