@@ -7,6 +7,7 @@ export const DRAW_PEASHOOTER_HITBOX = true
 export const DRAW_PEA_COORDS_POINT = false
 export const DRAW_PEA_SPRITE_BORDERS = false
 export const DRAW_PEA_HITBOX = true
+export const SHOW_HP = true
 
 export const PeashooterState = {
   IDLE: 'idle',

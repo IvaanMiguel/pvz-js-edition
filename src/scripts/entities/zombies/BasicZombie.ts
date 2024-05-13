@@ -11,12 +11,14 @@ import {
   HITBOX_HEIGHT,
   HITBOX_OFFSET_X,
   HITBOX_WIDTH,
+  SHOW_HP,
   TransformFrame,
   ZOMBIE_SPEED,
   ZOMBIE_TIMER,
   ZombieDimensions,
   ZombieState
 } from '../../constants/zombie'
+import { drawHp } from '../../utils'
 import Entity from '../Entity'
 import Pea from '../projectiles/Pea'
 import zombieSprites from '/sprites/zombie.png'
@@ -193,6 +195,8 @@ class Zombie extends Entity {
     }
 
     if (DRAW_COORDS_POINT) this.drawCoordsPoint(p5)
+
+    if (SHOW_HP && this.remainingHp > 0) drawHp(p5, this.position.x, this.position.y, this.hp, this.remainingHp)
   }
 }
 

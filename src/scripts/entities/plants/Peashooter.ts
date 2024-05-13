@@ -13,8 +13,10 @@ import {
   PEASHOOTER_TIMER,
   PEASHOOTER_WIDTH,
   PeashooterState,
+  SHOW_HP,
   TransformFrame
 } from '../../constants/peashooter'
+import { drawHp } from '../../utils'
 import Plant from './Plant'
 import peashooterSprites from '/sprites/peashooter.png'
 
@@ -156,6 +158,8 @@ class Peashooter extends Plant {
     }
 
     if (DRAW_PEASHOOTER_COORDS_POINT) this.drawCoordsPoint(p5)
+
+    if (SHOW_HP && this.remainingHp > 0) drawHp(p5, this.position.x, this.position.y, this.hp, this.remainingHp)
   }
 }
 

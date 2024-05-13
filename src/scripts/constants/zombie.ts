@@ -4,6 +4,7 @@ import { SPEED_MULTIPLIER, TILE_HEIGHT } from './game'
 export const DRAW_COORDS_POINT = true
 export const DRAW_SPRITE_BORDERS = false
 export const DRAW_HITBOX = true
+export const SHOW_HP = true
 
 export const HITBOX_OFFSET_X = 4
 export const HITBOX_WIDTH = 15
