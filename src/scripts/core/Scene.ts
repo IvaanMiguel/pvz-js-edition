@@ -10,24 +10,30 @@ import {
   TILE_HEIGHT,
   TILE_WIDTH
 } from '../constants/game'
+import { SUN_COUNTER_HUD_X, SUN_COUNTER_HUD_Y } from '../constants/hud'
 import Zombie from '../entities/Zombie'
 import Peashooter from '../entities/peashooter/Peashooter'
+import SunCounter from '../screen/SunCounter'
 import Player from './Player'
 import LawnSystem from './systems/LawnSystem'
 import PeasSystem from './systems/PeasSystem'
+import SunSystem from './systems/SunSystem'
+import VersusSystem from './systems/VersusSystem'
 import ZombiesSystem from './systems/ZombiesSystem'
 import bgImage from '/sprites/bg.png'
-import VersusSystem from './systems/VersusSystem'
+
 
 class Scene {
   static bgImage: Image
 
   framesTimer: number = 0
   frameRate: number = 0
+  sunCounter: SunCounter
   lawnSystem: LawnSystem
   peasSystem: PeasSystem
   zombiesSystem: ZombiesSystem
   versusSystem: VersusSystem
+  sunSystem: SunSystem
   player: Player
   SPAWNING_TIMER_CONST: number = 2000
   spawningTime: number = 0
@@ -37,8 +43,11 @@ class Scene {
     this.lawnSystem = new LawnSystem(LAWN_OFFSET_X, LAWN_OFFSET_Y, LAWN_WIDTH, LAWN_HEIGHT, this.zombiesSystem)
     this.peasSystem = new PeasSystem(this.zombiesSystem)
     this.versusSystem = new VersusSystem(this.lawnSystem, this.peasSystem, this.zombiesSystem)
+    this.sunSystem = new SunSystem(p5)
 
-    this.player = new Player(this.lawnSystem, this.peasSystem)
+    this.sunCounter = new SunCounter(SUN_COUNTER_HUD_X, SUN_COUNTER_HUD_Y, this.sunSystem)
+
+    this.player = new Player(p5, this.lawnSystem, this.peasSystem, this.sunSystem)
 
     if (!DEBUG) return
 
@@ -49,6 +58,7 @@ class Scene {
   static preload(p5: P5) {
     Scene.bgImage = p5.loadImage(bgImage)
 
+    SunCounter.preload(p5)
     Peashooter.preload(p5)
     Zombie.preload(p5)
   }
@@ -67,20 +77,16 @@ class Scene {
       const lawnRow = Math.floor(Math.random() * 5)
       const y = (lawnRow + 1) * TILE_HEIGHT + LAWN_OFFSET_Y - TILE_HEIGHT / 2
 
-      this.zombiesSystem.addZombieToRow(
-        new Zombie(p5.width + 10, y, lawnRow, this.zombiesSystem.onZombieEnd),
-        lawnRow
-      )
+      this.zombiesSystem.addZombieToRow(new Zombie(p5.width + 10, y, lawnRow, this.zombiesSystem.onZombieEnd), lawnRow)
       this.spawningTime = p5.millis() + this.SPAWNING_TIMER_CONST
     }
 
-    this.player.update(p5)
     this.versusSystem.update(p5)
     this.lawnSystem.update(p5)
     this.zombiesSystem.update(p5)
     this.peasSystem.update(p5)
-
-    // console.log((p5.deltaTime / 1000) * 100)
+    this.sunSystem.update(p5)
+    this.sunCounter.update(p5)
 
     if (SHOW_FPS) this.updateFrameRate(p5)
   }
@@ -89,14 +95,14 @@ class Scene {
     p5.imageMode(p5.CORNER)
     p5.image(Scene.bgImage, 0, 0)
 
+    this.sunCounter.draw(p5)
     this.lawnSystem.draw(p5)
     this.peasSystem.draw(p5)
+    this.sunSystem.draw(p5)
 
     if (SHOW_FPS) this.drawFps(p5)
 
-    if (!DEBUG) return
-
-    this.debug(p5)
+    if (DEBUG) this.debug(p5)
   }
 
   drawFps(p5: P5) {
