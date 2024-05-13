@@ -1,7 +1,7 @@
 import P5 from 'p5'
 import { LAWN_HEIGHT, TILE_HEIGHT } from '../../constants/game'
 import Entity from '../../entities/Entity'
-import Zombie from '../../entities/Zombie'
+import BasicZombie from '../../entities/zombies/BasicZombie'
 
 class ZombiesSystem {
   zombies: Entity[][]
@@ -11,7 +11,7 @@ class ZombiesSystem {
   }
 
   onZombieEnd = (zombie: Entity) => {
-    const lawnRow = (zombie as Zombie).lawnRow
+    const lawnRow = (zombie as BasicZombie).lawnRow
     const index = this.zombies[lawnRow].indexOf(zombie)
 
     this.zombies[lawnRow].splice(index, 1)

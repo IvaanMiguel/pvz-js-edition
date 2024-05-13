@@ -1,6 +1,6 @@
 import P5 from 'p5'
 import { TILE_HEIGHT, TILE_WIDTH } from '../constants/game'
-import Peashooter from '../entities/peashooter/Peashooter'
+import Peashooter from '../entities/plants/Peashooter'
 import LawnSystem from './systems/LawnSystem'
 import PeasSystem from './systems/PeasSystem'
 import SunSystem from './systems/SunSystem'

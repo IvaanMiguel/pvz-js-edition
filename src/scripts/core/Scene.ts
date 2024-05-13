@@ -11,8 +11,8 @@ import {
   TILE_WIDTH
 } from '../constants/game'
 import { SUN_COUNTER_HUD_X, SUN_COUNTER_HUD_Y } from '../constants/hud'
-import Zombie from '../entities/Zombie'
-import Peashooter from '../entities/peashooter/Peashooter'
+import Peashooter from '../entities/plants/Peashooter'
+import BasicZombie from '../entities/zombies/BasicZombie'
 import SunCounter from '../screen/SunCounter'
 import Player from './Player'
 import LawnSystem from './systems/LawnSystem'
@@ -21,7 +21,6 @@ import SunSystem from './systems/SunSystem'
 import VersusSystem from './systems/VersusSystem'
 import ZombiesSystem from './systems/ZombiesSystem'
 import bgImage from '/sprites/bg.png'
-
 
 class Scene {
   static bgImage: Image
@@ -60,7 +59,7 @@ class Scene {
 
     SunCounter.preload(p5)
     Peashooter.preload(p5)
-    Zombie.preload(p5)
+    BasicZombie.preload(p5)
   }
 
   getFrameRate = (p5: P5) => p5.round(p5.frameRate())
@@ -77,7 +76,10 @@ class Scene {
       const lawnRow = Math.floor(Math.random() * 5)
       const y = (lawnRow + 1) * TILE_HEIGHT + LAWN_OFFSET_Y - TILE_HEIGHT / 2
 
-      this.zombiesSystem.addZombieToRow(new Zombie(p5.width + 10, y, lawnRow, this.zombiesSystem.onZombieEnd), lawnRow)
+      this.zombiesSystem.addZombieToRow(
+        new BasicZombie(p5.width + 10, y, lawnRow, this.zombiesSystem.onZombieEnd),
+        lawnRow
+      )
       this.spawningTime = p5.millis() + this.SPAWNING_TIMER_CONST
     }
 

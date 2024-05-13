@@ -15,7 +15,7 @@ import {
   PeashooterState,
   TransformFrame
 } from '../../constants/peashooter'
-import Plant from '../Plant'
+import Plant from './Plant'
 import peashooterSprites from '/sprites/peashooter.png'
 
 class Peashooter extends Plant {

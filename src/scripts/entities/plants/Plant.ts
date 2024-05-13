@@ -1,5 +1,5 @@
-import { PLANT_BASIC_HP } from '../constants/game'
-import Entity from './Entity'
+import { PLANT_BASIC_HP } from '../../constants/game'
+import Entity from '../Entity'
 
 abstract class Plant extends Entity {
   isZombieAhead: boolean = false

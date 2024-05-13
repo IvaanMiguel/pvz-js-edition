@@ -1,7 +1,7 @@
 import P5 from 'p5'
 import { TILE_HEIGHT, TILE_WIDTH } from '../../constants/game'
 import Entity from '../../entities/Entity'
-import Plant from '../../entities/Plant'
+import Plant from '../../entities/plants/Plant'
 import ZombiesSystem from './ZombiesSystem'
 
 class LawnSystem {

@@ -14,7 +14,7 @@ import {
   PeaState
 } from '../../constants/peashooter'
 import Entity from '../Entity'
-import Peashooter from './Peashooter'
+import Peashooter from '../plants/Peashooter'
 
 class Pea extends Entity {
   states: EntityState

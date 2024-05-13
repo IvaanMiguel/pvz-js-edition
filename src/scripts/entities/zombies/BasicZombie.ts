@@ -1,6 +1,6 @@
 import P5 from 'p5'
-import { EntityState, HandleState } from '../../types'
-import { DEBUG } from '../constants/game'
+import { EntityState, HandleState } from '../../../types'
+import { DEBUG } from '../../constants/game'
 import {
   BASIC_ZOMBIE_DMG,
   BASIC_ZOMBIE_HP,
@@ -16,9 +16,9 @@ import {
   ZOMBIE_TIMER,
   ZombieDimensions,
   ZombieState
-} from '../constants/zombie'
-import Entity from './Entity'
-import Pea from './peashooter/Pea'
+} from '../../constants/zombie'
+import Entity from '../Entity'
+import Pea from '../projectiles/Pea'
 import zombieSprites from '/sprites/zombie.png'
 
 class Zombie extends Entity {

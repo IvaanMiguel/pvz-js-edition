@@ -1,6 +1,6 @@
 import P5 from 'p5'
-import Plant from '../../entities/Plant'
-import Zombie from '../../entities/Zombie'
+import Plant from '../../entities/plants/Plant'
+import BasicZombie from '../../entities/zombies/BasicZombie'
 import { areColliding } from '../../utils'
 import LawnSystem from './LawnSystem'
 import PeasSystem from './PeasSystem'
@@ -25,7 +25,7 @@ class VersusSystem {
   updateEatingPlant(p5: P5) {
     for (let i = 0; i < this.zombiesSystem.zombies.length; i++) {
       for (let j = 0; j < this.zombiesSystem.zombies[i].length; j++) {
-        const zombie = this.zombiesSystem.getZombie(i, j) as Zombie
+        const zombie = this.zombiesSystem.getZombie(i, j) as BasicZombie
 
         for (let k = this.lawnSystem.tiles[i].length - 1; k >= 0; k--) {
           const lawnTile = this.lawnSystem.getLawnTile(i, k) as Plant
@@ -59,7 +59,7 @@ class VersusSystem {
         if (!lawnTile) continue
 
         for (let k = 0; k < this.zombiesSystem.zombies[i].length; k++) {
-          const zombie = this.zombiesSystem.getZombie(i, k) as Zombie
+          const zombie = this.zombiesSystem.getZombie(i, k) as BasicZombie
 
           /* Si el zombi ya ha sobrepasado a la planta, esta no será capaz
            * de golpearlo y simplemente no atacará.
