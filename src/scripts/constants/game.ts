@@ -1,5 +1,5 @@
 export const DEBUG = false
-export const SHOW_FPS = true
+export const SHOW_FPS = false
 
 export const CANVAS_ELEMENT = document.getElementById('canvas') as HTMLCanvasElement
 export const PIXEL_DENSITY = 2
@@ -19,3 +19,7 @@ export const LAWN_OFFSET_X = 8
 export const LAWN_OFFSET_Y = 25
 
 export const PLANT_BASIC_HP = 300
+
+export const INITIAL_SUN_AMOUNT = 50
+export const MAX_SUN_AMOUNT = 9990
+export const SPAWNING_SUN_TIMER = 10000 * SPEED_MULTIPLIER
