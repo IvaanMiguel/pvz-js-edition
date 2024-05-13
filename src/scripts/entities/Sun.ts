@@ -23,7 +23,6 @@ class Sun extends Entity {
   stoppingY?: number
 
   constructor(
-    p5: P5,
     x: number,
     y: number,
     hitbox: { x: number; y: number; w: number; h: number; isActive: boolean },
