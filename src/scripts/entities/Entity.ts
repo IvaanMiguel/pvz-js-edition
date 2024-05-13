@@ -40,6 +40,8 @@ abstract class Entity {
   }
 
   drawHitbox(p5: P5) {
+    if (!this.hitbox.isActive) return
+
     p5.strokeWeight(1)
     p5.noFill()
     p5.noTint()
