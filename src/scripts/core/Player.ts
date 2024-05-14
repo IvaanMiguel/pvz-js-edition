@@ -4,6 +4,7 @@ import Peashooter from '../entities/plants/Peashooter'
 import LawnSystem from './systems/LawnSystem'
 import PeasSystem from './systems/PeasSystem'
 import SunSystem from './systems/SunSystem'
+import Wallnut from '../entities/plants/Wallnut'
 
 class Player {
   lawnSystem: LawnSystem
@@ -36,7 +37,8 @@ class Player {
     const x = (lawnTileCol + 1) * TILE_WIDTH + this.lawnSystem.x - TILE_WIDTH / 2
     const y = (lawnTileRow + 1) * TILE_HEIGHT + this.lawnSystem.y - TILE_HEIGHT / 2
 
-    this.lawnSystem.plantTile(new Peashooter(p5, x, y, lawnTileRow, this.peasSystem.addPea), lawnTileRow, lawnTileCol)
+    // this.lawnSystem.plantTile(new Peashooter(p5, x, y, lawnTileRow, this.peasSystem.addPea), lawnTileRow, lawnTileCol)
+    this.lawnSystem.plantTile(new Wallnut(x, y, lawnTileRow), lawnTileRow, lawnTileCol)
   }
 }
 

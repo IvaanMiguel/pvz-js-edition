@@ -12,6 +12,7 @@ import {
 } from '../constants/game'
 import { SUN_COUNTER_HUD_X, SUN_COUNTER_HUD_Y } from '../constants/hud'
 import Peashooter from '../entities/plants/Peashooter'
+import Wallnut from '../entities/plants/Wallnut'
 import BasicZombie from '../entities/zombies/BasicZombie'
 import SunCounter from '../screen/SunCounter'
 import Player from './Player'
@@ -59,6 +60,7 @@ class Scene {
 
     SunCounter.preload(p5)
     Peashooter.preload(p5)
+    Wallnut.preload(p5)
     BasicZombie.preload(p5)
   }
 
@@ -118,6 +120,7 @@ class Scene {
 
   debug(p5: P5) {
     p5.stroke('red')
+    p5.strokeWeight(1)
     p5.noFill()
     p5.rectMode(p5.CORNER)
 
