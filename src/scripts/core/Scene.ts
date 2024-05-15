@@ -10,7 +10,8 @@ import {
   TILE_HEIGHT,
   TILE_WIDTH
 } from '../constants/game'
-import { SUN_COUNTER_HUD_X, SUN_COUNTER_HUD_Y } from '../constants/hud'
+import { SEEDS_BAR_X, SEEDS_BAR_Y, SUN_COUNTER_HUD_X, SUN_COUNTER_HUD_Y } from '../constants/hud'
+import { PlantId } from '../constants/plants'
 import Peashooter from '../entities/plants/Peashooter'
 import Wallnut from '../entities/plants/Wallnut'
 import BasicZombie from '../entities/zombies/BasicZombie'
@@ -18,6 +19,7 @@ import SunCounter from '../screen/SunCounter'
 import Player from './Player'
 import LawnSystem from './systems/LawnSystem'
 import PeasSystem from './systems/PeasSystem'
+import SeedsBarSystem from './systems/SeedsBarSystem'
 import SunSystem from './systems/SunSystem'
 import VersusSystem from './systems/VersusSystem'
 import ZombiesSystem from './systems/ZombiesSystem'
@@ -28,12 +30,16 @@ class Scene {
 
   framesTimer: number = 0
   frameRate: number = 0
+
   sunCounter: SunCounter
+
   lawnSystem: LawnSystem
   peasSystem: PeasSystem
   zombiesSystem: ZombiesSystem
   versusSystem: VersusSystem
   sunSystem: SunSystem
+  seedsBarSystem: SeedsBarSystem
+
   player: Player
   SPAWNING_TIMER_CONST: number = 2000
   spawningTime: number = 0
@@ -45,9 +51,16 @@ class Scene {
     this.versusSystem = new VersusSystem(this.lawnSystem, this.peasSystem, this.zombiesSystem)
     this.sunSystem = new SunSystem(p5)
 
+    this.seedsBarSystem = new SeedsBarSystem(
+      SEEDS_BAR_X,
+      SEEDS_BAR_Y,
+      new Set([PlantId.SUNFLOWER, PlantId.PEASHOOTER, PlantId.POTATO_MINE, PlantId.REPEATER, PlantId.WALLNUT]),
+      this.sunSystem
+    )
+
     this.sunCounter = new SunCounter(SUN_COUNTER_HUD_X, SUN_COUNTER_HUD_Y, this.sunSystem)
 
-    this.player = new Player(p5, this.lawnSystem, this.peasSystem, this.sunSystem)
+    this.player = new Player(p5, this.lawnSystem, this.peasSystem, this.sunSystem, this.seedsBarSystem)
 
     if (!DEBUG) return
 
@@ -58,6 +71,7 @@ class Scene {
   static preload(p5: P5) {
     Scene.bgImage = p5.loadImage(bgImage)
 
+    SeedsBarSystem.preload(p5)
     SunCounter.preload(p5)
     Peashooter.preload(p5)
     Wallnut.preload(p5)
@@ -85,12 +99,14 @@ class Scene {
       this.spawningTime = p5.millis() + this.SPAWNING_TIMER_CONST
     }
 
+    this.player.update(p5)
     this.versusSystem.update(p5)
     this.lawnSystem.update(p5)
     this.zombiesSystem.update(p5)
     this.peasSystem.update(p5)
     this.sunSystem.update(p5)
     this.sunCounter.update(p5)
+    this.seedsBarSystem.update(p5)
 
     if (SHOW_FPS) this.updateFrameRate(p5)
   }
@@ -100,9 +116,11 @@ class Scene {
     p5.image(Scene.bgImage, 0, 0)
 
     this.sunCounter.draw(p5)
+    this.seedsBarSystem.draw(p5)
     this.lawnSystem.draw(p5)
     this.peasSystem.draw(p5)
     this.sunSystem.draw(p5)
+    this.player.draw(p5)
 
     if (SHOW_FPS) this.drawFps(p5)
 
