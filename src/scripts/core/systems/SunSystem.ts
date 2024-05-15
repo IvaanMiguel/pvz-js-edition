@@ -26,11 +26,7 @@ class SunSystem {
     this.suns.splice(index, 1)
   }
 
-  spawnSun(p5: P5) {
-    const x = p5.random(LAWN_OFFSET_X + SUN_SIZE / 2, LAWN_OFFSET_X + LAWN_WIDTH - SUN_SIZE / 2)
-    const y = SUN_SIZE / 2
-    const stoppingY = p5.random(LAWN_OFFSET_Y + SUN_SIZE / 2, LAWN_OFFSET_Y + LAWN_HEIGHT - SUN_SIZE / 2)
-
+  addSun = (x: number, y: number, stoppingY: number) => {
     this.suns.push(
       new Sun(
         x,
@@ -47,6 +43,14 @@ class SunSystem {
         stoppingY
       )
     )
+  }
+
+  spawnSun(p5: P5) {
+    const x = p5.random(LAWN_OFFSET_X + SUN_SIZE / 2, LAWN_OFFSET_X + LAWN_WIDTH - SUN_SIZE / 2)
+    const y = SUN_SIZE / 2
+    const stoppingY = p5.random(LAWN_OFFSET_Y + SUN_SIZE / 2, LAWN_OFFSET_Y + LAWN_HEIGHT - SUN_SIZE / 2)
+
+    this.addSun(x, y, stoppingY)
   }
 
   updateSpawningTimer(p5: P5) {
