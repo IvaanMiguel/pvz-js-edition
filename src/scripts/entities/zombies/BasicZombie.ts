@@ -21,7 +21,7 @@ import {
 import { drawHp } from '../../utils'
 import Entity from '../Entity'
 import Pea from '../projectiles/Pea'
-import zombieSprites from '/sprites/zombie.png'
+import basicZombieSprites from '/sprites/zombies/basic-zombie.png'
 
 class Zombie extends Entity {
   states: EntityState
@@ -80,7 +80,7 @@ class Zombie extends Entity {
   }
 
   static preload(p5: P5) {
-    Zombie.spritesheet = p5.loadImage(zombieSprites)
+    Zombie.spritesheet = p5.loadImage(basicZombieSprites)
   }
 
   hit(pea: Pea) {

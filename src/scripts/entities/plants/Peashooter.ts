@@ -18,7 +18,7 @@ import {
 } from '../../constants/peashooter'
 import { drawHp } from '../../utils'
 import Plant from './Plant'
-import peashooterSprites from '/sprites/peashooter.png'
+import peashooterSprites from '/sprites/plants/peashooter.png'
 
 class Peashooter extends Plant {
   firingTimer: number

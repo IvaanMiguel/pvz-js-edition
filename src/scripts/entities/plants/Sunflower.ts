@@ -16,7 +16,7 @@ import {
 } from '../../constants/sunflower'
 import { drawHp } from '../../utils'
 import Plant from './Plant'
-import sunflowerSprites from '/sprites/sunflower.png'
+import sunflowerSprites from '/sprites/plants/sunflower.png'
 
 class Sunflower extends Plant {
   states: EntityState

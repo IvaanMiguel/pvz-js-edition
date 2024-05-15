@@ -18,7 +18,7 @@ import {
 } from '../../constants/wallnut'
 import { drawHp } from '../../utils'
 import Plant from './Plant'
-import wallnutSprites from '/sprites/wallnut.png'
+import wallnutSprites from '/sprites/plants/wallnut.png'
 
 class Wallnut extends Plant {
   hp: number = WALLNUT_HP
