@@ -1,14 +1,18 @@
 import P5 from 'p5'
 import { PlantId } from '../constants/plants'
 import Peashooter from '../entities/plants/Peashooter'
+import Sunflower from '../entities/plants/Sunflower'
 import Wallnut from '../entities/plants/Wallnut'
 import PeasSystem from './systems/PeasSystem'
+import SunSystem from './systems/SunSystem'
 
 class PlantFactory {
   peasSystem: PeasSystem
+  sunSystem: SunSystem
 
-  constructor(peasSystem: PeasSystem) {
+  constructor(peasSystem: PeasSystem, sunSystem: SunSystem) {
     this.peasSystem = peasSystem
+    this.sunSystem = sunSystem
   }
 
   createPlant(p5: P5, plantId: string, x: number, y: number, lawnRow: number) {
@@ -17,6 +21,8 @@ class PlantFactory {
         return new Peashooter(p5, x, y, lawnRow, this.peasSystem.addPea)
       case PlantId.WALLNUT:
         return new Wallnut(x, y, lawnRow)
+      case PlantId.SUNFLOWER:
+        return new Sunflower(p5, x, y, this.sunSystem.addSun)
       default:
         return null
     }

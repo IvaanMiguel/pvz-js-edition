@@ -34,7 +34,7 @@ class Player {
     this.sunSystem = sunSystem
     this.seedsBarSystem = seedsBarSystem
 
-    this.plantFactory = new PlantFactory(this.peasSystem)
+    this.plantFactory = new PlantFactory(this.peasSystem, this.sunSystem)
 
     p5.mouseClicked = () => this.onMouseClicked(p5)
   }

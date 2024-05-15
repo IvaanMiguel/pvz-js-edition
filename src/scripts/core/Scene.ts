@@ -13,6 +13,7 @@ import {
 import { SEEDS_BAR_X, SEEDS_BAR_Y, SUN_COUNTER_HUD_X, SUN_COUNTER_HUD_Y } from '../constants/hud'
 import { PlantId } from '../constants/plants'
 import Peashooter from '../entities/plants/Peashooter'
+import Sunflower from '../entities/plants/Sunflower'
 import Wallnut from '../entities/plants/Wallnut'
 import BasicZombie from '../entities/zombies/BasicZombie'
 import SunCounter from '../screen/SunCounter'
@@ -41,7 +42,7 @@ class Scene {
   seedsBarSystem: SeedsBarSystem
 
   player: Player
-  SPAWNING_TIMER_CONST: number = 2000
+  SPAWNING_TIMER_CONST: number = 10000
   spawningTime: number = 0
 
   constructor(p5: P5) {
@@ -75,6 +76,7 @@ class Scene {
     SunCounter.preload(p5)
     Peashooter.preload(p5)
     Wallnut.preload(p5)
+    Sunflower.preload(p5)
     BasicZombie.preload(p5)
   }
 
