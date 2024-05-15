@@ -62,6 +62,10 @@ class Wallnut extends Plant {
     this.spritesheet = p5.loadImage(wallnutSprites)
   }
 
+  static getPlaceholder() {
+    return Wallnut.spritesheet.get(1, 1, WALLNUT_WIDTH, WALLNUT_HEIGHT)
+  }
+
   setIsZombieAhead(isZombieAhead: boolean) {
     this.isZombieAhead = isZombieAhead
   }

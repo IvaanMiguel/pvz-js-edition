@@ -66,6 +66,10 @@ class Peashooter extends Plant {
     Peashooter.spritesheet = p5.loadImage(peashooterSprites)
   }
 
+  static getPlaceholder() {
+    return Peashooter.spritesheet.get(0, 0, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT)
+  }
+
   setIsZombieAhead(isZombieAhead: boolean) {
     this.isZombieAhead = isZombieAhead
   }

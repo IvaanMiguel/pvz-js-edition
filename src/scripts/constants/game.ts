@@ -18,8 +18,6 @@ export const LAWN_HEIGHT = TILE_HEIGHT * 5
 export const LAWN_OFFSET_X = 8
 export const LAWN_OFFSET_Y = 25
 
-export const PLANT_BASIC_HP = 300
-
-export const INITIAL_SUN_AMOUNT = 50
+export const INITIAL_SUN_AMOUNT = 9990
 export const MAX_SUN_AMOUNT = 9990
 export const SPAWNING_SUN_TIMER = 10000 * SPEED_MULTIPLIER
