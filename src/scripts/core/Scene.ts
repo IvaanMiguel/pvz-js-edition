@@ -25,6 +25,7 @@ import SunSystem from './systems/SunSystem'
 import VersusSystem from './systems/VersusSystem'
 import ZombiesSystem from './systems/ZombiesSystem'
 import bgImage from '/sprites/bg.png'
+import PotatoMine from '../entities/plants/PotatoMine'
 
 class Scene {
   static bgImage: Image
@@ -42,7 +43,7 @@ class Scene {
   seedsBarSystem: SeedsBarSystem
 
   player: Player
-  SPAWNING_TIMER_CONST: number = 10000
+  SPAWNING_TIMER_CONST: number = 1000
   spawningTime: number = 0
 
   constructor(p5: P5) {
@@ -77,6 +78,7 @@ class Scene {
     Peashooter.preload(p5)
     Wallnut.preload(p5)
     Sunflower.preload(p5)
+    PotatoMine.preload(p5)
     BasicZombie.preload(p5)
   }
 
@@ -126,7 +128,7 @@ class Scene {
 
     if (SHOW_FPS) this.drawFps(p5)
 
-    if (DEBUG) this.debug(p5)
+    // if (DEBUG) this.debug(p5)
   }
 
   drawFps(p5: P5) {

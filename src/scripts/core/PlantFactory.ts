@@ -5,6 +5,7 @@ import Sunflower from '../entities/plants/Sunflower'
 import Wallnut from '../entities/plants/Wallnut'
 import PeasSystem from './systems/PeasSystem'
 import SunSystem from './systems/SunSystem'
+import PotatoMine from '../entities/plants/PotatoMine'
 
 class PlantFactory {
   peasSystem: PeasSystem
@@ -23,6 +24,8 @@ class PlantFactory {
         return new Wallnut(x, y, lawnRow)
       case PlantId.SUNFLOWER:
         return new Sunflower(p5, x, y, this.sunSystem.addSun)
+      case PlantId.POTATO_MINE:
+        return new PotatoMine(p5, x, y, lawnRow)
       default:
         return null
     }

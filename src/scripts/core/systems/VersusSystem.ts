@@ -1,6 +1,7 @@
 import P5 from 'p5'
 import Plant from '../../entities/plants/Plant'
-import BasicZombie from '../../entities/zombies/BasicZombie'
+import PotatoMine from '../../entities/plants/PotatoMine'
+import { default as BasicZombie, default as Zombie } from '../../entities/zombies/BasicZombie'
 import { areColliding } from '../../utils'
 import LawnSystem from './LawnSystem'
 import PeasSystem from './PeasSystem'
@@ -33,7 +34,7 @@ class VersusSystem {
           // Si el zombi ya ha sobrepasado a la planta, simplemente la ignora y sigue caminando.
           if (lawnTile && zombie.hitbox.position.x + zombie.hitbox.w < lawnTile.position.x) continue
 
-          if (lawnTile && areColliding(lawnTile, zombie)) {
+          if (lawnTile && areColliding(lawnTile.hitbox, zombie.hitbox)) {
             zombie.action = 'EATING'
             lawnTile.remainingHp -= (zombie.dmg / 1000) * p5.deltaTime
 
@@ -51,7 +52,7 @@ class VersusSystem {
     }
   }
 
-  updateTauntingLawn = () => {
+  updateTauntingLawn = (p5: P5) => {
     for (let i = 0; i < this.lawnSystem.tiles.length; i++) {
       for (let j = 0; j < this.lawnSystem.tiles[0].length; j++) {
         const lawnTile = this.lawnSystem.getLawnTile(i, j) as Plant | null
@@ -61,12 +62,19 @@ class VersusSystem {
         for (let k = 0; k < this.zombiesSystem.zombies[i].length; k++) {
           const zombie = this.zombiesSystem.getZombie(i, k) as BasicZombie
 
-          /* Si el zombi ya ha sobrepasado a la planta, esta no será capaz
-           * de golpearlo y simplemente no atacará.
-           */
-          lawnTile.setIsZombieAhead(
-            zombie.hitbox.position.x + zombie.hitbox.w > lawnTile.position.x + lawnTile.hitbox.w
-          )
+          if (lawnTile instanceof PotatoMine) {
+            if (!areColliding(lawnTile.spudowHitbox, zombie.hitbox)) continue
+
+            lawnTile.spudow(p5, this.zombiesSystem.zombies[i] as Zombie[])
+            // (lawnTile as PotatoMine).setIsZombieAhead(areColliding(lawnTile.spudowHitbox, zombie.hitbox))
+          } else {
+            /* Si el zombi ya ha sobrepasado a la planta, esta no será capaz
+             * de golpearlo y simplemente no atacará.
+             */
+            lawnTile.setIsZombieAhead(
+              zombie.hitbox.position.x + zombie.hitbox.w > lawnTile.position.x + lawnTile.hitbox.w
+            )
+          }
         }
 
         if (this.zombiesSystem.zombies[i].length <= 0) lawnTile.setIsZombieAhead(false)
@@ -75,7 +83,7 @@ class VersusSystem {
   }
 
   update(p5: P5) {
-    this.updateTauntingLawn()
+    this.updateTauntingLawn(p5)
     this.updateEatingPlant(p5)
   }
 }

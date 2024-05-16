@@ -1,4 +1,5 @@
 import Peashooter from '../entities/plants/Peashooter'
+import PotatoMine from '../entities/plants/PotatoMine'
 import Sunflower from '../entities/plants/Sunflower'
 import Wallnut from '../entities/plants/Wallnut'
 import { PlantId, RechargingTime } from './plants'
@@ -14,7 +15,8 @@ export const SeedStats = {
 export const SeedPlaceholder = {
   [PlantId.PEASHOOTER]: Peashooter.getPlaceholder,
   [PlantId.WALLNUT]: Wallnut.getPlaceholder,
-  [PlantId.SUNFLOWER]: Sunflower.getPlaceholder
+  [PlantId.SUNFLOWER]: Sunflower.getPlaceholder,
+  [PlantId.POTATO_MINE]: PotatoMine.getPlaceholder
 }
 
 export const SeedCoords = {

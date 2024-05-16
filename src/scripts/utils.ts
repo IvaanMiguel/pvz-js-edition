@@ -1,14 +1,14 @@
 import P5 from 'p5'
-import Entity from './entities/Entity'
+import { Hitbox } from '../types'
 
-export const areColliding = (entity1: Entity, entity2: Entity) => {
+export const areColliding = (hitbox1: Hitbox, hitbox2: Hitbox) => {
   return (
-    entity1.hitbox.isActive &&
-    entity2.hitbox.isActive &&
-    entity1.hitbox.position.x + entity1.hitbox.w >= entity2.hitbox.position.x &&
-    entity1.hitbox.position.x <= entity2.hitbox.position.x + entity2.hitbox.w &&
-    entity1.hitbox.position.y + entity1.hitbox.h >= entity2.hitbox.position.y &&
-    entity1.hitbox.position.y <= entity2.hitbox.position.y + entity2.hitbox.w
+    hitbox1.isActive &&
+    hitbox2.isActive &&
+    hitbox1.position.x + hitbox1.w >= hitbox2.position.x &&
+    hitbox1.position.x <= hitbox2.position.x + hitbox2.w &&
+    hitbox1.position.y + hitbox1.h >= hitbox2.position.y &&
+    hitbox1.position.y <= hitbox2.position.y + hitbox2.w
   )
 }
 
