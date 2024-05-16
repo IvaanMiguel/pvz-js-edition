@@ -1,4 +1,4 @@
-import { SPEED_MULTIPLIER } from './game'
+import { SPEED_MULTIPLIER } from '../game'
 
 export const DRAW_WALLNUT_COORDS_POINT = true
 export const DRAW_WALLNUT_SPRITE_BORDERS = false

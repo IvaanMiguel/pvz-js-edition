@@ -12,7 +12,7 @@ import {
   PeaFrame,
   PeaKeyframe,
   PeaState
-} from '../../constants/peashooter'
+} from '../../constants/plants/peashooter'
 import Entity from '../Entity'
 import Peashooter from '../plants/Peashooter'
 

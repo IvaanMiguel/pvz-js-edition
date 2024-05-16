@@ -15,7 +15,7 @@ import {
   PeashooterState,
   SHOW_HP,
   TransformFrame
-} from '../../constants/peashooter'
+} from '../../constants/plants/peashooter'
 import { drawHp } from '../../utils'
 import Plant from './Plant'
 import peashooterSprites from '/sprites/plants/peashooter.png'

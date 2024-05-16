@@ -17,13 +17,13 @@ import {
   ZOMBIE_TIMER,
   ZombieDimensions,
   ZombieState
-} from '../../constants/zombie'
+} from '../../constants/zombie/basicZombie'
 import { drawHp } from '../../utils'
 import Entity from '../Entity'
 import Pea from '../projectiles/Pea'
 import basicZombieSprites from '/sprites/zombies/basic-zombie.png'
 
-class Zombie extends Entity {
+class BasicZombie extends Entity {
   states: EntityState
   currentState: HandleState
   hp: number = BASIC_ZOMBIE_HP
@@ -80,7 +80,7 @@ class Zombie extends Entity {
   }
 
   static preload(p5: P5) {
-    Zombie.spritesheet = p5.loadImage(basicZombieSprites)
+    BasicZombie.spritesheet = p5.loadImage(basicZombieSprites)
   }
 
   hit(pea: Pea) {
@@ -122,7 +122,7 @@ class Zombie extends Entity {
 
     p5.imageMode(p5.CENTER)
     p5.image(
-      Zombie.spritesheet,
+      BasicZombie.spritesheet,
       this.position.x + (TransformFrame[currentState]?.offsetX || 0),
       this.position.y + (TransformFrame[currentState]?.offsetY || 0),
       width,
@@ -140,7 +140,7 @@ class Zombie extends Entity {
 
     p5.imageMode(p5.CENTER)
     p5.image(
-      Zombie.spritesheet,
+      BasicZombie.spritesheet,
       this.position.x + (TransformFrame[this.currentState.type]?.offsetX || 0),
       this.position.y + (TransformFrame[this.currentState.type]?.offsetY || 0),
       width,
@@ -200,4 +200,4 @@ class Zombie extends Entity {
   }
 }
 
-export default Zombie
+export default BasicZombie

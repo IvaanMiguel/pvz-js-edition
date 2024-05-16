@@ -13,7 +13,7 @@ import {
   SUNFLOWER_WIDTH,
   SunflowerAnimation,
   SunflowerState
-} from '../../constants/sunflower'
+} from '../../constants/plants/sunflower'
 import { drawHp } from '../../utils'
 import Plant from './Plant'
 import sunflowerSprites from '/sprites/plants/sunflower.png'

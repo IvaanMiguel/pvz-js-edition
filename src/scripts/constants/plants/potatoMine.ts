@@ -1,4 +1,4 @@
-import { SPEED_MULTIPLIER, TILE_HEIGHT, TILE_WIDTH } from './game'
+import { SPEED_MULTIPLIER, TILE_HEIGHT, TILE_WIDTH } from '../game'
 
 export const DRAW_POTATO_MINE_COORDS_POINT = true
 export const DRAW_POTATO_MINE_SPRITE_BORDERS = true

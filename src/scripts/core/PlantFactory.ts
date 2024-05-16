@@ -1,11 +1,11 @@
 import P5 from 'p5'
-import { PlantId } from '../constants/plants'
+import { PlantId } from '../constants/plants/plants'
 import Peashooter from '../entities/plants/Peashooter'
+import PotatoMine from '../entities/plants/PotatoMine'
 import Sunflower from '../entities/plants/Sunflower'
 import Wallnut from '../entities/plants/Wallnut'
 import PeasSystem from './systems/PeasSystem'
 import SunSystem from './systems/SunSystem'
-import PotatoMine from '../entities/plants/PotatoMine'
 
 class PlantFactory {
   peasSystem: PeasSystem

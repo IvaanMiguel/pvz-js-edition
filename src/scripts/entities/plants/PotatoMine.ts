@@ -15,9 +15,9 @@ import {
   SHOW_HP,
   SPUDOW_HITBOX_HEIGHT,
   SPUDOW_HITBOX_WIDTH
-} from '../../constants/potatoMine'
+} from '../../constants/plants/potatoMine'
 import { areColliding, drawHp } from '../../utils'
-import Zombie from '../zombies/BasicZombie'
+import BasicZombie from '../zombies/BasicZombie'
 import Plant from './Plant'
 import potatoMineSprites from '/sprites/plants/potato-mine.png'
 
@@ -90,7 +90,7 @@ class PotatoMine extends Plant {
     this.isZombieAhead = isZombieAhead
   }
 
-  spudow(p5: P5, zombies: Zombie[]) {
+  spudow(p5: P5, zombies: BasicZombie[]) {
     if (this.currentState.type === PotatoMineState.SPUDOW) return
 
     this.changeState(p5, PotatoMineState.SPUDOW)

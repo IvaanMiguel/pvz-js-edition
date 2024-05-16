@@ -1,5 +1,5 @@
-import { TransformFrame as TransformFrameType } from '../../types'
-import { SPEED_MULTIPLIER } from './game'
+import { TransformFrame as TransformFrameType } from '../../../types'
+import { SPEED_MULTIPLIER } from '../game'
 
 export const DRAW_PEASHOOTER_COORDS_POINT = true
 export const DRAW_PEASHOOTER_SPRITE_BORDERS = false

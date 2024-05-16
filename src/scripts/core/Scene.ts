@@ -11,8 +11,9 @@ import {
   TILE_WIDTH
 } from '../constants/game'
 import { SEEDS_BAR_X, SEEDS_BAR_Y, SUN_COUNTER_HUD_X, SUN_COUNTER_HUD_Y } from '../constants/hud'
-import { PlantId } from '../constants/plants'
+import { PlantId } from '../constants/plants/plants'
 import Peashooter from '../entities/plants/Peashooter'
+import PotatoMine from '../entities/plants/PotatoMine'
 import Sunflower from '../entities/plants/Sunflower'
 import Wallnut from '../entities/plants/Wallnut'
 import BasicZombie from '../entities/zombies/BasicZombie'
@@ -25,7 +26,6 @@ import SunSystem from './systems/SunSystem'
 import VersusSystem from './systems/VersusSystem'
 import ZombiesSystem from './systems/ZombiesSystem'
 import bgImage from '/sprites/bg.png'
-import PotatoMine from '../entities/plants/PotatoMine'
 
 class Scene {
   static bgImage: Image

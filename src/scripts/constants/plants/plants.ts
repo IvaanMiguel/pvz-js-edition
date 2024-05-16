@@ -1,4 +1,4 @@
-import { SPEED_MULTIPLIER } from './game'
+import { SPEED_MULTIPLIER } from '../game'
 
 export const BASIC_PLANT_HP = 300
 

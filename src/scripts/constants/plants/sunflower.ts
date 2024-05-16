@@ -1,4 +1,4 @@
-import { SPEED_MULTIPLIER } from './game'
+import { SPEED_MULTIPLIER } from '../game'
 
 export const DRAW_SUNFLOWER_COORDS_POINT = true
 export const DRAW_SUNFLOWER_SPRITE_BORDERS = true

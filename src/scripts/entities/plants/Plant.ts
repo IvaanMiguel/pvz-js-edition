@@ -1,4 +1,4 @@
-import { BASIC_PLANT_HP } from '../../constants/plants';
+import { BASIC_PLANT_HP } from '../../constants/plants/plants'
 import Entity from '../Entity'
 
 abstract class Plant extends Entity {

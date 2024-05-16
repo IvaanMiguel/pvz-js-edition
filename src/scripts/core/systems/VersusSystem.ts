@@ -1,7 +1,7 @@
 import P5 from 'p5'
 import Plant from '../../entities/plants/Plant'
 import PotatoMine from '../../entities/plants/PotatoMine'
-import { default as BasicZombie, default as Zombie } from '../../entities/zombies/BasicZombie'
+import BasicZombie from '../../entities/zombies/BasicZombie'
 import { areColliding } from '../../utils'
 import LawnSystem from './LawnSystem'
 import PeasSystem from './PeasSystem'
@@ -65,7 +65,7 @@ class VersusSystem {
           if (lawnTile instanceof PotatoMine) {
             if (!areColliding(lawnTile.spudowHitbox, zombie.hitbox)) continue
 
-            lawnTile.spudow(p5, this.zombiesSystem.zombies[i] as Zombie[])
+            lawnTile.spudow(p5, this.zombiesSystem.zombies[i] as BasicZombie[])
             // (lawnTile as PotatoMine).setIsZombieAhead(areColliding(lawnTile.spudowHitbox, zombie.hitbox))
           } else {
             /* Si el zombi ya ha sobrepasado a la planta, esta no será capaz

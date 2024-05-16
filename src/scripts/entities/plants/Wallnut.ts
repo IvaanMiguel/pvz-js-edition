@@ -15,7 +15,7 @@ import {
   WALLNUT_WIDTH,
   WallnutKeyframe,
   WallnutState
-} from '../../constants/wallnut'
+} from '../../constants/plants/wallnut'
 import { drawHp } from '../../utils'
 import Plant from './Plant'
 import wallnutSprites from '/sprites/plants/wallnut.png'

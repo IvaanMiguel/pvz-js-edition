@@ -2,7 +2,7 @@ import Peashooter from '../entities/plants/Peashooter'
 import PotatoMine from '../entities/plants/PotatoMine'
 import Sunflower from '../entities/plants/Sunflower'
 import Wallnut from '../entities/plants/Wallnut'
-import { PlantId, RechargingTime } from './plants'
+import { PlantId, RechargingTime } from './plants/plants'
 
 export const SeedStats = {
   [PlantId.PEASHOOTER]: { sunCost: 100, rechargingTime: RechargingTime.FAST, readyOnStart: false },
