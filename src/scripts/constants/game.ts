@@ -1,4 +1,5 @@
 export const DEBUG = false
+export const SHOW_GRID = false
 export const SHOW_FPS = false
 
 export const CANVAS_ELEMENT = document.getElementById('canvas') as HTMLCanvasElement

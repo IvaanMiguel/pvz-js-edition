@@ -7,6 +7,7 @@ import {
   LAWN_OFFSET_Y,
   LAWN_WIDTH,
   SHOW_FPS,
+  SHOW_GRID,
   TILE_HEIGHT,
   TILE_WIDTH
 } from '../constants/game'
@@ -132,7 +133,7 @@ class Scene {
 
     if (SHOW_FPS) this.drawFps(p5)
 
-    // if (DEBUG) this.debug(p5)
+    if (DEBUG) this.debug(p5)
   }
 
   drawFps(p5: P5) {
@@ -145,6 +146,8 @@ class Scene {
   }
 
   debug(p5: P5) {
+    if (!SHOW_GRID) return
+
     p5.stroke('red')
     p5.strokeWeight(1)
     p5.noFill()
