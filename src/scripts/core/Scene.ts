@@ -16,6 +16,7 @@ import Peashooter from '../entities/plants/Peashooter'
 import PotatoMine from '../entities/plants/PotatoMine'
 import Sunflower from '../entities/plants/Sunflower'
 import Wallnut from '../entities/plants/Wallnut'
+import Pea from '../entities/projectiles/Pea'
 import BasicZombie from '../entities/zombies/BasicZombie'
 import SunCounter from '../screen/SunCounter'
 import Player from './Player'
@@ -74,6 +75,7 @@ class Scene {
     Scene.bgImage = p5.loadImage(bgImage)
 
     SeedsBarSystem.preload(p5)
+    Pea.preload(p5)
     SunCounter.preload(p5)
     Peashooter.preload(p5)
     Wallnut.preload(p5)

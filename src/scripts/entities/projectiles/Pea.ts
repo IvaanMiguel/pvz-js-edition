@@ -12,9 +12,9 @@ import {
   PeaFrame,
   PeaKeyframe,
   PeaState
-} from '../../constants/plants/peashooter'
+} from '../../constants/projectiles/pea'
 import Entity from '../Entity'
-import Peashooter from '../plants/Peashooter'
+import peaSprites from '/sprites/projectiles/pea.png'
 
 class Pea extends Entity {
   states: EntityState
@@ -25,8 +25,6 @@ class Pea extends Entity {
 
   constructor(x: number, y: number, lawnRow: number, onPeaEnd: (pea: Pea) => void) {
     super(x, y, { x, y, w: 1, h: 1, isActive: true })
-
-    Pea.spritesheet = Peashooter.spritesheet
 
     this.lawnRow = lawnRow
     this.onPeaEnd = onPeaEnd
@@ -47,11 +45,15 @@ class Pea extends Entity {
     this.currentState = this.states[PeaState.FLYING]
   }
 
+  static preload(p5: P5) {
+    Pea.spritesheet = p5.loadImage(peaSprites)
+  }
+
   handleFlyingDraw = (p5: P5) => {
     const { originX, originY, w, h } = PeaKeyframe[PeaFrame.FLYING]
 
     p5.imageMode(p5.CENTER)
-    p5.image(Peashooter.spritesheet, this.position.x, this.position.y, w, h, originX, originY, w, h)
+    p5.image(Pea.spritesheet, this.position.x, this.position.y, w, h, originX, originY, w, h)
   }
 
   handleFlyingUpdate = (p5: P5) => {

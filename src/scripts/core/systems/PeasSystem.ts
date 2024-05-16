@@ -1,6 +1,6 @@
 import P5 from 'p5'
 import { LAWN_HEIGHT, TILE_HEIGHT } from '../../constants/game'
-import { PeaState } from '../../constants/plants/peashooter'
+import { PeaState } from '../../constants/projectiles/pea'
 import Pea from '../../entities/projectiles/Pea'
 import BasicZombie from '../../entities/zombies/BasicZombie'
 import { areColliding } from '../../utils'
