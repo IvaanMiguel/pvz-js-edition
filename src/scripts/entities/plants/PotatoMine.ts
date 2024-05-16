@@ -2,6 +2,7 @@ import P5, { Vector } from 'p5'
 import { EntityState, HandleState, Hitbox } from '../../../types'
 import { DEBUG } from '../../constants/game'
 import {
+  ARMING_TIMER,
   DRAW_POTATO_MINE_COORDS_POINT,
   DRAW_POTATO_MINE_HITBOX,
   DRAW_POTATO_MINE_SPRITE_BORDERS,
@@ -47,7 +48,7 @@ class PotatoMine extends Plant {
       isActive: false
     }
     this.isArmed = false
-    this.armingTimer = p5.millis() + 100
+    this.armingTimer = p5.millis() + ARMING_TIMER
     this.animationTimer = p5.millis() + PotatoMineAnimation[PotatoMineState.SLEEPING][0].timer * p5.deltaTime
     this.states = {
       [PotatoMineState.SLEEPING]: {
