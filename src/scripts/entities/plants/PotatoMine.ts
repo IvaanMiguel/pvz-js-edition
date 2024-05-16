@@ -144,8 +144,6 @@ class PotatoMine extends Plant {
   update(p5: P5) {
     this.currentState.update(p5)
     this.updateAnimation(p5)
-
-    console.log(this.isZombieAhead)
   }
 
   handleDrawSpudowState = (p5: P5) => {

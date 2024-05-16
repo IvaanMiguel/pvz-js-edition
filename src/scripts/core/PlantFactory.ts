@@ -2,6 +2,7 @@ import P5 from 'p5'
 import { PlantId } from '../constants/plants/plants'
 import Peashooter from '../entities/plants/Peashooter'
 import PotatoMine from '../entities/plants/PotatoMine'
+import Repeater from '../entities/plants/Repeater'
 import Sunflower from '../entities/plants/Sunflower'
 import Wallnut from '../entities/plants/Wallnut'
 import PeasSystem from './systems/PeasSystem'
@@ -26,6 +27,8 @@ class PlantFactory {
         return new Sunflower(p5, x, y, this.sunSystem.addSun)
       case PlantId.POTATO_MINE:
         return new PotatoMine(p5, x, y, lawnRow)
+      case PlantId.REPEATER:
+        return new Repeater(p5, x, y, lawnRow, this.peasSystem.addPea)
       default:
         return null
     }

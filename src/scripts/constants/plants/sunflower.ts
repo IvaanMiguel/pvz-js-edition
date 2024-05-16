@@ -1,9 +1,9 @@
 import { SPEED_MULTIPLIER } from '../game'
 
 export const DRAW_SUNFLOWER_COORDS_POINT = true
-export const DRAW_SUNFLOWER_SPRITE_BORDERS = true
+export const DRAW_SUNFLOWER_SPRITE_BORDERS = false
 export const DRAW_SUNFLOWER_HITBOX = true
-export const SHOW_HP = false
+export const SHOW_HP = true
 
 export const SUNFLOWER_SPAWNING_SUN_TIMER = 24000
 export const SUNFLOWER_WIDTH = 32

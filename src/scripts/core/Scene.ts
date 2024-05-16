@@ -14,6 +14,7 @@ import { SEEDS_BAR_X, SEEDS_BAR_Y, SUN_COUNTER_HUD_X, SUN_COUNTER_HUD_Y } from '
 import { PlantId } from '../constants/plants/plants'
 import Peashooter from '../entities/plants/Peashooter'
 import PotatoMine from '../entities/plants/PotatoMine'
+import Repeater from '../entities/plants/Repeater'
 import Sunflower from '../entities/plants/Sunflower'
 import Wallnut from '../entities/plants/Wallnut'
 import Pea from '../entities/projectiles/Pea'
@@ -44,7 +45,7 @@ class Scene {
   seedsBarSystem: SeedsBarSystem
 
   player: Player
-  SPAWNING_TIMER_CONST: number = 1000
+  SPAWNING_TIMER_CONST: number = 4000
   spawningTime: number = 0
 
   constructor(p5: P5) {
@@ -81,6 +82,7 @@ class Scene {
     Wallnut.preload(p5)
     Sunflower.preload(p5)
     PotatoMine.preload(p5)
+    Repeater.preload(p5)
     BasicZombie.preload(p5)
   }
 
