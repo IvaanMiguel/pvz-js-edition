@@ -1,23 +1,22 @@
 import P5 from 'p5'
 import { LAWN_HEIGHT, TILE_HEIGHT } from '../../constants/game'
-import Entity from '../../entities/Entity'
-import BasicZombie from '../../entities/zombies/BasicZombie'
+import Zombie from '../../entities/zombies/Zombie'
 
 class ZombiesSystem {
-  zombies: Entity[][]
+  zombies: Zombie[][]
 
   constructor() {
     this.zombies = [...Array(LAWN_HEIGHT / TILE_HEIGHT)].map(() => [])
   }
 
-  onZombieEnd = (zombie: Entity) => {
-    const lawnRow = (zombie as BasicZombie).lawnRow
+  onZombieEnd = (zombie: Zombie) => {
+    const lawnRow = zombie.lawnRow
     const index = this.zombies[lawnRow].indexOf(zombie)
 
     this.zombies[lawnRow].splice(index, 1)
   }
 
-  addZombieToRow(zombie: Entity, lawnRow: number) {
+  addZombieToRow(zombie: Zombie, lawnRow: number) {
     this.zombies[lawnRow].push(zombie)
   }
 

@@ -19,34 +19,33 @@ import {
   ZombieState
 } from '../../constants/zombie/basicZombie'
 import { drawHp } from '../../utils'
-import Entity from '../Entity'
 import Pea from '../projectiles/Pea'
+import Zombie from './Zombie'
 import basicZombieSprites from '/sprites/zombies/basic-zombie.png'
 
-class BasicZombie extends Entity {
+class BasicZombie extends Zombie {
   states: EntityState
   currentState: HandleState
-  hp: number = BASIC_ZOMBIE_HP
-  remainingHp: number = BASIC_ZOMBIE_HP
   dmg: number = BASIC_ZOMBIE_DMG
-  action: 'EATING' | 'WALKING'
   hpStatus: 'FULL' | 'DAMAGED'
-  lawnRow: number
-  onZombieEnd: (zombie: Entity) => void
 
-  constructor(x: number, y: number, lawnRow: number, onZombieEnd: (zombie: Entity) => void) {
-    super(x, y, {
-      x: x - HITBOX_WIDTH / 2 + HITBOX_OFFSET_X,
-      y: y - HITBOX_HEIGHT / 2,
-      w: HITBOX_WIDTH,
-      h: HITBOX_HEIGHT,
-      isActive: true
-    })
+  constructor(x: number, y: number, lawnRow: number, onZombieEnd: (zombie: Zombie) => void) {
+    super(
+      x,
+      y,
+      BASIC_ZOMBIE_HP,
+      {
+        x: x - HITBOX_WIDTH / 2 + HITBOX_OFFSET_X,
+        y: y - HITBOX_HEIGHT / 2,
+        w: HITBOX_WIDTH,
+        h: HITBOX_HEIGHT,
+        isActive: true
+      },
+      lawnRow,
+      onZombieEnd
+    )
 
-    this.onZombieEnd = onZombieEnd
-    this.action = 'WALKING'
     this.hpStatus = 'FULL'
-    this.lawnRow = lawnRow
 
     this.states = {
       [ZombieState.WALKING.FULL]: {

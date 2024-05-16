@@ -2,7 +2,7 @@ import P5 from 'p5'
 import { LAWN_HEIGHT, TILE_HEIGHT } from '../../constants/game'
 import { PeaState } from '../../constants/projectiles/pea'
 import Pea from '../../entities/projectiles/Pea'
-import BasicZombie from '../../entities/zombies/BasicZombie'
+import Zombie from '../../entities/zombies/Zombie'
 import { areColliding } from '../../utils'
 import ZombiesSystem from './ZombiesSystem'
 
@@ -26,7 +26,7 @@ class PeasSystem {
     this.peas[lawnRow].push(new Pea(x, y, lawnRow, this.onPeaEnd))
   }
 
-  updateOnHittingZombie(p5: P5, pea: Pea, zombies: BasicZombie[]) {
+  updateOnHittingZombie(p5: P5, pea: Pea, zombies: Zombie[]) {
     for (let i = 0; i < zombies.length; i++) {
       const zombie = zombies[i]
 
@@ -44,7 +44,7 @@ class PeasSystem {
       for (let j = 0; j < this.peas[i].length; j++) {
         const pea = this.peas[i][j]
 
-        this.updateOnHittingZombie(p5, pea, this.zombiesSystem.zombies[i] as BasicZombie[])
+        this.updateOnHittingZombie(p5, pea, this.zombiesSystem.zombies[i])
 
         pea.position.x > p5.width + 10 ? this.onPeaEnd(pea) : pea.update(p5)
       }

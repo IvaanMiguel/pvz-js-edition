@@ -1,7 +1,6 @@
 import P5 from 'p5'
 import Plant from '../../entities/plants/Plant'
 import PotatoMine from '../../entities/plants/PotatoMine'
-import BasicZombie from '../../entities/zombies/BasicZombie'
 import { areColliding } from '../../utils'
 import LawnSystem from './LawnSystem'
 import PeasSystem from './PeasSystem'
@@ -26,7 +25,7 @@ class VersusSystem {
   updateEatingPlant(p5: P5) {
     for (let i = 0; i < this.zombiesSystem.zombies.length; i++) {
       for (let j = 0; j < this.zombiesSystem.zombies[i].length; j++) {
-        const zombie = this.zombiesSystem.getZombie(i, j) as BasicZombie
+        const zombie = this.zombiesSystem.getZombie(i, j)
 
         for (let k = this.lawnSystem.tiles[i].length - 1; k >= 0; k--) {
           const lawnTile = this.lawnSystem.getLawnTile(i, k) as Plant
@@ -60,12 +59,12 @@ class VersusSystem {
         if (!lawnTile) continue
 
         for (let k = 0; k < this.zombiesSystem.zombies[i].length; k++) {
-          const zombie = this.zombiesSystem.getZombie(i, k) as BasicZombie
+          const zombie = this.zombiesSystem.getZombie(i, k)
 
           if (lawnTile instanceof PotatoMine) {
             if (!areColliding(lawnTile.spudowHitbox, zombie.hitbox)) continue
 
-            lawnTile.spudow(p5, this.zombiesSystem.zombies[i] as BasicZombie[])
+            lawnTile.spudow(p5, this.zombiesSystem.zombies[i])
             // (lawnTile as PotatoMine).setIsZombieAhead(areColliding(lawnTile.spudowHitbox, zombie.hitbox))
           } else {
             /* Si el zombi ya ha sobrepasado a la planta, esta no será capaz
