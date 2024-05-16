@@ -30,7 +30,7 @@ class PeasSystem {
     for (let i = 0; i < zombies.length; i++) {
       const zombie = zombies[i]
 
-      if (!areColliding(pea, zombie) || pea.currentState.type === PeaState.ON_HIT) {
+      if (!areColliding(pea.hitbox, zombie.hitbox) || pea.currentState.type === PeaState.ON_HIT) {
         continue
       }
 
