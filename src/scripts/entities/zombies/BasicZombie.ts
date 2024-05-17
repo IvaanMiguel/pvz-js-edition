@@ -1,18 +1,17 @@
 import P5 from 'p5'
-import { EntityState, HandleState } from '../../../types'
+import { ConstructorHitbox, EntityState, HandleState } from '../../../types'
 import { DEBUG } from '../../constants/game'
 import {
-  BASIC_ZOMBIE_DMG,
+  BASIC_ZOMBIE_HITBOX_HEIGHT,
+  BASIC_ZOMBIE_HITBOX_OFFSET_X,
+  BASIC_ZOMBIE_HITBOX_WIDTH,
   BASIC_ZOMBIE_HP,
   BasicZombieAnimation,
   BasicZombieState,
-  DRAW_COORDS_POINT,
-  DRAW_HITBOX,
-  DRAW_SPRITE_BORDERS,
-  HITBOX_HEIGHT,
-  HITBOX_OFFSET_X,
-  HITBOX_WIDTH,
-  SHOW_HP,
+  DRAW_BASIC_ZOMBIE_COORDS_POINT,
+  DRAW_BASIC_ZOMBIE_HITBOX,
+  DRAW_BASIC_ZOMBIE_SPRITE_BORDERS,
+  SHOW_BASIC_ZOMBIE_HP,
   TransformFrame,
   ZOMBIE_SPEED
 } from '../../constants/zombie/basicZombie'
@@ -24,26 +23,17 @@ import basicZombieSprites from '/sprites/zombies/basic-zombie.png'
 class BasicZombie extends Zombie {
   states: EntityState
   currentState: HandleState
-  dmg: number = BASIC_ZOMBIE_DMG
-  hpStatus: 'FULL' | 'DAMAGED'
+  hpStatus: 'FULL' | 'DAMAGED' = 'FULL'
 
   constructor(x: number, y: number, lawnRow: number, onZombieEnd: (zombie: Zombie) => void) {
-    super(
-      x,
-      y,
-      BASIC_ZOMBIE_HP,
-      {
-        x: x - HITBOX_WIDTH / 2 + HITBOX_OFFSET_X,
-        y: y - HITBOX_HEIGHT / 2,
-        w: HITBOX_WIDTH,
-        h: HITBOX_HEIGHT,
-        isActive: true
-      },
-      lawnRow,
-      onZombieEnd
-    )
-
-    this.hpStatus = 'FULL'
+    const hitbox: ConstructorHitbox = {
+      x: x - BASIC_ZOMBIE_HITBOX_WIDTH / 2 + BASIC_ZOMBIE_HITBOX_OFFSET_X,
+      y: y - BASIC_ZOMBIE_HITBOX_HEIGHT / 2,
+      w: BASIC_ZOMBIE_HITBOX_WIDTH,
+      h: BASIC_ZOMBIE_HITBOX_HEIGHT,
+      isActive: true
+    }
+    super(x, y, BASIC_ZOMBIE_HP, hitbox, lawnRow, onZombieEnd)
 
     this.states = {
       [BasicZombieState.WALKING.FULL]: {
@@ -165,9 +155,9 @@ class BasicZombie extends Zombie {
   debug(p5: P5) {
     p5.strokeWeight(1)
 
-    if (DRAW_HITBOX && this.hitbox.isActive) this.drawHitbox(p5)
+    if (DRAW_BASIC_ZOMBIE_HITBOX && this.hitbox.isActive) this.drawHitbox(p5)
 
-    if (DRAW_SPRITE_BORDERS) {
+    if (DRAW_BASIC_ZOMBIE_SPRITE_BORDERS) {
       this.drawSpriteBorders(
         p5,
         this.position.x + (TransformFrame[this.currentState.type]?.offsetX || 0),
@@ -177,9 +167,10 @@ class BasicZombie extends Zombie {
       )
     }
 
-    if (DRAW_COORDS_POINT) this.drawCoordsPoint(p5)
+    if (DRAW_BASIC_ZOMBIE_COORDS_POINT) this.drawCoordsPoint(p5)
 
-    if (SHOW_HP && this.remainingHp > 0) drawHp(p5, this.position.x, this.position.y, this.hp, this.remainingHp)
+    if (SHOW_BASIC_ZOMBIE_HP && this.remainingHp > 0)
+      drawHp(p5, this.position.x, this.position.y, this.hp, this.remainingHp)
   }
 }
 

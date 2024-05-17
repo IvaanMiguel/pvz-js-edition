@@ -1,4 +1,5 @@
 import P5 from 'p5'
+import { ConstructorHitbox } from '../../../types'
 import { BASIC_ZOMBIE_DMG } from '../../constants/zombie/basicZombie'
 import Entity from '../Entity'
 import Pea from '../projectiles/Pea'
@@ -16,7 +17,7 @@ abstract class Zombie extends Entity {
     x: number,
     y: number,
     hp: number,
-    hitbox: { x: number; y: number; w: number; h: number; isActive: boolean },
+    hitbox: ConstructorHitbox,
     lawnRow: number,
     onZombieEnd: (zombie: Zombie) => void
   ) {

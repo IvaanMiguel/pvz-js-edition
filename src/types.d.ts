@@ -24,6 +24,14 @@ export interface HandleState {
   draw: (p5: P5) => void
 }
 
+export interface ConstructorHitbox {
+  x: number
+  y: number
+  w: number
+  h: number
+  isActive: boolean
+}
+
 export interface Hitbox {
   position: Vector
   w: number
