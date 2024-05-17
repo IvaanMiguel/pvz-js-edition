@@ -32,13 +32,15 @@ class Pea extends Entity {
     this.states = {
       [PeaState.FLYING]: {
         type: PeaState.FLYING,
-        draw: this.handleFlyingDraw,
-        update: this.handleFlyingUpdate
+        animation: PeaAnimation[PeaState.FLYING],
+        draw: this.handleDrawFlyingState,
+        update: this.handleUpdateFlyingState
       },
       [PeaState.ON_HIT]: {
         type: PeaState.ON_HIT,
-        draw: this.handleOnHitDraw,
-        update: this.handleOnHitUpdate
+        animation: PeaAnimation[PeaState.ON_HIT],
+        draw: this.handleDrawOnHitState,
+        update: this.handleUpdateOnHitState
       }
     }
 
@@ -49,59 +51,56 @@ class Pea extends Entity {
     Pea.spritesheet = p5.loadImage(peaSprites)
   }
 
-  handleFlyingDraw = (p5: P5) => {
-    const { originX, originY, w, h } = PeaKeyframe[PeaFrame.FLYING]
-
-    p5.imageMode(p5.CENTER)
-    p5.image(Pea.spritesheet, this.position.x, this.position.y, w, h, originX, originY, w, h)
+  changeState(p5: P5, newState: string) {
+    this.currentState = this.states[newState]
+    this.animationFrame = 0
+    this.animationTimer = p5.millis() + this.currentState.animation[this.animationFrame].timer * p5.deltaTime
   }
 
-  handleFlyingUpdate = (p5: P5) => {
+  handleUpdateFlyingState = (p5: P5) => {
     const xVelocity = PEA_SPEED * (p5.deltaTime / 1000)
+
     this.position.add(xVelocity, 0)
     this.hitbox.position.add(xVelocity, 0)
   }
 
-  handleOnHitDraw = (p5: P5) => {
-    const { originX, originY, w, h } = PeaAnimation.OnHit[this.animationFrame]
-
-    p5.imageMode(p5.CENTER)
-    p5.image(Pea.spritesheet, this.position.x, this.position.y, w, h, originX, originY, w, h)
-  }
-
-  handleOnHitUpdate = (p5: P5) => {
+  handleUpdateOnHitState = (p5: P5) => {
     if (p5.millis() < this.animationTimer) return
 
     this.animationFrame++
-    if (this.animationFrame >= PeaAnimation.OnHit.length) {
-      this.animationFrame = 0
+    if (this.animationFrame >= this.currentState.animation.length) {
       this.onPeaEnd(this)
+      return
     }
 
-    this.animationTimer = p5.millis() + PeaAnimation.OnHit[this.animationFrame].timer * p5.deltaTime
-  }
-
-  changeState(p5: P5, newState: string) {
-    this.currentState = this.states[newState]
-    this.animationFrame = 0
-    this.animationTimer = p5.millis() + PeaAnimation.OnHit[this.animationFrame].timer * p5.deltaTime
+    this.animationTimer = p5.millis() + this.currentState.animation[this.animationFrame].timer * p5.deltaTime
   }
 
   update(p5: P5) {
     this.currentState.update(p5)
   }
 
+  handleDrawFlyingState = (p5: P5) => {
+    const { originX, originY, w, h } = PeaKeyframe[PeaFrame.FLYING_1]
+
+    p5.imageMode(p5.CENTER)
+    p5.image(Pea.spritesheet, this.position.x, this.position.y, w, h, originX, originY, w, h)
+  }
+
+  handleDrawOnHitState = (p5: P5) => {
+    const { originX, originY, w, h } = this.currentState.animation[this.animationFrame]
+
+    p5.imageMode(p5.CENTER)
+    p5.image(Pea.spritesheet, this.position.x, this.position.y, w, h, originX, originY, w, h)
+  }
+
   draw(p5: P5) {
     this.currentState.draw(p5)
 
-    if (!DEBUG) return
-
-    this.debug(p5)
+    if (DEBUG) this.debug(p5)
   }
 
   debug(p5: P5) {
-    p5.strokeWeight(1)
-
     if (DRAW_PEA_SPRITE_BORDERS) this.drawSpriteBorders(p5, this.position.x, this.position.y, PEA_SIZE, PEA_SIZE)
 
     if (DRAW_PEA_HITBOX) this.drawHitbox(p5)
