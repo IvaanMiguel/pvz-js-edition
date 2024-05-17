@@ -46,11 +46,13 @@ class Repeater extends Plant {
     this.states = {
       [RepeaterState.IDLE]: {
         type: RepeaterState.IDLE,
+        animation: RepeaterAnimation[RepeaterState.IDLE],
         update: this.handleUpdateIdleState,
         draw: this.handleDrawState
       },
       [RepeaterState.SHOOTING]: {
         type: RepeaterState.SHOOTING,
+        animation: RepeaterAnimation[RepeaterState.SHOOTING],
         update: this.handleUpdateShootingState,
         draw: this.handleDrawState
       }
@@ -76,15 +78,14 @@ class Repeater extends Plant {
   changeState(p5: P5, newState: string, initialAnimationFrame: number = 0) {
     this.currentState = this.states[newState]
     this.animationFrame = initialAnimationFrame
-    this.animationTimer =
-      p5.millis() + RepeaterAnimation[this.currentState.type][this.animationFrame].timer * p5.deltaTime
+    this.animationTimer = p5.millis() + this.currentState.animation[this.animationFrame].timer * p5.deltaTime
   }
 
   handleUpdateShootingState = (p5: P5) => {
     if (p5.millis() < this.animationTimer) return
 
     this.animationFrame++
-    if (this.animationFrame >= RepeaterAnimation[this.currentState.type].length) {
+    if (this.animationFrame >= this.currentState.animation.length) {
       const initialFrame = p5.floor(p5.random(0, RepeaterAnimation[RepeaterState.IDLE].length))
 
       this.changeState(p5, RepeaterState.IDLE, initialFrame)
@@ -94,8 +95,7 @@ class Repeater extends Plant {
 
     if (this.animationFrame % 2 !== 0) this.addPea(this.position.x + 10, this.position.y - 8, this.lawnRow)
 
-    this.animationTimer =
-      p5.millis() + RepeaterAnimation[this.currentState.type][this.animationFrame].timer * p5.deltaTime
+    this.animationTimer = p5.millis() + this.currentState.animation[this.animationFrame].timer * p5.deltaTime
   }
 
   updateFiringPea(p5: P5) {
@@ -110,10 +110,9 @@ class Repeater extends Plant {
     if (p5.millis() < this.animationTimer) return
 
     this.animationFrame++
-    if (this.animationFrame >= RepeaterAnimation[this.currentState.type].length) this.animationFrame = 0
+    if (this.animationFrame >= this.currentState.animation.length) this.animationFrame = 0
 
-    this.animationTimer =
-      p5.millis() + RepeaterAnimation[this.currentState.type][this.animationFrame].timer * p5.deltaTime
+    this.animationTimer = p5.millis() + this.currentState.animation[this.animationFrame].timer * p5.deltaTime
   }
 
   update(p5: P5) {
@@ -122,7 +121,7 @@ class Repeater extends Plant {
   }
 
   handleDrawState = (p5: P5) => {
-    const { originX, originY, w, h } = RepeaterAnimation[this.currentState.type][this.animationFrame]
+    const { originX, originY, w, h } = this.currentState.animation[this.animationFrame]
 
     p5.imageMode(p5.CENTER)
     p5.image(Repeater.spritesheet, this.position.x, this.position.y, w, h, originX, originY, w, h)

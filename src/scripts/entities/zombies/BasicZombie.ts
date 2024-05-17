@@ -4,19 +4,17 @@ import { DEBUG } from '../../constants/game'
 import {
   BASIC_ZOMBIE_DMG,
   BASIC_ZOMBIE_HP,
+  BasicZombieAnimation,
+  BasicZombieState,
   DRAW_COORDS_POINT,
   DRAW_HITBOX,
   DRAW_SPRITE_BORDERS,
-  FramesIndex,
   HITBOX_HEIGHT,
   HITBOX_OFFSET_X,
   HITBOX_WIDTH,
   SHOW_HP,
   TransformFrame,
-  ZOMBIE_SPEED,
-  ZOMBIE_TIMER,
-  ZombieDimensions,
-  ZombieState
+  ZOMBIE_SPEED
 } from '../../constants/zombie/basicZombie'
 import { drawHp } from '../../utils'
 import Pea from '../projectiles/Pea'
@@ -48,34 +46,39 @@ class BasicZombie extends Zombie {
     this.hpStatus = 'FULL'
 
     this.states = {
-      [ZombieState.WALKING.FULL]: {
-        type: ZombieState.WALKING.FULL,
-        draw: this.handleDraw,
-        update: this.handleUpdate
+      [BasicZombieState.WALKING.FULL]: {
+        type: BasicZombieState.WALKING.FULL,
+        animation: BasicZombieAnimation[BasicZombieState.WALKING.FULL],
+        draw: this.handleDrawState,
+        update: this.handleUpdateState
       },
-      [ZombieState.WALKING.DAMAGED]: {
-        type: ZombieState.WALKING.DAMAGED,
-        draw: this.handleDraw,
-        update: this.handleUpdate
+      [BasicZombieState.WALKING.DAMAGED]: {
+        type: BasicZombieState.WALKING.DAMAGED,
+        animation: BasicZombieAnimation[BasicZombieState.WALKING.DAMAGED],
+        draw: this.handleDrawState,
+        update: this.handleUpdateState
       },
-      [ZombieState.EATING.FULL]: {
-        type: ZombieState.EATING.FULL,
-        draw: this.handleDraw,
-        update: this.handleUpdate
+      [BasicZombieState.EATING.FULL]: {
+        type: BasicZombieState.EATING.FULL,
+        animation: BasicZombieAnimation[BasicZombieState.EATING.FULL],
+        draw: this.handleDrawState,
+        update: this.handleUpdateState
       },
-      [ZombieState.EATING.DAMAGED]: {
-        type: ZombieState.EATING.DAMAGED,
-        draw: this.handleDraw,
-        update: this.handleUpdate
+      [BasicZombieState.EATING.DAMAGED]: {
+        type: BasicZombieState.EATING.DAMAGED,
+        animation: BasicZombieAnimation[BasicZombieState.EATING.DAMAGED],
+        draw: this.handleDrawState,
+        update: this.handleUpdateState
       },
-      [ZombieState.LYING_DOWN]: {
-        type: ZombieState.LYING_DOWN,
-        draw: this.handleLyingDownDraw,
+      [BasicZombieState.LYING_DOWN]: {
+        type: BasicZombieState.LYING_DOWN,
+        animation: BasicZombieAnimation[BasicZombieState.LYING_DOWN],
+        draw: this.handleDrawState,
         update: this.handleLyingDownUpdate
       }
     }
 
-    this.currentState = this.states[ZombieState[this.action][this.hpStatus]]
+    this.currentState = this.states[BasicZombieState[this.action][this.hpStatus]]
   }
 
   static preload(p5: P5) {
@@ -87,68 +90,46 @@ class BasicZombie extends Zombie {
   }
 
   kill(p5: P5) {
-    this.currentState = this.states[ZombieState.LYING_DOWN]
+    this.currentState = this.states[BasicZombieState.LYING_DOWN]
     this.animationFrame = 0
-    this.animationTimer = p5.millis() + ZOMBIE_TIMER * p5.deltaTime
+    this.animationTimer = p5.millis() + this.currentState.animation[this.animationFrame].timer * p5.deltaTime
   }
 
-  handleUpdate = (p5: P5) => {
+  handleUpdateState = (p5: P5) => {
     if (p5.millis() < this.animationTimer) return
 
     this.animationFrame++
-    if (this.animationFrame >= FramesIndex[this.currentState.type].length) this.animationFrame = 0
+    if (this.animationFrame >= this.currentState.animation.length) this.animationFrame = 0
 
-    this.animationTimer = p5.millis() + ZOMBIE_TIMER * p5.deltaTime
+    this.animationTimer = p5.millis() + this.currentState.animation[this.animationFrame].timer * p5.deltaTime
   }
 
   handleLyingDownUpdate = (p5: P5) => {
     if (p5.millis() < this.animationTimer) return
 
     this.animationFrame++
-    if (this.animationFrame >= FramesIndex[this.currentState.type].length) {
+    if (this.animationFrame >= this.currentState.animation.length) {
       this.animationFrame = 0
       this.onZombieEnd(this)
     }
 
-    this.animationTimer = p5.millis() + ZOMBIE_TIMER * p5.deltaTime
+    this.animationTimer = p5.millis() + this.currentState.animation[this.animationFrame].timer * p5.deltaTime
   }
 
-  handleDraw = (p5: P5) => {
-    const currentState = ZombieState[this.action][this.hpStatus]
-
-    const width = ZombieDimensions[currentState].width
-    const height = ZombieDimensions[currentState].height
+  handleDrawState = (p5: P5) => {
+    const { originX, originY, w, h } = this.currentState.animation[this.animationFrame]
+    const x = this.position.x + (TransformFrame[this.currentState.type]?.offsetX || 0)
+    const y = this.position.y + (TransformFrame[this.currentState.type]?.offsetY || 0)
 
     p5.imageMode(p5.CENTER)
-    p5.image(
-      BasicZombie.spritesheet,
-      this.position.x + (TransformFrame[currentState]?.offsetX || 0),
-      this.position.y + (TransformFrame[currentState]?.offsetY || 0),
-      width,
-      height,
-      width * FramesIndex[currentState][this.animationFrame],
-      ZombieDimensions[currentState].originY || 0,
-      width,
-      height
-    )
+    p5.image(BasicZombie.spritesheet, x, y, w, h, originX, originY, w, h)
   }
 
-  handleLyingDownDraw = (p5: P5) => {
-    const width = ZombieDimensions[this.currentState.type].width
-    const height = ZombieDimensions[this.currentState.type].height
+  updateAction() {
+    if (this.remainingHp <= 0) return
 
-    p5.imageMode(p5.CENTER)
-    p5.image(
-      BasicZombie.spritesheet,
-      this.position.x + (TransformFrame[this.currentState.type]?.offsetX || 0),
-      this.position.y + (TransformFrame[this.currentState.type]?.offsetY || 0),
-      width,
-      height,
-      width * FramesIndex[this.currentState.type][this.animationFrame],
-      ZombieDimensions[this.currentState.type].originY || 0,
-      width,
-      height
-    )
+    this.action = this.isPlantAhead ? 'EATING' : 'WALKING'
+    this.currentState = this.states[BasicZombieState[this.action][this.hpStatus]]
   }
 
   updatePosition(p5: P5) {
@@ -162,9 +143,12 @@ class BasicZombie extends Zombie {
 
   update(p5: P5) {
     this.hpStatus = this.remainingHp <= this.hp / 2 ? 'DAMAGED' : 'FULL'
+
+    this.updateAction()
+
     this.hitbox.isActive = this.remainingHp > 0
 
-    if (this.remainingHp <= 0 && this.currentState.type !== ZombieState.LYING_DOWN) this.kill(p5)
+    if (this.remainingHp <= 0 && this.currentState.type !== BasicZombieState.LYING_DOWN) this.kill(p5)
 
     this.updatePosition(p5)
     this.currentState.update(p5)
@@ -188,8 +172,8 @@ class BasicZombie extends Zombie {
         p5,
         this.position.x + (TransformFrame[this.currentState.type]?.offsetX || 0),
         this.position.y + (TransformFrame[this.currentState.type]?.offsetY || 0),
-        ZombieDimensions[this.currentState.type].width,
-        ZombieDimensions[this.currentState.type].height
+        this.currentState.animation[this.animationFrame].w,
+        this.currentState.animation[this.animationFrame].h
       )
     }
 

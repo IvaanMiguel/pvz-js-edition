@@ -6,6 +6,7 @@ import Pea from '../projectiles/Pea'
 abstract class Zombie extends Entity {
   hp: number
   remainingHp: number
+  isPlantAhead: boolean = false
   dmg: number = BASIC_ZOMBIE_DMG
   action: 'EATING' | 'WALKING' = 'WALKING'
   lawnRow: number

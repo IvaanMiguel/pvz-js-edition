@@ -5,14 +5,14 @@ import {
   DRAW_WALLNUT_COORDS_POINT,
   DRAW_WALLNUT_HITBOX,
   DRAW_WALLNUT_SPRITE_BORDERS,
-  FramesIndex,
   SHOW_HP,
   WALLNUT_HEIGHT,
   WALLNUT_HITBOX_HEIGHT,
   WALLNUT_HITBOX_WIDTH,
   WALLNUT_HP,
-  WALLNUT_TIMER,
   WALLNUT_WIDTH,
+  WallnutAnimation,
+  WallnutFrame,
   WallnutKeyframe,
   WallnutState
 } from '../../constants/plants/wallnut'
@@ -41,16 +41,19 @@ class Wallnut extends Plant {
     this.states = {
       [WallnutState.FULL]: {
         type: WallnutState.FULL,
+        animation: WallnutAnimation[WallnutState.FULL],
         draw: this.handleDrawState,
         update: this.handleUpdateState
       },
       [WallnutState.DAMAGED]: {
         type: WallnutState.DAMAGED,
+        animation: WallnutAnimation[WallnutState.DAMAGED],
         draw: this.handleDrawState,
         update: this.handleUpdateState
       },
       [WallnutState.DYING]: {
         type: WallnutState.DYING,
+        animation: WallnutAnimation[WallnutState.DYING],
         draw: this.handleDrawState,
         update: this.handleUpdateState
       }
@@ -63,7 +66,9 @@ class Wallnut extends Plant {
   }
 
   static getPlaceholder() {
-    return Wallnut.spritesheet.get(1, 1, WALLNUT_WIDTH, WALLNUT_HEIGHT)
+    const { originX, originY, w, h } = WallnutKeyframe[WallnutFrame.FULL_1]
+
+    return Wallnut.spritesheet.get(originX, originY, w, h)
   }
 
   setIsZombieAhead(isZombieAhead: boolean) {
@@ -74,9 +79,9 @@ class Wallnut extends Plant {
     if (p5.millis() < this.animationTimer) return
 
     this.animationFrame++
-    if (this.animationFrame >= FramesIndex.length) this.animationFrame = 0
+    if (this.animationFrame >= this.currentState.animation.length) this.animationFrame = 0
 
-    this.animationTimer = p5.millis() + WALLNUT_TIMER * p5.deltaTime
+    this.animationTimer = p5.millis() + this.currentState.animation[this.animationFrame].timer * p5.deltaTime
   }
 
   updateHpStatus() {
@@ -95,18 +100,10 @@ class Wallnut extends Plant {
   }
 
   handleDrawState = (p5: P5) => {
+    const { originX, originY, w, h } = this.currentState.animation[this.animationFrame]
+
     p5.imageMode(p5.CENTER)
-    p5.image(
-      Wallnut.spritesheet,
-      this.position.x,
-      this.position.y,
-      WALLNUT_WIDTH,
-      WALLNUT_HEIGHT,
-      WALLNUT_WIDTH * FramesIndex[this.animationFrame] + this.animationFrame + 1,
-      WallnutKeyframe[this.currentState.type].originX,
-      WALLNUT_WIDTH,
-      WALLNUT_HEIGHT
-    )
+    p5.image(Wallnut.spritesheet, this.position.x, this.position.y, w, h, originX, originY, w, h)
   }
 
   draw(p5: P5) {

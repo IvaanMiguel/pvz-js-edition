@@ -39,11 +39,13 @@ class Sunflower extends Plant {
     this.states = {
       [SunflowerState.IDLE]: {
         type: SunflowerState.IDLE,
+        animation: SunflowerAnimation[SunflowerState.IDLE],
         update: this.handleUpdateState,
         draw: this.handleDrawState
       },
       [SunflowerState.SHINING]: {
         type: SunflowerState.SHINING,
+        animation: SunflowerAnimation[SunflowerState.SHINING],
         update: this.handleUpdateState,
         draw: this.handleDrawState
       }
@@ -74,16 +76,15 @@ class Sunflower extends Plant {
     if (p5.millis() < this.animationTimer) return
 
     this.animationFrame++
-    if (this.animationFrame >= SunflowerAnimation[this.currentState.type].length) this.animationFrame = 0
+    if (this.animationFrame >= this.currentState.animation.length) this.animationFrame = 0
 
-    this.animationTimer =
-      p5.millis() + SunflowerAnimation[this.currentState.type][this.animationFrame].timer * p5.deltaTime
+    this.animationTimer = p5.millis() + this.currentState.animation[this.animationFrame].timer * p5.deltaTime
   }
 
   handleDrawState = (p5: P5) => {
     p5.imageMode(p5.CENTER)
 
-    const { originX, originY, w, h } = SunflowerAnimation[this.currentState.type][this.animationFrame]
+    const { originX, originY, w, h } = this.currentState.animation[this.animationFrame]
 
     p5.image(Sunflower.spritesheet, this.position.x, this.position.y, w, h, originX, originY, w, h)
   }

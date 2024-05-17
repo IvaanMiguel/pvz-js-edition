@@ -11,8 +11,6 @@ export const SUNFLOWER_HEIGHT = 31
 export const SUNFLOWER_HITBOX_WIDTH = SUNFLOWER_WIDTH * 0.5
 export const SUNFLOWER_HITBOX_HEIGHT = SUNFLOWER_HEIGHT * 0.8
 
-export const SUNFLOWER_TIMER = 10 * SPEED_MULTIPLIER
-
 export const SunflowerState = {
   IDLE: 'idle',
   SHINING: 'shining'
@@ -25,6 +23,7 @@ export const SunflowerFrame = {
   IDLE_4: 'idle-4',
   IDLE_5: 'idle-5',
   IDLE_6: 'idle-6',
+
   SHINING_1: 'shining-1',
   SHINING_2: 'shining-2',
   SHINING_3: 'shining-3',
@@ -33,19 +32,22 @@ export const SunflowerFrame = {
   SHINING_6: 'shining-6'
 }
 
+const TIMER = 10 * SPEED_MULTIPLIER
+
 export const SunflowerKeyframe = {
-  [SunflowerFrame.IDLE_1]: { originX: 1, originY: 1, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: SUNFLOWER_TIMER },
-  [SunflowerFrame.IDLE_2]: { originX: 34, originY: 1, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: SUNFLOWER_TIMER },
-  [SunflowerFrame.IDLE_3]: { originX: 67, originY: 1, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: SUNFLOWER_TIMER },
-  [SunflowerFrame.IDLE_4]: { originX: 100, originY: 1, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: SUNFLOWER_TIMER },
-  [SunflowerFrame.IDLE_5]: { originX: 133, originY: 1, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: SUNFLOWER_TIMER },
-  [SunflowerFrame.IDLE_6]: { originX: 166, originY: 1, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: SUNFLOWER_TIMER },
-  [SunflowerFrame.SHINING_1]: { originX: 1, originY: 33, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: SUNFLOWER_TIMER },
-  [SunflowerFrame.SHINING_2]: { originX: 34, originY: 33, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: SUNFLOWER_TIMER },
-  [SunflowerFrame.SHINING_3]: { originX: 67, originY: 33, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: SUNFLOWER_TIMER },
-  [SunflowerFrame.SHINING_4]: { originX: 100, originY: 33, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: SUNFLOWER_TIMER },
-  [SunflowerFrame.SHINING_5]: { originX: 133, originY: 33, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: SUNFLOWER_TIMER },
-  [SunflowerFrame.SHINING_6]: { originX: 166, originY: 33, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: SUNFLOWER_TIMER }
+  [SunflowerFrame.IDLE_1]: { originX: 1, originY: 1, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: TIMER },
+  [SunflowerFrame.IDLE_2]: { originX: 34, originY: 1, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: TIMER },
+  [SunflowerFrame.IDLE_3]: { originX: 67, originY: 1, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: TIMER },
+  [SunflowerFrame.IDLE_4]: { originX: 100, originY: 1, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: TIMER },
+  [SunflowerFrame.IDLE_5]: { originX: 133, originY: 1, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: TIMER },
+  [SunflowerFrame.IDLE_6]: { originX: 166, originY: 1, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: TIMER },
+
+  [SunflowerFrame.SHINING_1]: { originX: 1, originY: 33, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: TIMER },
+  [SunflowerFrame.SHINING_2]: { originX: 34, originY: 33, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: TIMER },
+  [SunflowerFrame.SHINING_3]: { originX: 67, originY: 33, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: TIMER },
+  [SunflowerFrame.SHINING_4]: { originX: 100, originY: 33, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: TIMER },
+  [SunflowerFrame.SHINING_5]: { originX: 133, originY: 33, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: TIMER },
+  [SunflowerFrame.SHINING_6]: { originX: 166, originY: 33, w: SUNFLOWER_WIDTH, h: SUNFLOWER_HEIGHT, timer: TIMER }
 
 }
 
@@ -62,6 +64,7 @@ export const SunflowerAnimation = {
     SunflowerKeyframe[SunflowerFrame.IDLE_3],
     SunflowerKeyframe[SunflowerFrame.IDLE_2]
   ],
+
   [SunflowerState.SHINING]: [
     SunflowerKeyframe[SunflowerFrame.SHINING_1],
     SunflowerKeyframe[SunflowerFrame.SHINING_2],

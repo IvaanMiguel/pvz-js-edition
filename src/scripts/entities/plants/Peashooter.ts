@@ -5,16 +5,14 @@ import {
   DRAW_PEASHOOTER_COORDS_POINT,
   DRAW_PEASHOOTER_HITBOX,
   DRAW_PEASHOOTER_SPRITE_BORDERS,
-  FIRE_RATE,
-  FramesIndex,
+  PEASHOOTER_FIRE_RATE,
   PEASHOOTER_HEIGHT,
   PEASHOOTER_HITBOX_HEIGHT,
   PEASHOOTER_HITBOX_WIDTH,
-  PEASHOOTER_TIMER,
   PEASHOOTER_WIDTH,
+  PeashooterAnimation,
   PeashooterState,
-  SHOW_HP,
-  TransformFrame
+  SHOW_PEASHOOTER_HP
 } from '../../constants/plants/peashooter'
 import { drawHp } from '../../utils'
 import Plant from './Plant'
@@ -26,9 +24,6 @@ class Peashooter extends Plant {
   states: EntityState
   lawnRow: number
   addPea: (x: number, y: number, lawnRow: number) => void
-
-  // Solo para usarse en el método debug().
-  dx: number = 0
 
   constructor(p5: P5, x: number, y: number, lawnRow: number, addPea: (x: number, y: number, lawnRow: number) => void) {
     super(x, y, {
@@ -43,19 +38,21 @@ class Peashooter extends Plant {
     this.addPea = addPea
 
     this.isZombieAhead = false
-    this.animationTimer = p5.millis() + PEASHOOTER_TIMER * p5.deltaTime
-    this.firingTimer = p5.millis() + FIRE_RATE / 4
+    this.animationTimer = p5.millis() + PeashooterAnimation[PeashooterState.IDLE][0].timer * p5.deltaTime
+    this.firingTimer = p5.millis() + PEASHOOTER_FIRE_RATE / 4
 
     this.states = {
       [PeashooterState.IDLE]: {
         type: PeashooterState.IDLE,
-        draw: this.handleIdleDraw,
-        update: this.handleIdleUpdate
+        animation: PeashooterAnimation[PeashooterState.IDLE],
+        draw: this.handleDrawState,
+        update: this.handleUpdateIdleState
       },
       [PeashooterState.SHOOTING]: {
         type: PeashooterState.SHOOTING,
-        draw: this.handleShootingDraw,
-        update: this.handleShootingUpdate
+        animation: PeashooterAnimation[PeashooterState.SHOOTING],
+        draw: this.handleDrawState,
+        update: this.handleUpdateShootingState
       }
     }
 
@@ -74,76 +71,57 @@ class Peashooter extends Plant {
     this.isZombieAhead = isZombieAhead
   }
 
-  handleIdleDraw = (p5: P5) => {
-    this.dx = this.position.x + (TransformFrame[this.animationFrame]?.offsetX || 0)
-    const sx = 26 * FramesIndex[this.currentState.type][this.animationFrame]
-
-    p5.imageMode(p5.CENTER)
-    p5.image(
-      Peashooter.spritesheet,
-      this.dx,
-      this.position.y,
-      PEASHOOTER_WIDTH,
-      PEASHOOTER_HEIGHT,
-      sx,
-      0,
-      PEASHOOTER_WIDTH,
-      PEASHOOTER_HEIGHT
-    )
-  }
-
-  handleIdleUpdate = () => {
-    this.animationFrame = 0
-  }
-
-  handleShootingDraw = (p5: P5) => {
-    p5.imageMode(p5.CENTER)
-    p5.image(
-      Peashooter.spritesheet,
-      this.position.x,
-      this.position.y,
-      PEASHOOTER_WIDTH,
-      PEASHOOTER_HEIGHT,
-      26 * FramesIndex[this.currentState.type][this.animationFrame],
-      30,
-      PEASHOOTER_WIDTH,
-      PEASHOOTER_HEIGHT
-    )
-  }
-
-  handleShootingUpdate = (p5: P5) => {
-    const initialFrame = p5.floor(p5.random(0, FramesIndex[PeashooterState.IDLE].length))
-
-    this.changeState(p5, PeashooterState.IDLE, initialFrame)
-  }
-
   changeState(p5: P5, newState: string, initialAnimationFrame: number = 0) {
     this.currentState = this.states[newState]
     this.animationFrame = initialAnimationFrame
-    this.animationTimer = p5.millis() + PEASHOOTER_TIMER * p5.deltaTime
+    this.animationTimer = p5.millis() + this.currentState.animation[this.animationFrame].timer * p5.deltaTime
   }
 
   updateFiringPea(p5: P5) {
-    if (p5.millis() < this.firingTimer) return
+    if (!this.isZombieAhead || this.currentState.type === PeashooterState.SHOOTING || p5.millis() < this.firingTimer) {
+      return
+    }
 
     this.changeState(p5, PeashooterState.SHOOTING)
-    this.firingTimer = p5.millis() + FIRE_RATE
-    this.addPea(this.position.x + 10, this.position.y - 8, this.lawnRow)
   }
 
-  updateAnimation(p5: P5) {
+  handleUpdateIdleState = (p5: P5) => {
     if (p5.millis() < this.animationTimer) return
 
     this.animationFrame++
-    if (this.animationFrame >= FramesIndex[this.currentState.type].length) this.currentState.update(p5)
+    if (this.animationFrame >= this.currentState.animation.length) this.animationFrame = 0
 
-    this.animationTimer = p5.millis() + PEASHOOTER_TIMER * p5.deltaTime
+    this.animationTimer = p5.millis() + this.currentState.animation[this.animationFrame].timer * p5.deltaTime
+  }
+
+  handleUpdateShootingState = (p5: P5) => {
+    if (p5.millis() < this.animationTimer) return
+
+    this.animationFrame++
+    if (this.animationFrame >= this.currentState.animation.length) {
+      const initialFrame = p5.floor(p5.random(0, PeashooterAnimation[PeashooterState.IDLE].length))
+
+      this.changeState(p5, PeashooterState.IDLE, initialFrame)
+      this.firingTimer = p5.millis() + PEASHOOTER_FIRE_RATE
+
+      return
+    }
+
+    if (this.animationFrame === 2) this.addPea(this.position.x + 10, this.position.y - 8, this.lawnRow)
+
+    this.animationTimer = p5.millis() + this.currentState.animation[this.animationFrame].timer * p5.deltaTime
   }
 
   update(p5: P5) {
-    if (this.isZombieAhead) this.updateFiringPea(p5)
+    this.updateFiringPea(p5)
+    this.currentState.update(p5)
+  }
 
-    this.updateAnimation(p5)
+  handleDrawState = (p5: P5) => {
+    const { originX, originY, w, h } = this.currentState.animation[this.animationFrame]
+
+    p5.imageMode(p5.CENTER)
+    p5.image(Peashooter.spritesheet, this.position.x, this.position.y, w, h, originX, originY, w, h)
   }
 
   draw(p5: P5) {
@@ -158,12 +136,13 @@ class Peashooter extends Plant {
     if (DRAW_PEASHOOTER_HITBOX && this.hitbox.isActive) this.drawHitbox(p5)
 
     if (DRAW_PEASHOOTER_SPRITE_BORDERS) {
-      this.drawSpriteBorders(p5, this.dx, this.position.y, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT)
+      this.drawSpriteBorders(p5, this.position.x, this.position.y, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT)
     }
 
     if (DRAW_PEASHOOTER_COORDS_POINT) this.drawCoordsPoint(p5)
 
-    if (SHOW_HP && this.remainingHp > 0) drawHp(p5, this.position.x, this.position.y, this.hp, this.remainingHp)
+    if (SHOW_PEASHOOTER_HP && this.remainingHp > 0)
+      drawHp(p5, this.position.x, this.position.y, this.hp, this.remainingHp)
   }
 }
 

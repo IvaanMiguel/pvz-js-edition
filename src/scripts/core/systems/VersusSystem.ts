@@ -34,7 +34,7 @@ class VersusSystem {
           if (lawnTile && zombie.hitbox.position.x + zombie.hitbox.w < lawnTile.position.x) continue
 
           if (lawnTile && areColliding(lawnTile.hitbox, zombie.hitbox)) {
-            zombie.action = 'EATING'
+            zombie.isPlantAhead = true
             lawnTile.remainingHp -= (zombie.dmg / 1000) * p5.deltaTime
 
             /* Si el zombi ya está colisionando con una planta, se rompe el bucle
@@ -44,7 +44,7 @@ class VersusSystem {
              */
             break
           } else {
-            zombie.action = 'WALKING'
+            zombie.isPlantAhead = false
           }
         }
       }

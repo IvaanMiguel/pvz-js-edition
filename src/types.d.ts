@@ -13,6 +13,13 @@ export interface EntityState {
 
 export interface HandleState {
   type: string
+  animation: {
+    originX: number
+    originY: number
+    w: number
+    h: number
+    timer: number
+  }[]
   update: (p5: P5) => void
   draw: (p5: P5) => void
 }

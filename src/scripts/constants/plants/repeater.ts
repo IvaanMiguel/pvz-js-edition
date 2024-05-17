@@ -22,22 +22,23 @@ export const RepeaterFrame = {
   IDLE_3: 'idle-3',
   IDLE_4: 'idle-4',
   IDLE_5: 'idle-5',
+
   SHOOTING_1: 'shooting-1',
   SHOOTING_2: 'shooting-2'
 }
 
-const REPEATER_TIMER = 10 * SPEED_MULTIPLIER
-const SHOOTING_TIMER = 8 * SPEED_MULTIPLIER
+const IDLE_STATE_TIMER = 10 * SPEED_MULTIPLIER
+const SHOOTING_STATE_TIMER = 8 * SPEED_MULTIPLIER
 
 export const RepeaterKeyframe = {
-  [RepeaterFrame.IDLE_1]: { originX: 1, originY: 1, w: REPEATER_WIDTH, h: REPEATER_HEIGHT, timer: REPEATER_TIMER },
-  [RepeaterFrame.IDLE_2]: { originX: 33, originY: 1, w: REPEATER_WIDTH, h: REPEATER_HEIGHT, timer: REPEATER_TIMER },
-  [RepeaterFrame.IDLE_3]: { originX: 65, originY: 1, w: REPEATER_WIDTH, h: REPEATER_HEIGHT, timer: REPEATER_TIMER },
-  [RepeaterFrame.IDLE_4]: { originX: 97, originY: 1, w: REPEATER_WIDTH, h: REPEATER_HEIGHT, timer: REPEATER_TIMER },
-  [RepeaterFrame.IDLE_5]: { originX: 129, originY: 1, w: REPEATER_WIDTH, h: REPEATER_HEIGHT, timer: REPEATER_TIMER },
+  [RepeaterFrame.IDLE_1]: { originX: 1, originY: 1, w: REPEATER_WIDTH, h: REPEATER_HEIGHT, timer: IDLE_STATE_TIMER },
+  [RepeaterFrame.IDLE_2]: { originX: 33, originY: 1, w: REPEATER_WIDTH, h: REPEATER_HEIGHT, timer: IDLE_STATE_TIMER },
+  [RepeaterFrame.IDLE_3]: { originX: 65, originY: 1, w: REPEATER_WIDTH, h: REPEATER_HEIGHT, timer: IDLE_STATE_TIMER },
+  [RepeaterFrame.IDLE_4]: { originX: 97, originY: 1, w: REPEATER_WIDTH, h: REPEATER_HEIGHT, timer: IDLE_STATE_TIMER },
+  [RepeaterFrame.IDLE_5]: { originX: 129, originY: 1, w: REPEATER_WIDTH, h: REPEATER_HEIGHT, timer: IDLE_STATE_TIMER },
 
-  [RepeaterFrame.SHOOTING_1]: { originX: 1, originY: 32, w: REPEATER_WIDTH, h: REPEATER_HEIGHT, timer: SHOOTING_TIMER },
-  [RepeaterFrame.SHOOTING_2]: { originX: 33, originY: 32, w: REPEATER_WIDTH, h: REPEATER_HEIGHT, timer: SHOOTING_TIMER }
+  [RepeaterFrame.SHOOTING_1]: { originX: 1, originY: 32, w: REPEATER_WIDTH, h: REPEATER_HEIGHT, timer: SHOOTING_STATE_TIMER },
+  [RepeaterFrame.SHOOTING_2]: { originX: 33, originY: 32, w: REPEATER_WIDTH, h: REPEATER_HEIGHT, timer: SHOOTING_STATE_TIMER }
 }
 
 export const RepeaterAnimation = {

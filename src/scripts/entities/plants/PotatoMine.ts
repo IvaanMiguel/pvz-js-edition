@@ -2,17 +2,19 @@ import P5, { Vector } from 'p5'
 import { EntityState, HandleState, Hitbox } from '../../../types'
 import { DEBUG } from '../../constants/game'
 import {
-  ARMING_TIMER,
   DRAW_POTATO_MINE_COORDS_POINT,
   DRAW_POTATO_MINE_HITBOX,
   DRAW_POTATO_MINE_SPRITE_BORDERS,
   DRAW_SPUDOW_HITBOX,
-  POTATO_MINE_DNG,
+  POTATO_MINE_ARMING_TIMER,
+  POTATO_MINE_DMG,
   POTATO_MINE_HITBOX_HEIGHT,
   POTATO_MINE_HITBOX_WIDTH,
   PotatoMineAnimation,
+  PotatoMineFrame,
+  PotatoMineKeyframe,
   PotatoMineState,
-  SHOW_HP,
+  SHOW_POTATO_MINE_HP,
   SPUDOW_HITBOX_HEIGHT,
   SPUDOW_HITBOX_WIDTH
 } from '../../constants/plants/potatoMine'
@@ -27,7 +29,7 @@ class PotatoMine extends Plant {
   armingTimer: number
   isArmed: boolean
   lawnRow: number
-  dmg: number = POTATO_MINE_DNG
+  dmg: number = POTATO_MINE_DMG
   spudowHitbox: Hitbox
   drawingOffset: number = -14
 
@@ -48,26 +50,30 @@ class PotatoMine extends Plant {
       isActive: false
     }
     this.isArmed = false
-    this.armingTimer = p5.millis() + ARMING_TIMER
+    this.armingTimer = p5.millis() + POTATO_MINE_ARMING_TIMER
     this.animationTimer = p5.millis() + PotatoMineAnimation[PotatoMineState.SLEEPING][0].timer * p5.deltaTime
     this.states = {
       [PotatoMineState.SLEEPING]: {
         type: PotatoMineState.SLEEPING,
+        animation: PotatoMineAnimation[PotatoMineState.SLEEPING],
         update: this.handleUpdateSleepingState,
         draw: this.handleDrawState
       },
       [PotatoMineState.ARMING]: {
         type: PotatoMineState.ARMING,
+        animation: PotatoMineAnimation[PotatoMineState.ARMING],
         update: this.handleUpdateArmingState,
         draw: this.handleDrawState
       },
       [PotatoMineState.IDLE]: {
         type: PotatoMineState.IDLE,
+        animation: PotatoMineAnimation[PotatoMineState.IDLE],
         update: () => {},
         draw: this.handleDrawState
       },
       [PotatoMineState.SPUDOW]: {
         type: PotatoMineState.SPUDOW,
+        animation: PotatoMineAnimation[PotatoMineState.SPUDOW],
         update: this.handleUpdateSpudowState,
         draw: this.handleDrawSpudowState
       }
@@ -81,7 +87,7 @@ class PotatoMine extends Plant {
   }
 
   static getPlaceholder() {
-    const { originX, originY, w, h } = PotatoMineAnimation[PotatoMineState.IDLE][0]
+    const { originX, originY, w, h } = PotatoMineKeyframe[PotatoMineFrame.IDLE_1]
 
     return PotatoMine.spritesheet.get(originX, originY, w, h)
   }
@@ -107,17 +113,16 @@ class PotatoMine extends Plant {
   changeState(p5: P5, newState: string) {
     this.currentState = this.states[newState]
     this.animationFrame = 0
-    this.animationTimer = p5.millis() + PotatoMineAnimation[this.currentState.type][0].timer * p5.deltaTime
+    this.animationTimer = p5.millis() + this.currentState.animation[0].timer * p5.deltaTime
   }
 
   updateAnimation(p5: P5) {
     if (p5.millis() < this.animationTimer) return
 
     this.animationFrame++
-    if (this.animationFrame >= PotatoMineAnimation[this.currentState.type].length) this.animationFrame = 0
+    if (this.animationFrame >= this.currentState.animation.length) this.animationFrame = 0
 
-    this.animationTimer =
-      p5.millis() + PotatoMineAnimation[this.currentState.type][this.animationFrame].timer * p5.deltaTime
+    this.animationTimer = p5.millis() + this.currentState.animation[this.animationFrame].timer * p5.deltaTime
   }
 
   handleUpdateSleepingState = (p5: P5) => {
@@ -129,14 +134,14 @@ class PotatoMine extends Plant {
   }
 
   handleUpdateArmingState = (p5: P5) => {
-    if (this.animationFrame < PotatoMineAnimation[this.currentState.type].length - 1) return
+    if (this.animationFrame < this.currentState.animation.length - 1) return
 
     this.spudowHitbox.isActive = true
     this.changeState(p5, PotatoMineState.IDLE)
   }
 
   handleUpdateSpudowState = () => {
-    if (this.animationFrame < PotatoMineAnimation[this.currentState.type].length - 1) return
+    if (this.animationFrame < this.currentState.animation.length - 1) return
 
     this.remainingHp = 0
   }
@@ -147,7 +152,7 @@ class PotatoMine extends Plant {
   }
 
   handleDrawSpudowState = (p5: P5) => {
-    const { originX, originY, w, h } = PotatoMineAnimation[this.currentState.type][this.animationFrame]
+    const { originX, originY, w, h } = this.currentState.animation[this.animationFrame]
 
     p5.imageMode(p5.CENTER)
     p5.image(
@@ -164,7 +169,7 @@ class PotatoMine extends Plant {
   }
 
   handleDrawState = (p5: P5) => {
-    const { originX, originY, w, h } = PotatoMineAnimation[this.currentState.type][this.animationFrame]
+    const { originX, originY, w, h } = this.currentState.animation[this.animationFrame]
 
     p5.imageMode(p5.CENTER)
     p5.image(PotatoMine.spritesheet, this.position.x, this.position.y, w, h, originX, originY, w, h)
@@ -199,8 +204,8 @@ class PotatoMine extends Plant {
         p5,
         this.position.x,
         this.position.y + (this.currentState.type === PotatoMineState.SPUDOW ? this.drawingOffset : 0),
-        PotatoMineAnimation[this.currentState.type][this.animationFrame].w,
-        PotatoMineAnimation[this.currentState.type][this.animationFrame].h
+        this.currentState.animation[this.animationFrame].w,
+        this.currentState.animation[this.animationFrame].h
       )
     }
 
@@ -208,7 +213,8 @@ class PotatoMine extends Plant {
 
     if (DRAW_POTATO_MINE_COORDS_POINT) this.drawCoordsPoint(p5)
 
-    if (SHOW_HP && this.remainingHp > 0) drawHp(p5, this.position.x, this.position.y, this.hp, this.remainingHp)
+    if (SHOW_POTATO_MINE_HP && this.remainingHp > 0)
+      drawHp(p5, this.position.x, this.position.y, this.hp, this.remainingHp)
   }
 }
 
