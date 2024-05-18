@@ -20,6 +20,7 @@ import Sunflower from '../entities/plants/Sunflower'
 import Wallnut from '../entities/plants/Wallnut'
 import Pea from '../entities/projectiles/Pea'
 import BasicZombie from '../entities/zombies/BasicZombie'
+import ConeheadZombie from '../entities/zombies/ConeheadZombie'
 import SunCounter from '../screen/SunCounter'
 import Player from './Player'
 import LawnSystem from './systems/LawnSystem'
@@ -46,7 +47,7 @@ class Scene {
   seedsBarSystem: SeedsBarSystem
 
   player: Player
-  SPAWNING_TIMER_CONST: number = 4000
+  SPAWNING_TIMER_CONST: number = 7000
   spawningTime: number = 0
 
   constructor(p5: P5) {
@@ -85,6 +86,7 @@ class Scene {
     PotatoMine.preload(p5)
     Repeater.preload(p5)
     BasicZombie.preload(p5)
+    ConeheadZombie.preload(p5)
   }
 
   getFrameRate = (p5: P5) => p5.round(p5.frameRate())
@@ -101,10 +103,14 @@ class Scene {
       const lawnRow = Math.floor(Math.random() * 5)
       const y = (lawnRow + 1) * TILE_HEIGHT + LAWN_OFFSET_Y - TILE_HEIGHT / 2
 
-      this.zombiesSystem.addZombieToRow(
-        new BasicZombie(p5.width + 10, y, lawnRow, this.zombiesSystem.onZombieEnd),
-        lawnRow
-      )
+      // Provisional
+      const rand = p5.floor(p5.random(0, 10))
+      let zombie =
+        rand >= 7
+          ? new ConeheadZombie(p5.width + 10, y, lawnRow, this.zombiesSystem.onZombieEnd)
+          : new BasicZombie(p5.width + 10, y, lawnRow, this.zombiesSystem.onZombieEnd)
+
+      this.zombiesSystem.addZombieToRow(zombie, lawnRow)
       this.spawningTime = p5.millis() + this.SPAWNING_TIMER_CONST
     }
 

@@ -4,7 +4,7 @@ export const DRAW_PEA_COORDS_POINT = true
 export const DRAW_PEA_SPRITE_BORDERS = true
 export const DRAW_PEA_HITBOX = true
 
-export const PEA_SPEED = 70 / SPEED_MULTIPLIER
+export const PEA_SPEED = 80 / SPEED_MULTIPLIER
 export const PEA_SIZE = 10
 export const PEA_DMG = 20
 

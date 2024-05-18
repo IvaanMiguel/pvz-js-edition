@@ -15,7 +15,7 @@ export const BASIC_ZOMBIE_HITBOX_HEIGHT = TILE_HEIGHT * 0.9
 
 export const BASIC_ZOMBIE_HP = 181
 export const BASIC_ZOMBIE_DMG = 100
-export const ZOMBIE_SPEED = 5 / SPEED_MULTIPLIER
+export const ZOMBIE_SPEED = 3 / SPEED_MULTIPLIER
 
 export const BasicZombieState = {
   WALKING: {
