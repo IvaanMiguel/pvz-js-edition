@@ -6,13 +6,13 @@ import {
   BASIC_ZOMBIE_HITBOX_OFFSET_X,
   BASIC_ZOMBIE_HITBOX_WIDTH,
   BASIC_ZOMBIE_HP,
+  BASIC_ZOMBIE_OFFSET_Y,
   BasicZombieAnimation,
   BasicZombieState,
   DRAW_BASIC_ZOMBIE_COORDS_POINT,
   DRAW_BASIC_ZOMBIE_HITBOX,
   DRAW_BASIC_ZOMBIE_SPRITE_BORDERS,
   SHOW_BASIC_ZOMBIE_HP,
-  TransformFrame,
   ZOMBIE_SPEED
 } from '../../constants/zombie/basicZombie'
 import { drawHp } from '../../utils'
@@ -33,6 +33,7 @@ class BasicZombie extends Zombie {
       h: BASIC_ZOMBIE_HITBOX_HEIGHT,
       isActive: true
     }
+
     super(x, y, BASIC_ZOMBIE_HP, hitbox, lawnRow, onZombieEnd)
 
     this.states = {
@@ -106,15 +107,6 @@ class BasicZombie extends Zombie {
     this.animationTimer = p5.millis() + this.currentState.animation[this.animationFrame].timer * p5.deltaTime
   }
 
-  handleDrawState = (p5: P5) => {
-    const { originX, originY, w, h } = this.currentState.animation[this.animationFrame]
-    const x = this.position.x + (TransformFrame[this.currentState.type]?.offsetX || 0)
-    const y = this.position.y + (TransformFrame[this.currentState.type]?.offsetY || 0)
-
-    p5.imageMode(p5.CENTER)
-    p5.image(BasicZombie.spritesheet, x, y, w, h, originX, originY, w, h)
-  }
-
   updateAction() {
     if (this.remainingHp <= 0) return
 
@@ -144,6 +136,14 @@ class BasicZombie extends Zombie {
     this.currentState.update(p5)
   }
 
+  handleDrawState = (p5: P5) => {
+    const { originX, originY, w, h } = this.currentState.animation[this.animationFrame]
+    const positionY = this.position.y + BASIC_ZOMBIE_OFFSET_Y
+
+    p5.imageMode(p5.CENTER)
+    p5.image(BasicZombie.spritesheet, this.position.x, positionY, w, h, originX, originY, w, h)
+  }
+
   draw(p5: P5) {
     this.currentState.draw(p5)
 
@@ -153,15 +153,13 @@ class BasicZombie extends Zombie {
   }
 
   debug(p5: P5) {
-    p5.strokeWeight(1)
-
     if (DRAW_BASIC_ZOMBIE_HITBOX && this.hitbox.isActive) this.drawHitbox(p5)
 
     if (DRAW_BASIC_ZOMBIE_SPRITE_BORDERS) {
       this.drawSpriteBorders(
         p5,
-        this.position.x + (TransformFrame[this.currentState.type]?.offsetX || 0),
-        this.position.y + (TransformFrame[this.currentState.type]?.offsetY || 0),
+        this.position.x,
+        this.position.y + BASIC_ZOMBIE_OFFSET_Y,
         this.currentState.animation[this.animationFrame].w,
         this.currentState.animation[this.animationFrame].h
       )
