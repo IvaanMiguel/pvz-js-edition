@@ -32,6 +32,7 @@ import SunSystem from './systems/SunSystem'
 import VersusSystem from './systems/VersusSystem'
 import ZombiesSystem from './systems/ZombiesSystem'
 import bgImage from '/sprites/bg.png'
+import ZombieYeti from '../entities/zombies/ZombieYeti'
 
 class Scene {
   static bgImage: Image
@@ -49,7 +50,7 @@ class Scene {
   seedsBarSystem: SeedsBarSystem
 
   player: Player
-  SPAWNING_TIMER_CONST: number = 1000
+  SPAWNING_TIMER_CONST: number = 5000
   spawningTime: number = 0
 
   constructor(p5: P5) {
@@ -90,6 +91,7 @@ class Scene {
     BasicZombie.preload(p5)
     ConeheadZombie.preload(p5)
     BucketheadZombie.preload(p5)
+    ZombieYeti.preload(p5)
   }
 
   getFrameRate = (p5: P5) => p5.round(p5.frameRate())
@@ -110,8 +112,10 @@ class Scene {
       const rand = p5.floor(p5.random(0, 10))
       let zombie: Zombie
       if (rand > 8) {
+        zombie = new ZombieYeti(p5.width + 10, y, lawnRow, this.zombiesSystem.onZombieEnd)
+      } else if (rand > 6) {
         zombie = new BucketheadZombie(p5.width + 10, y, lawnRow, this.zombiesSystem.onZombieEnd)
-      } else if (rand > 5) {
+      } else if (rand > 3) {
         zombie = new ConeheadZombie(p5.width + 10, y, lawnRow, this.zombiesSystem.onZombieEnd)
       } else {
         zombie = new BasicZombie(p5.width + 10, y, lawnRow, this.zombiesSystem.onZombieEnd)
