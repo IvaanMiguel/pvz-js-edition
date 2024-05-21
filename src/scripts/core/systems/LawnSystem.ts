@@ -1,6 +1,5 @@
 import P5 from 'p5'
 import { TILE_HEIGHT, TILE_WIDTH } from '../../constants/game'
-import Entity from '../../entities/Entity'
 import Plant from '../../entities/plants/Plant'
 import ZombiesSystem from './ZombiesSystem'
 
@@ -9,7 +8,7 @@ class LawnSystem {
   y: number
   w: number
   h: number
-  tiles: (Entity | null)[][]
+  tiles: (Plant | null)[][]
 
   // Solo para ser dibujado correctamente respecto a las plantas.
   zombiesSystem: ZombiesSystem
@@ -34,7 +33,7 @@ class LawnSystem {
     this.tiles[row][col] = null
   }
 
-  plantTile(plant: Entity, row: number, col: number) {
+  plantTile(plant: Plant, row: number, col: number) {
     this.tiles[row][col] = plant
   }
 
