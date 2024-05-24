@@ -3,7 +3,7 @@ import { ZombieId } from './zombie/ids'
 export const Hordes = [
   {
     hordeSize: 10,
-    killsBeforeHorde: 1,
+    killsBeforeHorde: 10,
     zombiesPerSpawn: [1, 2],
     zombies: [
       {
