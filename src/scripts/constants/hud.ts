@@ -1,4 +1,4 @@
-import { SPEED_MULTIPLIER } from './game'
+import { SCREEN_HEIGHT, SCREEN_WIDTH, SPEED_MULTIPLIER } from './game'
 
 export const SUN_COUNTER_HUD_X = 5
 export const SUN_COUNTER_HUD_Y = 0
@@ -22,3 +22,33 @@ export const SUN_NUMBER_ORIGIN_Y = 27
 export const SEEDS_BAR_X = SUN_COUNTER_HUD_X + SUN_HUD_SIZE + 5
 export const SEEDS_BAR_Y = 0
 export const SEED_PACKET_SIZE = 24
+
+export const PROGRESS_BAR_ORIGIN_X = 0
+export const PROGRESS_BAR_ORIGIN_Y = 37
+export const PROGRESS_BAR_HEIGHT = 21
+export const PROGRESS_BAR_WIDTH = 256
+export const PROGRESS_BAR_X = SCREEN_WIDTH - PROGRESS_BAR_WIDTH
+export const PROGRESS_BAR_Y = SCREEN_HEIGHT - PROGRESS_BAR_HEIGHT
+
+export const ZOMBIE_HEAD_ORIGIN_X = 71
+export const ZOMBIE_HEAD_ORIGIN_Y = 0
+export const ZOMBIE_HEAD_WIDTH = 22
+export const ZOMBIE_HEAD_HEIGHT = 23
+
+export const PROGRESSION_ORIGIN_X = 115
+export const PROGRESSION_ORIGIN_Y = 0
+export const PROGRESSION_HEIGHT = 7
+export const PROGRESSION_GAP_X = 7
+export const PROGRESSION_GAP_Y = 7
+
+export const FLAG_ORIGIN_X = 94
+export const FLAG_ORIGIN_Y = 0
+export const FLAG_WIDTH = 20
+export const FLAG_HEIGHT = 15
+
+export const FLAG_LERP_AMOUNT = 0.02 * SPEED_MULTIPLIER
+
+export const FLAGPOLE_ORIGIN_X = 94
+export const FLAGPOLE_ORIGIN_Y = 15
+export const FLAGPOLE_WIDTH = 3
+export const FLAGPOLE_HEIGHT = 5

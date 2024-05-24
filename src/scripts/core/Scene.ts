@@ -11,8 +11,16 @@ import {
   TILE_HEIGHT,
   TILE_WIDTH
 } from '../constants/game'
-import { SEEDS_BAR_X, SEEDS_BAR_Y, SUN_COUNTER_HUD_X, SUN_COUNTER_HUD_Y } from '../constants/hud'
+import {
+  PROGRESS_BAR_X,
+  PROGRESS_BAR_Y,
+  SEEDS_BAR_X,
+  SEEDS_BAR_Y,
+  SUN_COUNTER_HUD_X,
+  SUN_COUNTER_HUD_Y
+} from '../constants/hud'
 import { PlantId } from '../constants/plants/plants'
+import { Hordes } from '../constants/zombie/levels'
 import Peashooter from '../entities/plants/Peashooter'
 import PotatoMine from '../entities/plants/PotatoMine'
 import Repeater from '../entities/plants/Repeater'
@@ -23,6 +31,7 @@ import BasicZombie from '../entities/zombies/BasicZombie'
 import BucketheadZombie from '../entities/zombies/BucketheadZombie'
 import ConeheadZombie from '../entities/zombies/ConeheadZombie'
 import ZombieYeti from '../entities/zombies/ZombieYeti'
+import ProgressBar from '../screen/ProgressBar'
 import SunCounter from '../screen/SunCounter'
 import Player from './Player'
 import HordeSystem from './systems/HordeSystem'
@@ -33,14 +42,17 @@ import SunSystem from './systems/SunSystem'
 import VersusSystem from './systems/VersusSystem'
 import ZombiesSystem from './systems/ZombiesSystem'
 import bgImage from '/sprites/bg.png'
+import hudSpritesheet from '/sprites/hud.png'
 
 class Scene {
   static bgImage: Image
+  static hudSpritesheet: Image
 
   framesTimer: number = 0
   frameRate: number = 0
 
   sunCounter: SunCounter
+  progressBar: ProgressBar
 
   hordeSystem: HordeSystem
   lawnSystem: LawnSystem
@@ -55,8 +67,10 @@ class Scene {
   spawningTime: number = 0
 
   constructor(p5: P5) {
+    this.progressBar = new ProgressBar(PROGRESS_BAR_X, PROGRESS_BAR_Y, Hordes)
+
     this.zombiesSystem = new ZombiesSystem()
-    this.hordeSystem = new HordeSystem(p5, this.zombiesSystem)
+    this.hordeSystem = new HordeSystem(p5, this.zombiesSystem, this.progressBar, Hordes)
     this.lawnSystem = new LawnSystem(LAWN_OFFSET_X, LAWN_OFFSET_Y, LAWN_WIDTH, LAWN_HEIGHT, this.zombiesSystem)
     this.peasSystem = new PeasSystem(this.zombiesSystem)
     this.versusSystem = new VersusSystem(this.lawnSystem, this.peasSystem, this.zombiesSystem)
@@ -81,10 +95,12 @@ class Scene {
 
   static preload(p5: P5) {
     Scene.bgImage = p5.loadImage(bgImage)
+    Scene.hudSpritesheet = p5.loadImage(hudSpritesheet)
 
     SeedsBarSystem.preload(p5)
     Pea.preload(p5)
-    SunCounter.preload(p5)
+    SunCounter.preload()
+    ProgressBar.preload()
     Peashooter.preload(p5)
     Wallnut.preload(p5)
     Sunflower.preload(p5)
@@ -110,6 +126,7 @@ class Scene {
     this.versusSystem.update(p5)
     this.lawnSystem.update(p5)
     this.hordeSystem.update(p5)
+    this.progressBar.update(p5)
     this.peasSystem.update(p5)
     this.sunSystem.update(p5)
     this.sunCounter.update(p5)
@@ -126,10 +143,13 @@ class Scene {
     this.sunCounter.draw(p5)
     this.seedsBarSystem.draw(p5)
     this.lawnSystem.draw(p5)
+    this.progressBar.draw(p5)
     this.hordeSystem.draw(p5)
     this.peasSystem.draw(p5)
     this.sunSystem.draw(p5)
     this.player.draw(p5)
+
+    // p5.rect(p5.width - 100, p5.height - 17, 100, 17)
 
     if (SHOW_FPS) this.drawFps(p5)
 

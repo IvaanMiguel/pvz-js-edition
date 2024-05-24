@@ -1,11 +1,12 @@
 import P5 from 'p5'
 import { HordeInfo } from '../../../types'
 import { DECREMENT_PER_SPAWN, SPAWNING_HORDE_TIMER, SPAWNING_ZOMBIE_TIMER_TRESHOLD } from '../../constants/hordeSystem'
-import { ZombieId } from '../../constants/zombie/ids'
+import ProgressBar from '../../screen/ProgressBar'
 import ZombiesSystem from './ZombiesSystem'
 
 class HordeSystem {
   zombiesSystem: ZombiesSystem
+  progressBar: ProgressBar
 
   nextSpawningTime: number
   currentHorde: number = 0
@@ -15,58 +16,12 @@ class HordeSystem {
   hordeZombiesSpawned: number = 0
   killedZombies: number = 0
 
-  constructor(p5: P5, zombiesSystem: ZombiesSystem) {
+  constructor(p5: P5, zombiesSystem: ZombiesSystem, progressBar: ProgressBar, hordes: HordeInfo[]) {
     this.zombiesSystem = zombiesSystem
+    this.progressBar = progressBar
 
     this.nextSpawningTime = p5.millis() + this.zombieTimer
-    this.hordes = [
-      {
-        hordeSize: 10,
-        killsBeforeHorde: 10,
-        zombiesPerSpawn: [1],
-        zombies: [
-          {
-            type: ZombieId.BASIC_ZOMBIE,
-            weight: 1
-          }
-        ],
-        hordeZombies: [
-          {
-            type: ZombieId.BASIC_ZOMBIE,
-            weight: 1
-          },
-          {
-            type: ZombieId.CONEHEAD_ZOMBIE,
-            weight: 0.25
-          }
-        ]
-      },
-      {
-        hordeSize: 15,
-        killsBeforeHorde: 30,
-        zombiesPerSpawn: [1, 3],
-        zombies: [
-          {
-            type: ZombieId.BASIC_ZOMBIE,
-            weight: 1
-          },
-          {
-            type: ZombieId.CONEHEAD_ZOMBIE,
-            weight: 0.4
-          }
-        ],
-        hordeZombies: [
-          {
-            type: ZombieId.BASIC_ZOMBIE,
-            weight: 1
-          },
-          {
-            type: ZombieId.CONEHEAD_ZOMBIE,
-            weight: 0.6
-          }
-        ]
-      }
-    ]
+    this.hordes = hordes
   }
 
   shouldSpawnZombie(p5: P5) {
@@ -133,6 +88,7 @@ class HordeSystem {
       if (this.zombiesSystem.spawnedZombies >= this.hordes[this.currentHorde].killsBeforeHorde) break
 
       this.spawnRandomWeightedZombie(p5)
+      this.progressBar.progress(this.currentHorde)
     }
 
     this.nextSpawningTime = p5.millis() + this.zombieTimer
@@ -168,6 +124,7 @@ class HordeSystem {
     if (!this.shouldHordeStart(p5)) return
 
     console.log(p5.millis(), 'Horde started')
+    this.progressBar.raiseFlag(this.currentHorde)
     this.isHordeTime = true
     this.nextSpawningTime = 0
   }
