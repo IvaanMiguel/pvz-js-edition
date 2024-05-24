@@ -3,9 +3,9 @@ export const SHOW_GRID = false
 export const SHOW_FPS = false
 
 export const CANVAS_ELEMENT = document.getElementById('canvas') as HTMLCanvasElement
-export const PIXEL_DENSITY = 2
+export const PIXEL_DENSITY = 4
 export const SCREEN_WIDTH = 256
-export const SCREEN_HEIGHT = 192
+export const SCREEN_HEIGHT = 210
 
 export const SPEED_MULTIPLIER = 1
 export const FRAME_RATE_FRECUENCY = 1000

@@ -96,11 +96,11 @@ class Player {
       return
     }
 
-    p5.tint(255, 127)
     if (this.lawnCoords.x !== null && this.lawnCoords.y !== null) {
+      p5.tint(255, 127)
       p5.image(SeedPlaceholder[this.selectedSeedPacket!.plantId](), this.lawnCoords.x, this.lawnCoords.y)
+      p5.noTint()
     }
-    p5.noTint()
   }
 
   drawMousePlaceholder(p5: P5) {
@@ -110,6 +110,7 @@ class Player {
   draw(p5: P5) {
     if (!this.selectedSeedPacket || typeof SeedPlaceholder[this.selectedSeedPacket.plantId] !== 'function') return
 
+    p5.imageMode(p5.CENTER)
     this.drawLawnPlaceholder(p5)
     this.drawMousePlaceholder(p5)
   }

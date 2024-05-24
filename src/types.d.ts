@@ -1,4 +1,5 @@
 import P5, { Vector } from 'p5'
+import { ZombieId } from './scripts/constants/zombie/ids'
 
 export interface TransformFrame {
   [x: string]: {
@@ -37,4 +38,19 @@ export interface Hitbox {
   w: number
   h: number
   isActive: boolean
+}
+
+export type ZombieId = (typeof ZombieId)[keyof typeof ZombieId]
+
+interface WeightedZombie {
+  type: ZombieId
+  weight: number
+}
+
+export interface HordeInfo {
+  hordeSize: number
+  killsBeforeHorde: number
+  zombiesPerSpawn: number[]
+  zombies: WeightedZombie[]
+  hordeZombies: WeightedZombie[]
 }

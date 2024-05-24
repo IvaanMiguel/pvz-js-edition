@@ -12,8 +12,8 @@ import {
   SUN_ORIGIN_X,
   SUN_ORIGIN_Y
 } from '../constants/hud'
+import Scene from '../core/Scene'
 import SunSystem from '../core/systems/SunSystem'
-import hudImage from '/sprites/hud.png'
 
 class SunCounter {
   static spritesheet: Image
@@ -29,8 +29,8 @@ class SunCounter {
     this.sunSystem = sunSystem
   }
 
-  static preload(p5: P5) {
-    SunCounter.spritesheet = p5.loadImage(hudImage)
+  static preload() {
+    SunCounter.spritesheet = Scene.hudSpritesheet
   }
 
   updateSunDigits(p5: P5) {
