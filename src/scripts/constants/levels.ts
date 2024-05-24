@@ -1,9 +1,9 @@
-import { ZombieId } from './ids'
+import { ZombieId } from './zombie/ids'
 
 export const Hordes = [
   {
     hordeSize: 10,
-    killsBeforeHorde: 10,
+    killsBeforeHorde: 1,
     zombiesPerSpawn: [1, 2],
     zombies: [
       {

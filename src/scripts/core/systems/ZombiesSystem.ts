@@ -57,7 +57,7 @@ class ZombiesSystem {
 
   spawnZombie(p5: P5, zombieId: ZombieIdType) {
     const spawningRow = this.getSpawningRow(p5)
-    const x = p5.width + 10
+    const x = p5.width + 15
     const y = (spawningRow + 1) * TILE_HEIGHT + LAWN_OFFSET_Y - TILE_HEIGHT / 2
 
     this.addZombieToRow(this.zombieFactory.createZombie(zombieId, x, y, spawningRow), spawningRow)

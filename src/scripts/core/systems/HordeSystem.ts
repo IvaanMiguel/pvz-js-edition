@@ -1,6 +1,7 @@
 import P5 from 'p5'
 import { HordeInfo } from '../../../types'
 import { DECREMENT_PER_SPAWN, SPAWNING_HORDE_TIMER, SPAWNING_ZOMBIE_TIMER_TRESHOLD } from '../../constants/hordeSystem'
+import { ZombieId } from '../../constants/zombie/ids'
 import ProgressBar from '../../screen/ProgressBar'
 import ZombiesSystem from './ZombiesSystem'
 
@@ -108,7 +109,7 @@ class HordeSystem {
 
       this.nextSpawningTime = p5.millis() + SPAWNING_HORDE_TIMER
     } else {
-      console.log(p5.millis(), 'Horde ended')
+      // Horda terminada.
       this.isHordeTime = false
       this.hordeZombiesSpawned = 0
       this.nextSpawningTime = p5.millis() + this.zombieTimer
@@ -123,10 +124,12 @@ class HordeSystem {
 
     if (!this.shouldHordeStart(p5)) return
 
-    console.log(p5.millis(), 'Horde started')
+    // Horda iniciada.
+    this.zombiesSystem.spawnZombie(p5, ZombieId.FLAG_ZOMBIE)
+    this.zombiesSystem.spawnedZombies--
     this.progressBar.raiseFlag(this.currentHorde)
     this.isHordeTime = true
-    this.nextSpawningTime = 0
+    this.nextSpawningTime = p5.millis() + SPAWNING_HORDE_TIMER
   }
 
   update(p5: P5) {
@@ -134,7 +137,6 @@ class HordeSystem {
     this.updateHorde(p5)
 
     this.zombiesSystem.update(p5)
-    console.log(this.currentHorde, this.zombiesSystem.spawnedZombies, this.zombieTimer)
   }
 
   draw(p5: P5) {
