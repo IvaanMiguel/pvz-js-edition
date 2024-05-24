@@ -19,8 +19,8 @@ import {
   SUN_COUNTER_HUD_X,
   SUN_COUNTER_HUD_Y
 } from '../constants/hud'
+import { Hordes } from '../constants/levels'
 import { PlantId } from '../constants/plants/plants'
-import { Hordes } from '../constants/zombie/levels'
 import Peashooter from '../entities/plants/Peashooter'
 import PotatoMine from '../entities/plants/PotatoMine'
 import Repeater from '../entities/plants/Repeater'
@@ -30,6 +30,7 @@ import Pea from '../entities/projectiles/Pea'
 import BasicZombie from '../entities/zombies/BasicZombie'
 import BucketheadZombie from '../entities/zombies/BucketheadZombie'
 import ConeheadZombie from '../entities/zombies/ConeheadZombie'
+import FlagZombie from '../entities/zombies/FlagZombie'
 import ZombieYeti from '../entities/zombies/ZombieYeti'
 import ProgressBar from '../screen/ProgressBar'
 import SunCounter from '../screen/SunCounter'
@@ -110,6 +111,7 @@ class Scene {
     ConeheadZombie.preload(p5)
     BucketheadZombie.preload(p5)
     ZombieYeti.preload(p5)
+    FlagZombie.preload(p5)
   }
 
   getFrameRate = (p5: P5) => p5.round(p5.frameRate())
