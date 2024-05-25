@@ -146,7 +146,7 @@ class Scene {
 
     if (this.gameState.gameEnded) return
 
-    this.gameState.update(p5)
+    this.gameState.update()
     this.versusSystem.update(p5)
     this.lawnSystem.update(p5)
     this.hordeSystem.update(p5)

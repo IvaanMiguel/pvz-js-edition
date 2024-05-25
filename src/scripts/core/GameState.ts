@@ -33,7 +33,7 @@ class GameState {
     }
   }
 
-  update(p5: P5) {
+  update() {
     if (this.gameEnded) return
 
     this.isGameEnded()
