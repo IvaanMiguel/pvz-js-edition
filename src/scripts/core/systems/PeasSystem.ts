@@ -16,6 +16,10 @@ class PeasSystem {
     this.peas = [...Array(LAWN_HEIGHT / TILE_HEIGHT)].map(() => [])
   }
 
+  restart() {
+    this.peas = [...Array(LAWN_HEIGHT / TILE_HEIGHT)].map(() => [])
+  }
+
   onPeaEnd = (pea: Pea) => {
     const index = this.peas[pea.lawnRow].indexOf(pea)
 

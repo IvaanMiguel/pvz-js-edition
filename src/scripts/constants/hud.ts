@@ -52,3 +52,7 @@ export const FLAGPOLE_ORIGIN_X = 94
 export const FLAGPOLE_ORIGIN_Y = 15
 export const FLAGPOLE_WIDTH = 3
 export const FLAGPOLE_HEIGHT = 5
+
+export const DEFEAT_ORIGIN_X = 0
+export const DEFEAT_ORIGIN_Y = 59
+export const DEFEAT_SIZE = 95

@@ -30,6 +30,15 @@ class SeedsBarSystem {
     SeedsBarSystem.spritesheet = p5.loadImage(seedsSpritesheet)
   }
 
+  restart() {
+    this.seedPackets = []
+    const selectedSeedsArray = Array.from(this.selectedSeeds)
+
+    for (let i = 0; i < this.selectedSeeds.size; i++) {
+      this.seedPackets.push(new SeedPacket(this.x + SEED_PACKET_SIZE * i + i, this.y, selectedSeedsArray[i]))
+    }
+  }
+
   update(p5: P5) {
     for (const seedPacket of this.seedPackets) {
       seedPacket.hasEnoughSun = this.sunSystem.collectedSun >= seedPacket.sunCost

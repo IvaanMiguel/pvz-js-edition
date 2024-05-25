@@ -32,8 +32,10 @@ import BucketheadZombie from '../entities/zombies/BucketheadZombie'
 import ConeheadZombie from '../entities/zombies/ConeheadZombie'
 import FlagZombie from '../entities/zombies/FlagZombie'
 import ZombieYeti from '../entities/zombies/ZombieYeti'
+import DefeatScreen from '../screen/DefeatScreen'
 import ProgressBar from '../screen/ProgressBar'
 import SunCounter from '../screen/SunCounter'
+import GameState from './GameState'
 import Player from './Player'
 import HordeSystem from './systems/HordeSystem'
 import LawnSystem from './systems/LawnSystem'
@@ -52,6 +54,9 @@ class Scene {
   framesTimer: number = 0
   frameRate: number = 0
 
+  gameState: GameState
+
+  defeatScreen: DefeatScreen
   sunCounter: SunCounter
   progressBar: ProgressBar
 
@@ -71,6 +76,8 @@ class Scene {
     this.progressBar = new ProgressBar(PROGRESS_BAR_X, PROGRESS_BAR_Y, Hordes)
 
     this.zombiesSystem = new ZombiesSystem()
+    this.gameState = new GameState(p5, this.zombiesSystem, this.restart)
+    this.defeatScreen = new DefeatScreen(this.gameState)
     this.hordeSystem = new HordeSystem(p5, this.zombiesSystem, this.progressBar, Hordes)
     this.lawnSystem = new LawnSystem(LAWN_OFFSET_X, LAWN_OFFSET_Y, LAWN_WIDTH, LAWN_HEIGHT, this.zombiesSystem)
     this.peasSystem = new PeasSystem(this.zombiesSystem)
@@ -86,7 +93,7 @@ class Scene {
 
     this.sunCounter = new SunCounter(SUN_COUNTER_HUD_X, SUN_COUNTER_HUD_Y, this.sunSystem)
 
-    this.player = new Player(p5, this.lawnSystem, this.peasSystem, this.sunSystem, this.seedsBarSystem)
+    this.player = new Player(p5, this.gameState, this.lawnSystem, this.peasSystem, this.sunSystem, this.seedsBarSystem)
 
     if (!DEBUG) return
 
@@ -100,6 +107,7 @@ class Scene {
 
     SeedsBarSystem.preload(p5)
     Pea.preload(p5)
+    DefeatScreen.preload()
     SunCounter.preload()
     ProgressBar.preload()
     Peashooter.preload(p5)
@@ -114,6 +122,16 @@ class Scene {
     FlagZombie.preload(p5)
   }
 
+  restart = (p5: P5) => {
+    this.progressBar.restart()
+    this.hordeSystem.restart(p5)
+    this.lawnSystem.restart()
+    this.peasSystem.restart()
+    this.zombiesSystem.restart()
+    this.sunSystem.restart(p5)
+    this.seedsBarSystem.restart()
+  }
+
   getFrameRate = (p5: P5) => p5.round(p5.frameRate())
 
   updateFrameRate(p5: P5) {
@@ -125,6 +143,10 @@ class Scene {
 
   update(p5: P5) {
     this.player.update(p5)
+
+    if (this.gameState.gameEnded) return
+
+    this.gameState.update(p5)
     this.versusSystem.update(p5)
     this.lawnSystem.update(p5)
     this.hordeSystem.update(p5)
@@ -141,7 +163,6 @@ class Scene {
     p5.imageMode(p5.CORNER)
     p5.image(Scene.bgImage, 0, 0)
 
-    // this.zombiesSystem.draw(p5)
     this.sunCounter.draw(p5)
     this.seedsBarSystem.draw(p5)
     this.lawnSystem.draw(p5)
@@ -150,8 +171,7 @@ class Scene {
     this.peasSystem.draw(p5)
     this.sunSystem.draw(p5)
     this.player.draw(p5)
-
-    // p5.rect(p5.width - 100, p5.height - 17, 100, 17)
+    this.defeatScreen.draw(p5)
 
     if (SHOW_FPS) this.drawFps(p5)
 

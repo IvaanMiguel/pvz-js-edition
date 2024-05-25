@@ -21,6 +21,12 @@ class SunSystem {
     this.spawningTimer = p5.millis() + SPAWNING_SUN_TIMER / 4
   }
 
+  restart(p5: P5) {
+    this.suns = []
+    this.spawningTimer = p5.millis() + SPAWNING_SUN_TIMER / 4
+    this.collectedSun = INITIAL_SUN_AMOUNT
+  }
+
   onSunEnd = (sun: Sun) => {
     const index = this.suns.indexOf(sun)
     this.suns.splice(index, 1)

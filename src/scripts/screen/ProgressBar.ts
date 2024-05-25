@@ -51,6 +51,13 @@ class ProgressBar {
     ProgressBar.spritesheet = Scene.hudSpritesheet
   }
 
+  restart() {
+    this.progressionLength = [0, 0]
+    this.progressing = false
+    this.flags = []
+    this.initFlags()
+  }
+
   setProgressionGaps() {
     const width = (PROGRESS_BAR_WIDTH - PROGRESSION_GAP_X * 2) / this.hordes.length
 

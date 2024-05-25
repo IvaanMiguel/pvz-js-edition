@@ -18,6 +18,15 @@ class ZombiesSystem {
     this.zombieFactory = new ZombieFactory(this)
   }
 
+  restart() {
+    this.zombies = [...Array(LAWN_HEIGHT / TILE_HEIGHT)].map(() => [])
+    this.rowsWeights = [...Array(LAWN_HEIGHT / TILE_HEIGHT)].map(() => 1)
+    this.zombiesOnYourLawn = 0
+    this.spawnedZombies = 0
+    this.killedZombies = 0
+    this.firstZombieSpawned = false
+  }
+
   onZombieEnd = (zombie: Zombie) => {
     const lawnRow = zombie.lawnRow
     const index = this.zombies[lawnRow].indexOf(zombie)

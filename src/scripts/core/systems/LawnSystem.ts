@@ -23,6 +23,10 @@ class LawnSystem {
     this.tiles = [...Array(this.h / TILE_HEIGHT)].map(() => Array(this.w / TILE_WIDTH).fill(null)) // ?
   }
 
+  restart() {
+    this.tiles = this.tiles = [...Array(this.h / TILE_HEIGHT)].map(() => Array(this.w / TILE_WIDTH).fill(null))
+  }
+
   getLawnTile(row: number | null, col: number | null) {
     if (row === null || col === null) return null
 

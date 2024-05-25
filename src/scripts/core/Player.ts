@@ -2,6 +2,7 @@ import P5 from 'p5'
 import { TILE_HEIGHT, TILE_WIDTH } from '../constants/game'
 import { SeedPlaceholder } from '../constants/seedPackets'
 import SeedPacket from '../entities/SeedPacket'
+import GameState from './GameState'
 import PlantFactory from './PlantFactory'
 import LawnSystem from './systems/LawnSystem'
 import PeasSystem from './systems/PeasSystem'
@@ -10,6 +11,8 @@ import SunSystem from './systems/SunSystem'
 
 class Player {
   plantFactory: PlantFactory
+
+  gameState: GameState
 
   lawnSystem: LawnSystem
   peasSystem: PeasSystem
@@ -24,11 +27,13 @@ class Player {
 
   constructor(
     p5: P5,
+    gameState: GameState,
     lawnSystem: LawnSystem,
     peasSystem: PeasSystem,
     sunSystem: SunSystem,
     seedsBarSystem: SeedsBarSystem
   ) {
+    this.gameState = gameState
     this.lawnSystem = lawnSystem
     this.peasSystem = peasSystem
     this.sunSystem = sunSystem
@@ -37,6 +42,11 @@ class Player {
     this.plantFactory = new PlantFactory(this.peasSystem, this.sunSystem)
 
     p5.mouseClicked = () => this.onMouseClicked(p5)
+  }
+
+  restart() {
+    this.plantMode = false
+    this.selectedSeedPacket = null
   }
 
   isMouseInsideLawn(p5: P5) {
@@ -116,6 +126,11 @@ class Player {
   }
 
   update(p5: P5) {
+    if (this.gameState.gameEnded) {
+      this.selectedSeedPacket = null
+      return
+    }
+
     if (!this.isMouseInsideLawn(p5)) {
       this.lawnPosition = { row: null, col: null }
       this.lawnCoords = { x: null, y: null }
@@ -129,6 +144,8 @@ class Player {
   }
 
   onMouseClicked(p5: P5) {
+    if (this.gameState.gameEnded) return
+
     this.onLawnClicked(p5)
     this.onSeedPacketClicked(p5)
   }

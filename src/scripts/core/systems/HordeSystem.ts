@@ -25,6 +25,15 @@ class HordeSystem {
     this.hordes = hordes
   }
 
+  restart(p5: P5) {
+    this.zombieTimer = SPAWNING_ZOMBIE_TIMER_TRESHOLD[1]
+    this.nextSpawningTime = p5.millis() + this.zombieTimer
+    this.currentHorde = 0
+    this.isHordeTime = false
+    this.hordeZombiesSpawned = 0
+    this.killedZombies = 0
+  }
+
   shouldSpawnZombie(p5: P5) {
     /*
      * Si el tiempo ya ha superado el próximo tiempo de spawn y la cantidad de zombis spawneada
