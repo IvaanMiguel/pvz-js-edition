@@ -55,7 +55,7 @@ class Scene {
   framesTimer: number = 0
   frameRate: number = 0
   levels = Levels
-  currentLevel = 2
+  currentLevel = 0
 
   gameState: GameState
 
