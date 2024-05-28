@@ -56,6 +56,8 @@ class ProgressBar {
     this.progressing = false
     this.flags = []
     this.initFlags()
+    this.progressionGaps = []
+    this.setProgressionGaps()
   }
 
   setProgressionGaps() {

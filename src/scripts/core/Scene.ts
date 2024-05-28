@@ -12,6 +12,7 @@ import {
   TILE_WIDTH
 } from '../constants/game'
 import {
+  LevelHud,
   PROGRESS_BAR_X,
   PROGRESS_BAR_Y,
   SEEDS_BAR_X,
@@ -19,8 +20,6 @@ import {
   SUN_COUNTER_HUD_X,
   SUN_COUNTER_HUD_Y
 } from '../constants/hud'
-import { Hordes } from '../constants/levels'
-import { PlantId } from '../constants/plants/plants'
 import Peashooter from '../entities/plants/Peashooter'
 import PotatoMine from '../entities/plants/PotatoMine'
 import Repeater from '../entities/plants/Repeater'
@@ -47,12 +46,16 @@ import ZombiesSystem from './systems/ZombiesSystem'
 import bgImage from '/sprites/bg.png'
 import hudSpritesheet from '/sprites/hud.png'
 
+import { Levels } from '../constants/levels'
+
 class Scene {
   static bgImage: Image
   static hudSpritesheet: Image
 
   framesTimer: number = 0
   frameRate: number = 0
+  levels = Levels
+  currentLevel = 2
 
   gameState: GameState
 
@@ -69,16 +72,14 @@ class Scene {
   seedsBarSystem: SeedsBarSystem
 
   player: Player
-  SPAWNING_TIMER_CONST: number = 5000
-  spawningTime: number = 0
 
   constructor(p5: P5) {
-    this.progressBar = new ProgressBar(PROGRESS_BAR_X, PROGRESS_BAR_Y, Hordes)
+    this.progressBar = new ProgressBar(PROGRESS_BAR_X, PROGRESS_BAR_Y, Levels[this.currentLevel].hordes)
 
     this.zombiesSystem = new ZombiesSystem()
-    this.gameState = new GameState(p5, this.zombiesSystem, this.restart)
+    this.hordeSystem = new HordeSystem(p5, this.zombiesSystem, this.progressBar, Levels[this.currentLevel].hordes)
+    this.gameState = new GameState(p5, this.zombiesSystem, this.hordeSystem, this.restart)
     this.defeatScreen = new DefeatScreen(this.gameState)
-    this.hordeSystem = new HordeSystem(p5, this.zombiesSystem, this.progressBar, Hordes)
     this.lawnSystem = new LawnSystem(LAWN_OFFSET_X, LAWN_OFFSET_Y, LAWN_WIDTH, LAWN_HEIGHT, this.zombiesSystem)
     this.peasSystem = new PeasSystem(this.zombiesSystem)
     this.versusSystem = new VersusSystem(this.lawnSystem, this.peasSystem, this.zombiesSystem)
@@ -87,7 +88,7 @@ class Scene {
     this.seedsBarSystem = new SeedsBarSystem(
       SEEDS_BAR_X,
       SEEDS_BAR_Y,
-      new Set([PlantId.SUNFLOWER, PlantId.PEASHOOTER, PlantId.POTATO_MINE, PlantId.REPEATER, PlantId.WALLNUT]),
+      new Set(Levels[this.currentLevel].plants),
       this.sunSystem
     )
 
@@ -141,7 +142,25 @@ class Scene {
     this.framesTimer = p5.millis() + FRAME_RATE_FRECUENCY
   }
 
+  checkLevelStatus(p5: P5) {
+    const currentLevel = this.levels[this.currentLevel]
+    const lastHorde = currentLevel.hordes[currentLevel.hordes.length - 1]
+    const totalZombies = lastHorde.killsBeforeHorde + lastHorde.hordeSize
+
+    if (this.zombiesSystem.spawnedZombies === totalZombies && this.zombiesSystem.zombiesOnYourLawn === 0) {
+      if (this.currentLevel === this.levels.length - 1) return
+
+      this.currentLevel++
+      this.progressBar.hordes = this.levels[this.currentLevel].hordes
+      this.hordeSystem.hordes = this.levels[this.currentLevel].hordes
+      this.seedsBarSystem.selectedSeeds = new Set(this.levels[this.currentLevel].plants)
+
+      this.restart(p5)
+    }
+  }
+
   update(p5: P5) {
+    this.checkLevelStatus(p5)
     this.player.update(p5)
 
     if (this.gameState.gameEnded) return
@@ -159,6 +178,20 @@ class Scene {
     if (SHOW_FPS) this.updateFrameRate(p5)
   }
 
+  drawLevelHud(p5: P5) {
+    const { originX, originY, w, h } = LevelHud[this.currentLevel]
+    
+    p5.noStroke()
+    p5.fill(0, 127)
+
+    const rectWidth = w + 2
+    const rectHeight = h + 2
+    p5.rect(p5.width - rectWidth - 1, 1, rectWidth, rectHeight)
+
+    p5.imageMode(p5.CORNER)
+    p5.image(Scene.hudSpritesheet, p5.width - w - 2, 2, w, h, originX, originY, w, h)
+  }
+
   draw(p5: P5) {
     p5.imageMode(p5.CORNER)
     p5.image(Scene.bgImage, 0, 0)
@@ -172,6 +205,8 @@ class Scene {
     this.sunSystem.draw(p5)
     this.player.draw(p5)
     this.defeatScreen.draw(p5)
+  
+    this.drawLevelHud(p5)
 
     if (SHOW_FPS) this.drawFps(p5)
 

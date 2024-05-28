@@ -104,6 +104,14 @@ class HordeSystem {
     this.nextSpawningTime = p5.millis() + this.zombieTimer
   }
 
+  hordeHasZombieYeti() {
+    for (const hordeZombie of this.hordes[this.currentHorde].hordeZombies) {
+      if (hordeZombie.type === ZombieId.ZOMBIE_YETI) return true
+    }
+
+    return false
+  }
+
   updateHordeZombiesSpawning(p5: P5) {
     if (this.hordeZombiesSpawned < this.hordes[this.currentHorde].hordeSize) {
       if (p5.millis() < this.nextSpawningTime) return
@@ -118,6 +126,8 @@ class HordeSystem {
 
       this.nextSpawningTime = p5.millis() + SPAWNING_HORDE_TIMER
     } else {
+      if (this.hordeHasZombieYeti()) this.zombiesSystem.spawnZombie(p5, ZombieId.ZOMBIE_YETI)
+
       // Horda terminada.
       this.isHordeTime = false
       this.hordeZombiesSpawned = 0

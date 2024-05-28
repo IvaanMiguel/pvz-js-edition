@@ -56,3 +56,9 @@ export const FLAGPOLE_HEIGHT = 5
 export const DEFEAT_ORIGIN_X = 0
 export const DEFEAT_ORIGIN_Y = 59
 export const DEFEAT_SIZE = 95
+
+export const LevelHud = [
+  { originX: 118, originY: 0, w: 40, h: 13 },
+  { originX: 159, originY: 0, w: 43, h: 13 },
+  { originX: 203, originY: 0, w: 43, h: 13 },
+]

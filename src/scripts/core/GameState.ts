@@ -1,14 +1,17 @@
 import P5 from 'p5'
+import HordeSystem from './systems/HordeSystem'
 import ZombiesSystem from './systems/ZombiesSystem'
 
 class GameState {
   zombiesSystem: ZombiesSystem
-  currentLevel: number = 1
+  hordeSystem: HordeSystem
+
   gameEnded: boolean = false
   onRestart: (p5: P5) => void
 
-  constructor(p5: P5, zombiesSystem: ZombiesSystem, onRestart: (p5: P5) => void) {
+  constructor(p5: P5, zombiesSystem: ZombiesSystem, hordeSystem: HordeSystem, onRestart: (p5: P5) => void) {
     this.zombiesSystem = zombiesSystem
+    this.hordeSystem = hordeSystem
     this.onRestart = onRestart
 
     p5.keyPressed = (e: KeyboardEvent) => this.onKeyPreseed(p5, e)
